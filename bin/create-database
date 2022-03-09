@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+
+from PIL import Image, ImageFont, ImageDraw
+import sys
+import os
+
+
+im_resolution = [640, 480]
+im_background = (0, 0, 0)
+im_fontsize   = 18
+text_color    = (255, 255, 255)
+text_offset   = 24
+margin_left   = 50 
+margin_top    = 50
+tab           = 100
+phi_values    = [ 10,  20,  30,  40]
+theta_values  = [110, 120, 130, 140]
+
+#
+# solution from:
+# https://www.programcreek.com/python/?CodeExample=get+font
+#
+def get_font(size):
+    """Attempts to retrieve a reasonably-looking TTF font from the system.
+
+    We don't make much of an effort, but it's what we can reasonably do without
+    incorporating additional dependencies for this task.
+    """
+    if sys.platform == 'win32':
+        font_names = ['Arial']
+    elif sys.platform in ['linux', 'linux2']:
+        font_names = ['DejaVuSans-Bold', 'DroidSans-Bold']
+    elif sys.platform == 'darwin':
+        font_names = ['Menlo', 'Helvetica']
+
+    font = None
+    for font_name in font_names:
+        try:
+            font = ImageFont.truetype(font_name, size)
+            break
+        except IOError:
+            continue
+
+    return font
+
+# make an image
+img = Image.new('RGB', (im_resolution[0], im_resolution[1]), color = im_background)
+# fnt = ImageFont.load_default()
+fnt = get_font(im_fontsize) 
+# ImageDraw.Draw(img).text((margin_left,margin_top), im_text, font=fnt, fill=text_color)
+# img.save(im_name)
+
+db = "cinema.cdb"
+os.mkdir(db)
+
+with open(f'{db}/data.csv', 'w') as dbinfo:
+    cur_image = 0
+    dbinfo.write("phi,theta,FILE\n")
+    for p in phi_values:
+        for t in theta_values:
+            im_name = f'{cur_image:03}.jpg'
+            ImageDraw.Draw(img).rectangle((0, 0, im_resolution[0], im_resolution[1]), fill=im_background)
+
+            # image name
+            cur_x = margin_left
+            cur_y = margin_top 
+            ImageDraw.Draw(img).text((cur_x, cur_y), "file:", font=fnt, fill=text_color)
+            cur_x += tab 
+            ImageDraw.Draw(img).text((cur_x, cur_y), im_name, font=fnt, fill=text_color)
+            # phi
+            cur_x =  margin_left
+            cur_y += text_offset 
+            ImageDraw.Draw(img).text((cur_x, cur_y), "phi:", font=fnt, fill=text_color)
+            cur_x += tab 
+            ImageDraw.Draw(img).text((cur_x, cur_y), str(p), font=fnt, fill=text_color)
+            # theta
+            cur_x =  margin_left
+            cur_y += text_offset 
+            ImageDraw.Draw(img).text((cur_x, cur_y), "theta:", font=fnt, fill=text_color)
+            cur_x += tab 
+            ImageDraw.Draw(img).text((cur_x, cur_y), str(t), font=fnt, fill=text_color)
+
+            # save the image
+            img.save(f'{db}/{im_name}')
+
+            # write to the database
+            dbinfo.write(f'{p},{t},{im_name}\n')
+
+            cur_image += 1
+
+

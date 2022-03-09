@@ -3,7 +3,7 @@
 from PIL import Image, ImageFont, ImageDraw
 import sys
 import os
-
+import argparse
 
 im_resolution = [640, 480]
 im_background = (0, 0, 0)
@@ -15,6 +15,23 @@ margin_top    = 50
 tab           = 100
 phi_values    = [ 10,  20,  30,  40]
 theta_values  = [110, 120, 130, 140]
+
+helptext = ""
+
+# normal option parsing
+parser = argparse.ArgumentParser(
+            description="create-database: a utility to create image databases for testing",
+            epilog=helptext,
+            formatter_class=argparse.RawDescriptionHelpFormatter )
+
+# parser.add_argument( "year", nargs="?", help="run reports for a single year" )
+
+parser.add_argument(    "--database",
+                        required=False,
+                        default="cinema.cdb",
+                        help="path to the new cinema database")
+
+args = parser.parse_args()
 
 #
 # solution from:
@@ -50,10 +67,10 @@ fnt = get_font(im_fontsize)
 # ImageDraw.Draw(img).text((margin_left,margin_top), im_text, font=fnt, fill=text_color)
 # img.save(im_name)
 
-db = "cinema.cdb"
-os.mkdir(db)
+print(f'Creating database: {args.database}')
+os.mkdir(args.database)
 
-with open(f'{db}/data.csv', 'w') as dbinfo:
+with open(f'{args.database}/data.csv', 'w') as dbinfo:
     cur_image = 0
     dbinfo.write("phi,theta,FILE\n")
     for p in phi_values:
@@ -81,7 +98,7 @@ with open(f'{db}/data.csv', 'w') as dbinfo:
             ImageDraw.Draw(img).text((cur_x, cur_y), str(t), font=fnt, fill=text_color)
 
             # save the image
-            img.save(f'{db}/{im_name}')
+            img.save(f'{args.database}/{im_name}')
 
             # write to the database
             dbinfo.write(f'{p},{t},{im_name}\n')

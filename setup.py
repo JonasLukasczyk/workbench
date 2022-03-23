@@ -21,7 +21,8 @@ setuptools.setup(
              ],
     install_requires=[
         "numpy",
-        "matplotlib"
+        "matplotlib",
+        "pytest"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

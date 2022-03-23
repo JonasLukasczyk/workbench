@@ -17,7 +17,7 @@ setuptools.setup(
     url="https://github.com/cinemascience",
     include_package_data=True,
     packages=[  "cinemasci",
-                "cinemasci.pulse"
+                "cinemasci.smoke"
              ],
     install_requires=[
         "numpy",

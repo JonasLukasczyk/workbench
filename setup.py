@@ -16,13 +16,13 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url="https://github.com/cinemascience",
     include_package_data=True,
-    packages=["cinemasci" 
-            ],
+    packages=[  "cinemasci",
+                "cinemasci.pulse"
+             ],
     install_requires=[
         "numpy",
         "matplotlib"
     ],
-    scripts=[''],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",

@@ -1,4 +1,4 @@
-# __all__ = ["cis", "cdb", "viewers", "pynb", "install"]
+__all__ = ["pulse"]
 
 #
 # new factory function

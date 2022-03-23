@@ -1,4 +1,4 @@
-__all__ = ["pulse"]
+__all__ = ["smoke"]
 
 #
 # new factory function

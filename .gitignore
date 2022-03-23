@@ -2,3 +2,4 @@
 build
 cinemasci.egg-info
 dist
+__pycache__

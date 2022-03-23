@@ -19,6 +19,7 @@ setuptools.setup(
     packages=["cinemasci" 
             ],
     install_requires=[
+        "setuptools",
         "pyyaml",
         "matplotlib"
     ],

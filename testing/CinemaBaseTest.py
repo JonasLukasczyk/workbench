@@ -25,4 +25,4 @@ class CinemaBaseTest(unittest.TestCase):
 
     def test_cinema_image_compare(self):
         result = self.compare( os.path.join(CinemaBaseTest.gold, "base", "000.png" ), os.path.join(CinemaBaseTest.gold, "base", "000.png" ) )
-        self.assertFalse(result)
+        self.assertTrue(result)

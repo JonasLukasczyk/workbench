@@ -19,8 +19,7 @@ setuptools.setup(
     packages=["cinemasci" 
             ],
     install_requires=[
-        "wheel",
-        "pyyaml",
+        "numpy",
         "matplotlib"
     ],
     scripts=[''],

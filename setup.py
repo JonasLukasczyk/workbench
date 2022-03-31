@@ -22,12 +22,12 @@ setuptools.setup(
     install_requires=[
         "setuptools>=60",
         "numpy",
+        "scipy",
         "matplotlib",
         "pytest",
         "py",
         "ipywidgets",
-        "PyOpenGL",
-        "PyOpenGL_accelerate"
+        "PyOpenGL"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

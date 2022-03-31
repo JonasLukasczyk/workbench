@@ -22,7 +22,10 @@ setuptools.setup(
     install_requires=[
         "numpy",
         "matplotlib",
-        "pytest"
+        "pytest",
+        "py",
+        "ipywidgets",
+        "widgetsnbextension"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

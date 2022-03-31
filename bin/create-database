@@ -75,7 +75,7 @@ fnt = get_font(im_fontsize)
 # img.save(im_name)
 
 print(f'Creating database: {args.database}')
-os.mkdir(args.database)
+os.makedirs(args.database)
 
 with open(f'{args.database}/data.csv', 'w') as dbinfo:
     cur_image = 0

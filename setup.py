@@ -26,6 +26,7 @@ setuptools.setup(
         "matplotlib",
         "pytest",
         "py",
+        "imageio",
         "ipywidgets",
         "PyOpenGL"
     ],

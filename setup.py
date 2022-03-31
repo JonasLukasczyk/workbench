@@ -20,6 +20,7 @@ setuptools.setup(
                 "cinemasci.smoke"
              ],
     install_requires=[
+        "setuptools>=60",
         "numpy",
         "matplotlib",
         "pytest",

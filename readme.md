@@ -12,33 +12,24 @@ All code and examples are prototype and for design purposes only
 
 Contributions can be made by submitting issues and contributing code through pull requests. The code shall be reviewed by the core Cinema team, and accepted when both content and code standards are met.
 
-# Running the example 
+# Running the example
+
+First, create a local python environment for this project, within the repository directory:
+```
+python3 -m venv csci
+source csci/bin/activate
+python setup.py install
+```
+
+Then, you can work within this environment and run the 'hello world' example:
 
 ```
-# IMPORTANT: CinemaLib repo must be in python path or in project directory
-import cinemasci
+mkdir run
+cp -rf cinemasci run
+./bin/create-database --database run/cinema.cdb
+cp examples/hello.ipynb run
+cd run
+jupyter notebook hello.ipynb
 
-# Open Cinema Database
-cdb  = cinemasci.DatabaseReader();
-cdb.inputs["Path"].setValue( 'cinema.cdb' );
-
-# Select Some Data Products
-query = cinemasci.DatabaseQuery();
-query.inputs["Table"].setValue(cdb.outputs['Table']);
-query.inputs["Query"].setValue('SELECT * FROM input LIMIT 5 OFFSET 0');
-
-# Read Data Products
-imageReader = cinemasci.ImageReader();
-imageReader.inputs["Table"].setValue(query.outputs['Table']);
-
-# Render Images in Black and White (to demo shader effects)
-imageRenderer = cinemasci.ImageRenderer();
-imageRenderer.inputs["Image"].setValue( imageReader.outputs["Images"] );
-
-# Display Results
-from IPython.display import display
-images = imageRenderer.outputs["Image"].getValue();
-for i in images:
-    display(i)
 ```
 

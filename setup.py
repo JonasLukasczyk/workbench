@@ -26,7 +26,8 @@ setuptools.setup(
         "pytest",
         "py",
         "ipywidgets",
-        "widgetsnbextension"
+        "PyOpenGL",
+        "PyOpenGL_accelerate"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -1,6 +1,7 @@
 # Cinema v2.0 prototyping and design repository
 ![smoke](https://github.com/cinemascience/workbench/actions/workflows/CinemaSmokeTest.yml/badge.svg)
 ![base](https://github.com/cinemascience/workbench/actions/workflows/CinemaBaseTest.yml/badge.svg)
+![rendering](https://github.com/cinemascience/workbench/actions/workflows/CinemaRenderTest.yml/badge.svg)
 
 Cinema v2.0 is a newly designed toolkit of python-based components for creating, filtering, transforming and viewing Cinema databases. The toolkit shall maintain compatibility with Cinema data specifications.
 

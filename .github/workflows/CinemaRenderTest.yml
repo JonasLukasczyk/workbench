@@ -6,7 +6,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-bionic
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.9]
@@ -21,7 +21,7 @@ jobs:
       uses: openrndr/setup-opengl@v1.1
     - name: Install dependencies
       run: |
-        python setup.py install
+        python setup.nogl.py install
     - name: Run the tests
       run: |
         python -m unittest testing/CinemaRenderTest.py

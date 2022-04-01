@@ -6,7 +6,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-bionic
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.9]

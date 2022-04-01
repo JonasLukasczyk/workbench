@@ -44,7 +44,6 @@ class ImageRenderer(Filter):
     def getVertexShaderCode(self):
         return """
 #version 120
-precision highp float;
 
 attribute vec3 position;
 varying vec2 vUV;
@@ -58,7 +57,6 @@ void main(){
     def getFragmentShaderCode(self):
         return """
 #version 120
-precision highp float;
 
 uniform sampler2D tex;
 
@@ -75,8 +73,8 @@ void main(){
 
     def render(self,image):
 
-        width = image.shape[0]
-        height = image.shape[1]
+        width = image.shape[1]
+        height = image.shape[0]
 
         # Setup framebuffer
         framebuffer = glGenFramebuffers (1)

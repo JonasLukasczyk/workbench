@@ -3,6 +3,7 @@ from .Core import *
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GL import shaders
+from OpenGL.GL import glGetString
 import numpy as np
 
 from PIL import Image
@@ -16,6 +17,16 @@ class ImageRenderer(Filter):
         # create context once
         glutInit()
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+
+    def smoke_test(self):
+        glutInitWindowSize(200, 200)
+        glutInitWindowPosition(0, 0)
+        window = glutCreateWindow("hello")
+        for glname in (GL_VENDOR,GL_RENDERER,GL_VERSION,GL_SHADING_LANGUAGE_VERSION,GL_EXTENSIONS):
+            print("{}: {}".format(glname, glGetString(glname).decode("UTF-8")))
+
+    def glVersion(self):
+        return glGetString(GL_VERSION)
 
     def compileShader(self, shader_code, shader_type):
         try:
@@ -32,7 +43,7 @@ class ImageRenderer(Filter):
 
     def getVertexShaderCode(self):
         return """
-#version 100
+#version 120
 precision highp float;
 
 attribute vec3 position;
@@ -46,7 +57,7 @@ void main(){
 
     def getFragmentShaderCode(self):
         return """
-#version 100
+#version 120
 precision highp float;
 
 uniform sampler2D tex;

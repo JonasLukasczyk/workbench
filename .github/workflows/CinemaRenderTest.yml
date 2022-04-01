@@ -22,7 +22,7 @@ jobs:
         python-version: ${{ matrix.python-version }} 
     - name: Install dependencies
       run: |
-        python setup.py install
+        python setup.action.py install
     - name: Run the tests 
       run: |
         python -m unittest testing/CinemaRenderTest.py

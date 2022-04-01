@@ -28,8 +28,7 @@ setuptools.setup(
         "py",
         "imageio",
         "ipywidgets",
-        "PyOpenGL",
-        "PyOpenGL_accelerate"
+        "PyOpenGL"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

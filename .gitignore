@@ -4,5 +4,5 @@ cinemasci.egg-info
 dist
 **/__pycache__
 wbenv
-scratch
-csci
+testing/scratch
+csenv

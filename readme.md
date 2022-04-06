@@ -22,15 +22,9 @@ source csenv/bin/activate
 python setup.py install
 ```
 
-Then, you can work within this environment and run the 'hello world' example:
+Then, you can work within this environment and run the 'hello world' example, using the `make_test_area` script. This will create a directory under `testing/`, copy files, and run a jupyter notebook example:
 
 ```
-mkdir run
-cp -rf cinemasci run
-./bin/create-database --database run/cinema.cdb
-cp examples/hello.ipynb run
-cd run
-jupyter notebook hello.ipynb
-
+./bin/make_test_area
 ```
 

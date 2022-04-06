@@ -1,0 +1,9 @@
+#!/bin/bash
+
+TEST_DIR="testing/scratch"
+mkdir $TESD_DIR 
+cp -rf cinemasci $TEST_DIR
+./bin/create-database --database $TEST_DIR/cinema.cdb
+cp examples/hello.ipynb $TEST_DIR
+pushd $TEST_DIR
+jupyter notebook hello.ipynb

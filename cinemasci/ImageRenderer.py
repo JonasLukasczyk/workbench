@@ -18,16 +18,6 @@ class ImageRenderer(Filter):
         glutInit()
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
 
-    def smoke_test(self):
-        glutInitWindowSize(200, 200)
-        glutInitWindowPosition(0, 0)
-        window = glutCreateWindow("hello")
-        for glname in (GL_VENDOR,GL_RENDERER,GL_VERSION,GL_SHADING_LANGUAGE_VERSION,GL_EXTENSIONS):
-            print("{}: {}".format(glname, glGetString(glname).decode("UTF-8")))
-
-    def glVersion(self):
-        return glGetString(GL_VERSION)
-
     def compileShader(self, shader_code, shader_type):
         try:
             shader_id = glCreateShader(shader_type)

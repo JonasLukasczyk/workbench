@@ -1,6 +1,6 @@
 import setuptools
 
-# read the description file 
+# read the description file
 from os import path
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'doc/description.md'), encoding='utf-8') as f:
@@ -28,8 +28,7 @@ setuptools.setup(
         "py",
         "imageio",
         "ipywidgets",
-        "PyOpenGL",
-        "PyOpenGL_accelerate"
+        "PyOpenGL"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

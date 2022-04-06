@@ -6,7 +6,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-bionic
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.9]
@@ -17,11 +17,12 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Setup OpenGL
-      uses: openrndr/setup-opengl@v1.1
     - name: Install dependencies
       run: |
+        sudo apt-get install freeglut3-dev # can be removed after switch from PyOpenGL to moderngl
         python setup.py install
-    - name: Run the tests
-      run: |
-        python -m unittest testing/CinemaRenderTest.py
+    - name: Run headless rendering tests
+      uses: GabrielBB/xvfb-action@v1
+      with:
+        run: |
+          python -m unittest testing/CinemaRenderTest.py

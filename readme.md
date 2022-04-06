@@ -17,8 +17,8 @@ Contributions can be made by submitting issues and contributing code through pul
 
 First, create a local python environment for this project, within the repository directory:
 ```
-python3 -m venv csci
-source csci/bin/activate
+python3 -m venv csenv
+source csenv/bin/activate
 python setup.py install
 ```
 

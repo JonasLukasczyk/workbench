@@ -1,9 +1,22 @@
 #!/bin/bash
 
-TEST_DIR="testing/scratch"
-mkdir $TESD_DIR 
+
+SCRATCH_DIR="testing/scratch"
+TEST_DIR=$SCRATCH_DIR/hello
+rm -rf $TEST_DIR
+
+# create directories
+if [ ! -d "$SCRATCH_DIR" ]; then
+    mkdir $SCRATCH_DIR
+fi
+if [ ! -d "$TEST_DIR" ]; then
+    mkdir $TEST_DIR
+fi
+
 cp -rf cinemasci $TEST_DIR
 ./bin/create-database --database $TEST_DIR/cinema.cdb
 cp examples/hello.ipynb $TEST_DIR
 pushd $TEST_DIR
+
+# run the notebook
 jupyter notebook hello.ipynb

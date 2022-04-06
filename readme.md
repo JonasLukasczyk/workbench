@@ -13,18 +13,21 @@ All code and examples are prototype and for design purposes only
 
 Contributions can be made by submitting issues and contributing code through pull requests. The code shall be reviewed by the core Cinema team, and accepted when both content and code standards are met.
 
-# Running the example
+# Creating a local python environment for the workbench
 
-First, create a local python environment for this project, within the repository directory:
+To create a local python environment for this project, run the following commands within the repository directory:
 ```
 python3 -m venv csenv
 source csenv/bin/activate
 python setup.py install
 ```
 
-Then, you can work within this environment and run the 'hello world' example, using the `make_test_area` script. This will create a directory under `testing/`, copy files, and run a jupyter notebook example:
+# Running the example
+
+You can now use this python environment to run the 'hello world' example, using the `make_test_area` script. This will create a directory under `testing/`, copy files, and run a jupyter notebook example:
 
 ```
+source csenv/bin/activate
 ./bin/make_test_area
 ```
 

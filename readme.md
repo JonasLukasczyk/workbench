@@ -9,10 +9,6 @@ The code in this repository is released under open source license. See the licen
 
 All code and examples are prototype and for design purposes only
 
-# Contributing to the workbench
-
-Contributions can be made by submitting issues and contributing code through pull requests. The code shall be reviewed by the core Cinema team, and accepted when both content and code standards are met.
-
 # Creating a local python environment for the workbench
 
 To create a local python environment for this project, run the following commands within the repository directory:
@@ -30,4 +26,9 @@ You can now use this python environment to run the 'hello world' example, using 
 source csenv/bin/activate
 ./bin/make_test_area
 ```
+
+# Contributing to the workbench
+
+Contributions can be made by submitting issues and contributing code through pull requests. The code shall be reviewed by the core Cinema team, and accepted when both content and code standards are met.
+
 

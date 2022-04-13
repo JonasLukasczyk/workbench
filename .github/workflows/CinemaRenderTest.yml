@@ -12,17 +12,20 @@ jobs:
         python-version: [3.9]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        sudo apt-get install freeglut3-dev # can be removed after switch from PyOpenGL to moderngl
-        python setup.py install
-    - name: Run headless rendering tests
-      uses: GabrielBB/xvfb-action@v1
-      with:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test Environment
         run: |
-          python -m unittest testing/CinemaRenderTest.py
+          python -m pip install --upgrade pip
+          sudo apt-get install libglu1-mesa-dev xvfb
+          python -m pip install pytest pytest-xvfb
+      - name: Dependencies
+        run: |
+          python setup.py install
+      - name: Test using ModernGL
+        run: |
+          python -m pytest -s testing/CinemaRenderTest.py
+

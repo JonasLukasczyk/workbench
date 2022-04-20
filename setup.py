@@ -20,15 +20,13 @@ setuptools.setup(
                 "cinemasci.smoke"
              ],
     install_requires=[
-        "setuptools>=60",
         "numpy",
         "scipy",
         "matplotlib",
-        "pytest",
         "py",
         "imageio",
         "ipywidgets",
-        "PyOpenGL"
+        "moderngl<6"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

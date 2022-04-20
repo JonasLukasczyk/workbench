@@ -13,8 +13,6 @@ text_offset   = 24
 margin_left   = 50 
 margin_top    = 50
 tab           = 100
-phi_values    = [ 10,  20,  30,  40]
-theta_values  = [110, 120, 130, 140]
 
 helptext = ""
 
@@ -30,6 +28,20 @@ parser.add_argument(    "--database",
                         required=False,
                         default="cinema.cdb",
                         help="path to the new cinema database")
+
+parser.add_argument(    "--phivalues",
+                        required=False,
+                        default=[10.0, 20.0, 30.0, 40.0],
+                        nargs='+',
+                        type=float,
+                        help="resolution of images to create")
+
+parser.add_argument(    "--thetavalues",
+                        required=False,
+                        default=[110.0, 120.0, 130.0, 140.0],
+                        nargs='+',
+                        type=float,
+                        help="resolution of images to create")
 
 parser.add_argument(    "--resolution",
                         required=False,
@@ -80,8 +92,8 @@ os.makedirs(args.database)
 with open(f'{args.database}/data.csv', 'w') as dbinfo:
     cur_image = 0
     dbinfo.write("phi,theta,FILE\n")
-    for p in phi_values:
-        for t in theta_values:
+    for p in args.phivalues:
+        for t in args.thetavalues:
             im_name = f'{cur_image:03}.jpg'
             ImageDraw.Draw(img).rectangle((0, 0, args.resolution[0], args.resolution[1]), fill=im_background)
 

@@ -4,71 +4,75 @@ import sqlite3
 
 class DatabaseQuery(Filter):
 
-    def __init__(self):
-        super(DatabaseQuery, self).__init__();
-        self.addInputPort("Table", "Table", []);
-        self.addInputPort("Query", "String", "SELECT * FROM input");
-        self.addOutputPort("Table", "Table", []);
+  def __init__(self):
+    super().__init__();
+    self.addInputPort("Table", "Table", []);
+    self.addInputPort("Query", "String", "SELECT * FROM input");
+    self.addOutputPort("Table", "Table", []);
 
-    def executeSQL(self,db,sql):
-#         print(sql)
-        try:
-            c = db.cursor()
-            c.execute(sql)
-        except sqlite3.Error as e:
-            print(e)
+  def executeSQL(self,db,sql):
+    try:
+      c = db.cursor()
+      c.execute(sql)
+    except sqlite3.Error as e:
+      print(e)
 
-    def createTable(self, db, table):
-        sql = 'CREATE TABLE input(id INTEGER PRIMARY KEY AUTOINCREMENT';
+  def createTable(self, db, table):
+    sql = 'CREATE TABLE input(id INTEGER PRIMARY KEY AUTOINCREMENT';
 
-        header = table[0]
-        firstRow = table[1]
+    header = table[0]
+    firstRow = table[1]
 
-        for i in range(0,len(header)):
-            sql = sql + ', ' + header[i];
-            if firstRow[i].isnumeric():
-                sql = sql + ' INTEGER';
-            else:
-                sql = sql + ' TEXT';
+    for i in range(0,len(header)):
+      if header[i].lower()=='id':
+        continue
 
-        sql =  sql + ')';
-        self.executeSQL(db,sql)
+      sql = sql + ', ' + header[i];
+      if firstRow[i].isnumeric():
+        sql = sql + ' INTEGER';
+      else:
+        sql = sql + ' TEXT';
 
-    def insertData(self, db, table):
-        sql = 'INSERT INTO input(';
-        for x in table[0]:
-            sql = sql + x + ', ';
-        sql = sql[0:-2] + ') VALUES\n';
+    sql =  sql + ')';
+    self.executeSQL(db,sql)
 
-        for i in range(1, len(table)):
-            row = '('
-            for v in table[i]:
-                row += '"' + v + '",'
+  def insertData(self, db, table):
+    sql = 'INSERT INTO input(';
+    for x in table[0]:
+      sql = sql + x + ', ';
+    sql = sql[0:-2] + ') VALUES\n';
 
-            sql += row[0:-1] + '),\n'
-        sql = sql[0:-2];
-        self.executeSQL(db,sql)
+    for i in range(1, len(table)):
+      row = '('
+      for v in table[i]:
+        row += '"' + v + '",'
 
-    def queryData(self, db, sqlQuery):
-        c = db.cursor();
-        c.execute(sqlQuery);
-        res = c.fetchall();
-        columns = [];
-        for d in c.description:
-            columns.append(d[0]);
-        res.insert(0,columns);
-        return res;
+      sql += row[0:-1] + '),\n'
+    sql = sql[0:-2];
+    self.executeSQL(db,sql)
 
-    def computeOutputs(self):
-        db = sqlite3.connect(":memory:");
+  def queryData(self, db, sqlQuery):
+    c = db.cursor();
+    c.execute(sqlQuery);
+    res = c.fetchall();
+    columns = [];
+    for d in c.description:
+      columns.append(d[0]);
+    res.insert(0,columns);
+    return res;
 
-        table = self.inputs["Table"].getValue();
+  def update(self):
+    super().update()
 
-        self.createTable(db, table);
-        self.insertData(db, table);
+    db = sqlite3.connect(":memory:");
 
-        output = self.queryData(db, self.inputs["Query"].getValue());
+    table = self.inputs["Table"].getValue();
 
-        self.outputs["Table"].setValue(output);
+    self.createTable(db, table);
+    self.insertData(db, table);
 
-        return super(DatabaseQuery, self).computeOutputs();
+    output = self.queryData(db, self.inputs["Query"].getValue());
+
+    self.outputs["Table"].setValue(output);
+
+    return 1;

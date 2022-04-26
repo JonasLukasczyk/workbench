@@ -4,26 +4,28 @@ import imageio
 
 class ImageReader(Filter):
 
-    def __init__(self):
-        super(ImageReader, self).__init__();
-        self.addInputPort("Table", "Table", []);
-        self.addInputPort("FileColumn", "String", "FILE");
-        self.addOutputPort("Images", "List", []);
+  def __init__(self):
+    super(ImageReader, self).__init__()
+    self.addInputPort("Table", "Table", [])
+    self.addInputPort("FileColumn", "String", "FILE")
+    self.addOutputPort("Images", "List", [])
 
-    def computeOutputs(self):
-        table = self.inputs["Table"].getValue();
-        fileColumn = self.inputs["FileColumn"].getValue();
+  def update(self):
+    super().update()
 
-        try:
-            fileColumnIdx = table[0].index(fileColumn);
-        except ValueError as e:
-            return print("Table does not contain '" + fileColumn + "' column!");
+    table = self.inputs["Table"].getValue()
+    fileColumn = self.inputs["FileColumn"].getValue()
 
-        images = [];
-        for i in range(1, len(table)):
-            path = table[i][fileColumnIdx];
-            images.append( imageio.imread(path) )
+    try:
+      fileColumnIdx = table[0].index(fileColumn)
+    except ValueError as e:
+      return print("Table does not contain '" + fileColumn + "' column!")
 
-        self.outputs["Images"].setValue( images );
+    images = [];
+    for i in range(1, len(table)):
+      path = table[i][fileColumnIdx]
+      images.append( imageio.imread(path) )
 
-        return super(ImageReader, self).computeOutputs();
+    self.outputs["Images"].setValue(images)
+
+    return 1;

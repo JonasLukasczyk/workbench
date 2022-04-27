@@ -31,6 +31,8 @@ class CinemaArtifactSourceTest(unittest.TestCase):
             i.save(os.path.join(CinemaArtifactSourceTest.scratch, "artifact", "imagesource.png"))
 
         # check the result
-        result = self.compare(  os.path.join(CinemaArtifactSourceTest.gold, "artifact", "imagesource.png" ), 
-                                os.path.join(CinemaArtifactSourceTest.scratch, "artifact", "imagesource.png" ) )
+        gold = os.path.join(CinemaArtifactSourceTest.gold, "artifact", "imagesource.png" ) 
+        scratch = os.path.join(CinemaArtifactSourceTest.scratch, "artifact", "imagesource.png" )
+        self.assertTrue(os.path.exists(scratch))
+        result = self.compare( gold, scratch ) 
         self.assertTrue(result)

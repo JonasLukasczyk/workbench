@@ -16,7 +16,8 @@ fi
 cp -rf cinemasci $TEST_DIR
 ./bin/create-database --database $TEST_DIR/cinema.cdb
 cp examples/hello.ipynb $TEST_DIR
+cp examples/artifactsource.ipynb $TEST_DIR
 pushd $TEST_DIR
 
 # run the notebook
-jupyter notebook hello.ipynb
+jupyter notebook artifactsource.ipynb

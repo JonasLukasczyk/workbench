@@ -19,7 +19,7 @@ class CinemaArtifactSourceTest(unittest.TestCase):
         print("Running test: {}".format(self._testMethodName))
 
     def compare(self, a, b ): 
-        results = compare_images( a, b, 1 )
+        results = compare_images( a, b, 150 )
 
         return (results is None)
 

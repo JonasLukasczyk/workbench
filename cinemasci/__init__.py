@@ -5,6 +5,7 @@ from .DatabaseReader import *
 from .DatabaseQuery import *
 from .ImageReader import *
 from .ImageRenderer import *
+from .TestImageArtifactSource import *
 
 #
 # new factory function

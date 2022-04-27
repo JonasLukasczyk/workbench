@@ -65,7 +65,6 @@ class TestImageArtifactSource(ArtifactSource):
 
     # make an image
     def generate_artifacts(self, **kwargs):
-        print("TestImageArtifactSource")
         img = Image.new('RGB', (self.im_resolution[0], self.im_resolution[1]), color = self.im_background)
 
         im_name = f'{self.cur_image:03}.jpg'

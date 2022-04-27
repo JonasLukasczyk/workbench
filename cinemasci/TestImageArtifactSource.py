@@ -12,7 +12,7 @@ class TestImageArtifactSource(Filter):
     Text_offset   = 24
     Margin_left   = 50 
     Margin_top    = 50
-    Tab           = 100
+    Tab           = 200
 
     def __init__(self):
         super(TestImageArtifactSource, self).__init__()
@@ -40,7 +40,8 @@ class TestImageArtifactSource(Filter):
 
         kwargs = self.inputs["Parameters"].getValue()
     
-        newimage = self.__generate_image(kwargs)
+        images = []
+        newimage = self.__generate_image(**kwargs)
         images.append(newimage)
 
         self.outputs["Artifacts"].setValue(images)
@@ -76,7 +77,7 @@ class TestImageArtifactSource(Filter):
 
     # make an image
     def __generate_image(self, **kwargs):
-        img = Image.new('RGB', (self.resolution[0], self.resolution[1]), color = self.im_background)
+        img = Image.new('RGB', (self.im_resolution[0], self.im_resolution[1]), color = self.im_background)
 
         im_name = f'{self.cur_image:03}.jpg'
         ImageDraw.Draw(img).rectangle((0, 0, self.im_resolution[0], self.im_resolution[1]), fill=self.im_background)
@@ -89,8 +90,10 @@ class TestImageArtifactSource(Filter):
         for key, value in kwargs.items():
             cur_x  = self.margin_left
             cur_y += self.text_offset 
-            ImageDraw.Draw(img).text((cur_x, cur_y), f'file:{key}', font=self.font, fill=self.text_color)
-            cur_x += tab 
+            ImageDraw.Draw(img).text((cur_x, cur_y), f'{key}', font=self.font, fill=self.text_color)
+            cur_x += self.tab 
             ImageDraw.Draw(img).text((cur_x, cur_y), f'{value}', font=self.font, fill=self.text_color)
 
         self.cur_image += 1
+
+        return img

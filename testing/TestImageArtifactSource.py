@@ -19,18 +19,22 @@ class CinemaArtifactSourceTest(unittest.TestCase):
         print("Running test: {}".format(self._testMethodName))
 
     def compare(self, a, b ): 
+        # '25' is a tolerance value, to be replaced when images can be inspected
         results = compare_images( a, b, 25 )
 
         return (results is None)
 
     def test_artifact_source(self):
+        # create an artifact source
         artifactSource = cinemasci.TestImageArtifactSource();
+
+        # provide input parameters and save the resulting images
         artifactSource.inputs["Parameters"].setValue( {'phi': 25.5, 'theta': 50.0} );
         images = artifactSource.outputs["Artifacts"].getValue();
         for i in images:
             i.save(os.path.join(CinemaArtifactSourceTest.scratch, "artifact", "imagesource.png"))
 
-        # check the result
+        # check the results
         gold = os.path.join(CinemaArtifactSourceTest.gold, "artifact", "imagesource.png" ) 
         scratch = os.path.join(CinemaArtifactSourceTest.scratch, "artifact", "imagesource.png" )
         self.assertTrue(os.path.exists(scratch))

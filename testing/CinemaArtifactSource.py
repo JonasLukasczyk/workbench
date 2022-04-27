@@ -43,4 +43,5 @@ class CinemaArtifactSourceTest(unittest.TestCase):
 
     def test_cinema_artifact_source(self):
         # create an artifact source
-        artifactSource = cinemasci.CinemaArtifactSource();
+        artifactSource = cinemasci.CinemaArtifactSource()
+        artifactSource.path = os.path.join(CinemaArtifactSourceTest.gold, "artifact", "cinema.cdb") 

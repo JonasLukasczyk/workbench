@@ -24,5 +24,5 @@ class CinemaComparisonTest(unittest.TestCase):
         return (results is None)
 
     def test_cinema_image_compare(self):
-        result = self.compare( os.path.join(CinemaComparisonTest.gold, "base", "000.png" ), os.path.join(CinemaComparisonTest.gold, "base", "000.png" ) )
+        result = self.compare( os.path.join(CinemaComparisonTest.gold, "comparison", "000.png" ), os.path.join(CinemaComparisonTest.gold, "comparison", "000.png" ) )
         self.assertTrue(result)

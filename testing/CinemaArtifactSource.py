@@ -44,4 +44,6 @@ class CinemaArtifactSourceTest(unittest.TestCase):
     def test_cinema_artifact_source(self):
         # create an artifact source
         artifactSource = cinemasci.CinemaArtifactSource()
+        # point it to a database
         artifactSource.path = os.path.join(CinemaArtifactSourceTest.gold, "artifact", "cinema.cdb") 
+        artifactSource.inputs["Parameters"].setValue( {'phi': 10.0, 'theta': 110.0} );

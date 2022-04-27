@@ -24,7 +24,7 @@ class ImageReader(Filter):
     images = [];
     for i in range(1, len(table)):
       path = table[i][fileColumnIdx]
-      images.append( imageio.imread(path) )
+      images.append( imageio.v2.imread(path) )
 
     self.outputs["Images"].setValue(images)
 

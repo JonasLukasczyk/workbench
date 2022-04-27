@@ -25,7 +25,6 @@ class CinemaArtifactSource(ArtifactSource):
     #
     # get and set properties
     #
-
     @property
     def path(self):
         return self.cdb.inputs["Path"].getValue(); 
@@ -34,7 +33,9 @@ class CinemaArtifactSource(ArtifactSource):
     def path(self, value):
         self.cdb.inputs["Path"].setValue( value );
 
+    #
     # generate artifacts 
+    #
     def generate_artifacts(self, **kwargs):
         # do the query
         self.query.inputs["Table"].setValue(self.cdb.outputs['Table']);
@@ -42,4 +43,4 @@ class CinemaArtifactSource(ArtifactSource):
         self.imageReader.inputs["Table"].setValue(self.query.outputs['Table'])
         # self.imageRenderer.inputs["Artifacts"].setValue( self.imageReader.outputs["Images"] );
 
-        return [img]
+        return self.imageReader.outputs["Images"]

@@ -6,6 +6,7 @@ from .DatabaseQuery import *
 from .ImageReader import *
 from .ImageRenderer import *
 from .ArtifactSource import *
+from .CinemaArtifactSource import *
 from .TestImageArtifactSource import *
 
 #

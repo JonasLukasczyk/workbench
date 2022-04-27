@@ -40,3 +40,7 @@ class CinemaArtifactSourceTest(unittest.TestCase):
         self.assertTrue(os.path.exists(scratch))
         result = self.compare( gold, scratch ) 
         self.assertTrue(result)
+
+    def test_cinema_artifact_source(self):
+        # create an artifact source
+        artifactSource = cinemasci.CinemaArtifactSource();

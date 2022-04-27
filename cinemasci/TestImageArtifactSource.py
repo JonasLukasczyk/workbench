@@ -1,9 +1,10 @@
 from .Core import *
+from .ArtifactSource import *
 
 import sys
 from PIL import Image, ImageFont, ImageDraw
 
-class TestImageArtifactSource(Filter):
+class TestImageArtifactSource(ArtifactSource):
 
     Im_resolution = [640, 480]
     Im_background = (0, 0, 0)
@@ -35,19 +36,6 @@ class TestImageArtifactSource(Filter):
         self.cur_image = 0
         self.font = self.__get_font(self.im_fontsize) 
 
-    def update(self):
-        super().update()
-
-        kwargs = self.inputs["Parameters"].getValue()
-    
-        images = []
-        newimage = self.__generate_image(**kwargs)
-        images.append(newimage)
-
-        self.outputs["Artifacts"].setValue(images)
-
-        return 1;
-
     #
     # solution from:
     # https://www.programcreek.com/python/?CodeExample=get+font
@@ -76,7 +64,8 @@ class TestImageArtifactSource(Filter):
         return font
 
     # make an image
-    def __generate_image(self, **kwargs):
+    def generate_artifacts(self, **kwargs):
+        print("TestImageArtifactSource")
         img = Image.new('RGB', (self.im_resolution[0], self.im_resolution[1]), color = self.im_background)
 
         im_name = f'{self.cur_image:03}.jpg'
@@ -96,4 +85,4 @@ class TestImageArtifactSource(Filter):
 
         self.cur_image += 1
 
-        return img
+        return [img]

@@ -36,7 +36,7 @@ class ImageRenderer(Filter):
 
   def getVertexShaderCode(self):
     return """
-#version 120
+#version 330
 
 attribute vec2 position;
 varying vec2 vUV;
@@ -50,7 +50,7 @@ void main(){
 
   def getFragmentShaderCode(self):
     return """
-#version 120
+#version 330
 
 uniform sampler2D tex;
 

@@ -32,6 +32,8 @@ A single CIS image is the result of coloring and compositing a set of elements t
     - required: (x,y) [int, int] offset from its image's origin
         - when offset, the layer's contents may be outside the image's (w,h)
 
+**NOTE** a layer could also be defined as an image OR a set of re-colorable, compositable data.
+
 # Example
 
 - **image**

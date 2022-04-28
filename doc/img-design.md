@@ -2,7 +2,7 @@
 
 <table>
 <tr>
-<td><img src="img/composite.png"></img></td>
+<td><img src="composite.png"></img></td>
 <tr>
 <td>Diagram of layers and possible composited images. Images can be combined together in many ways, depending upon the information that is included, as well as the capabilities of the consumer of the data.</td>
 </tr>

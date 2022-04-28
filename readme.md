@@ -26,7 +26,7 @@ You can now use this python environment to run the 'hello world' example, using 
 
 ```
 source csenv/bin/activate
-./bin/make_test_area
+make example
 ```
 
 # Contributing to the workbench

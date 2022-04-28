@@ -29,6 +29,10 @@ source csenv/bin/activate
 make example
 ```
 
+# Design proposals
+
+- [CIS image proposal](doc/img-design.md)
+
 # Contributing to the workbench
 
 Contributions can be made by submitting issues and contributing code through pull requests. The code shall be reviewed by the core Cinema team, and accepted when both content and code standards are met.

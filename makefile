@@ -21,6 +21,7 @@ example:
 	@echo "Creating test area ..."
 	@cp -rf cinemasci $(TEST_DIR)
 	@./cinema --database $(TEST_DIR)/cinema.cdb
+	@cp examples/demoCDB.ipynb $(TEST_DIR)
 	@cp examples/hello.ipynb $(TEST_DIR)
 	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
 	@echo "Running jupyter notebook ..."

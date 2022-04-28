@@ -8,6 +8,7 @@ from .ImageRenderer import *
 from .ArtifactSource import *
 from .CinemaArtifactSource import *
 from .TestImageArtifactSource import *
+from .DemoCDB import *
 
 #
 # new factory function

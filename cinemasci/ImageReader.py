@@ -1,6 +1,6 @@
 from .Core import *
 
-import imageio
+from PIL import Image
 
 class ImageReader(Filter):
 
@@ -24,7 +24,7 @@ class ImageReader(Filter):
     images = [];
     for i in range(1, len(table)):
       path = table[i][fileColumnIdx]
-      images.append( imageio.v2.imread(path) )
+      images.append( Image.open(path) )
 
     self.outputs["Images"].setValue(images)
 

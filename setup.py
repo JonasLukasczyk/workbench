@@ -24,7 +24,7 @@ setuptools.setup(
         "scipy",
         "matplotlib",
         "py",
-        "imageio",
+        "Pillow",
         "ipywidgets",
         "moderngl<6"
     ],

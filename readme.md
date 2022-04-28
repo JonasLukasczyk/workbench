@@ -22,7 +22,7 @@ pip install jupyterlab
 
 # Running the example
 
-You can now use this python environment to run the 'hello world' example, using the `make_test_area` script. This will create a directory under `testing/`, copy files, and run a jupyter notebook example:
+You can now use this python environment to run several examples, using `make`. Running `make example` will create a directory under `testing/`, copy files, and run a jupyter notebook example:
 
 ```
 source csenv/bin/activate

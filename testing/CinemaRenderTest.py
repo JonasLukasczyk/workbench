@@ -18,7 +18,6 @@ def test_render():
   except OSError as error:
     pass
 
-
   # create a test database
   os.system("./cinema --database {}".format(cdbpath))
   assert os.path.isdir(scratchdir)

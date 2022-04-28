@@ -44,4 +44,4 @@ class Filter():
     self.outputs[name] = Port(type, value, self)
 
   def update(self):
-    print("-> "+type(self).__name__)
+    return  

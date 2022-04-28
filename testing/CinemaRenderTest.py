@@ -11,7 +11,7 @@ def ensure_xvfb():
 
 def test_render():
    # create a test database
-  os.system("./bin/create-database --database scratch/cinema.cdb")
+  os.system("cinema --database scratch/cinema.cdb")
 
   # open a cinema database
   cdb = cinemasci.CinemaDatabaseReader();

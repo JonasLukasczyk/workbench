@@ -27,4 +27,4 @@ jobs:
         python setup.py install
     - name: Run the tests 
       run: |
-        python -m unittest testing/CinemaComparisonTest.py
+        python -m pytest testing/CinemaComparisonTest.py

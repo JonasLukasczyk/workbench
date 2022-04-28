@@ -1,28 +1,19 @@
-import unittest
-import numpy
+import pytest
 import os
-import matplotlib.pyplot as plt
 from matplotlib.testing.compare import compare_images
 
-class CinemaComparisonTest(unittest.TestCase):
-    gold    = "testing/gold"
-    scratch = "testing/scratch"
+gold    = "testing/gold"
+scratch = "testing/scratch"
 
-    def __init__(self, *args, **kwargs):
-        super(CinemaComparisonTest, self).__init__(*args, **kwargs)
+def compare( a, b ): 
+    results = compare_images( a, b, 1 )
 
-    def setUp(self):
-        try:
-            os.makedirs(CinemaComparisonTest.scratch)
-        except OSError as error:
-            pass
-        print("Running test: {}".format(self._testMethodName))
+    return (results is None)
 
-    def compare(self, a, b ): 
-        results = compare_images( a, b, 1 )
+def test_cinema_image_compare():
+    try:
+        os.makedirs(scratch)
+    except OSError as error:
+        pass
 
-        return (results is None)
-
-    def test_cinema_image_compare(self):
-        result = self.compare( os.path.join(CinemaComparisonTest.gold, "comparison", "000.png" ), os.path.join(CinemaComparisonTest.gold, "comparison", "000.png" ) )
-        self.assertTrue(result)
+    assert compare( os.path.join(gold, "comparison", "000.png" ), os.path.join(gold, "comparison", "000.png" ) )

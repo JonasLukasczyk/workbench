@@ -1,50 +1,59 @@
 import pytest
-import unittest
 import cinemasci
 import os
 from matplotlib.testing.compare import compare_images
 
-class CinemaArtifactSourceTest(unittest.TestCase):
-    gold    = "testing/gold"
-    scratch = "testing/scratch"
+gold        = "testing/gold"
+scratch     = "testing/scratch"
+do_setup    = True
 
-    def __init__(self, *args, **kwargs):
-        super(CinemaArtifactSourceTest, self).__init__(*args, **kwargs)
+def setUp():
+    global do_setup
+    global scratch
 
-    def setUp(self):
+    if do_setup:
         try:
-            os.makedirs(os.path.join(CinemaArtifactSourceTest.scratch, "artifact"))
+            os.makedirs(os.path.join(scratch, "artifact"))
+            do_setup = False
         except OSError as error:
             pass
 
-        print("Running test: {}".format(self._testMethodName))
 
-    def compare(self, a, b ): 
-        # '25' is a tolerance value, to be replaced when images can be inspected
-        results = compare_images( a, b, 25 )
+def compare( a, b ): 
+    # '25' is a tolerance value, to be replaced when images can be inspected
+    results = compare_images( a, b, 25 )
 
-        return (results is None)
+    return (results is None)
 
-    def test_artifact_source(self):
-        # create an artifact source
-        artifactSource = cinemasci.TestImageArtifactSource();
+def test_artifact_source():
+    global scratch
+    global gold
 
-        # provide input parameters and save the resulting images
-        artifactSource.inputs["Parameters"].setValue( {'phi': 25.5, 'theta': 50.0} );
-        images = artifactSource.outputs["Artifacts"].getValue();
-        for i in images:
-            i.save(os.path.join(CinemaArtifactSourceTest.scratch, "artifact", "imagesource.png"))
+    setUp()
 
-        # check the results
-        gold = os.path.join(CinemaArtifactSourceTest.gold, "artifact", "imagesource.png" ) 
-        scratch = os.path.join(CinemaArtifactSourceTest.scratch, "artifact", "imagesource.png" )
-        self.assertTrue(os.path.exists(scratch))
-        result = self.compare( gold, scratch ) 
-        self.assertTrue(result)
+    # create an artifact source
+    artifactSource = cinemasci.TestImageArtifactSource();
 
-    def test_cinema_artifact_source(self):
-        # create an artifact source
-        artifactSource = cinemasci.CinemaArtifactSource()
-        # point it to a database
-        artifactSource.path = os.path.join(CinemaArtifactSourceTest.gold, "artifact", "cinema.cdb") 
-        artifactSource.inputs["Parameters"].setValue( {'phi': 10.0, 'theta': 110.0} );
+    # provide input parameters and save the resulting images
+    artifactSource.inputs["Parameters"].setValue( {'phi': 25.5, 'theta': 50.0} );
+    images = artifactSource.outputs["Artifacts"].getValue();
+    for i in images:
+        i.save(os.path.join(scratch, "artifact", "imagesource.png"))
+
+    # check the results
+    resdir = os.path.join(gold, "artifact", "imagesource.png" ) 
+    scratch = os.path.join(scratch, "artifact", "imagesource.png" )
+    assert os.path.exists(scratch)
+    result = compare( resdir, scratch ) 
+    assert result
+
+def test_cinema_artifact_source():
+    global gold
+
+    setUp()
+
+    # create an artifact source
+    artifactSource = cinemasci.CinemaArtifactSource()
+    # point it to a database
+    artifactSource.path = os.path.join(gold, "artifact", "cinema.cdb") 
+    artifactSource.inputs["Parameters"].setValue( {'phi': 10.0, 'theta': 110.0} );

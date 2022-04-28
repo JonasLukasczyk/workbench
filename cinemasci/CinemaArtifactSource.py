@@ -1,12 +1,15 @@
 from .Core import *
 from .ArtifactSource import *
 from .DatabaseQuery import *
-from .DatabaseReader import *
+from .CinemaDatabaseReader import *
 from .ImageReader import *
 from .ImageRenderer import *
 
 import sys
 
+#
+# A class that provides artifacts in a cinema-compliant way
+#
 class CinemaArtifactSource(ArtifactSource):
 
     def __init__(self):
@@ -17,7 +20,7 @@ class CinemaArtifactSource(ArtifactSource):
         self.addOutputPort("Artifacts", "List", [])
 
         # instance variables 
-        self.cdb = DatabaseReader();
+        self.cdb = CinemaDatabaseReader();
         self.query = DatabaseQuery();
         self.imageReader = ImageReader();
         # self.imageRenderer = ImageRenderer();

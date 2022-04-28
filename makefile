@@ -1,0 +1,26 @@
+SCRATCH_DIR=testing/scratch
+NEW_SCRATCH_DIR=testing/scratcher
+TEST_DIR=$(SCRATCH_DIR)/hello
+
+clean:
+	rm -rf build
+	rm -rf cinemasci.egg-info
+	rm -rf $(SCRATCH_DIR) 
+
+example:
+	@rm -rf $(TEST_DIR)
+	@if [ ! -d "$(SCRATCH_DIR)" ]; then\
+		echo "Creating scratch dir";\
+		mkdir $(SCRATCH_DIR);\
+	fi
+	@if [ ! -d "$(TEST_DIR)" ]; then\
+		echo "Creating test dir";\
+		mkdir $(TEST_DIR);\
+	fi
+	@echo "Creating test area ..."
+	@cp -rf cinemasci $(TEST_DIR)
+	@./bin/create-database --database $(TEST_DIR)/cinema.cdb
+	@cp examples/hello.ipynb $(TEST_DIR)
+	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
+	@echo "Running jupyter notebook ..."
+	@pushd $(TEST_DIR); jupyter notebook imageArtifactSource.ipynb

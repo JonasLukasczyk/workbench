@@ -14,7 +14,7 @@ def test_render():
   os.system("./bin/create-database --database scratch/cinema.cdb")
 
   # open a cinema database
-  cdb = cinemasci.DatabaseReader();
+  cdb = cinemasci.CinemaDatabaseReader();
   cdb.inputs["Path"].setValue( 'scratch/cinema.cdb' );
 
   # Select Some Data Products\n",

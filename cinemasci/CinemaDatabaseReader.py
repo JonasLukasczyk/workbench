@@ -2,7 +2,7 @@ from .Core import *
 
 import csv
 
-class DatabaseReader(Filter):
+class CinemaDatabaseReader(Filter):
 
   def __init__(self):
     super().__init__();

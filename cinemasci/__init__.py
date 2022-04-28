@@ -1,7 +1,7 @@
 __all__ = ["smoke"]
 
 from .Core import *
-from .DatabaseReader import *
+from .CinemaDatabaseReader import *
 from .DatabaseQuery import *
 from .ImageReader import *
 from .ImageRenderer import *

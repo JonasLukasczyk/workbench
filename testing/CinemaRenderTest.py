@@ -10,22 +10,23 @@ def ensure_xvfb():
     raise Exception("Tests need Xvfb to run.")
 
 def test_render():
-  scratchdir = "testing/scratch"
-  # make the test area
+  scratchdir = os.path.join( "testing", "scratch" )
+  cdbpath    = os.path.join( scratchdir, "cinema.cdb" )
+
   try:
     os.makedirs(scratchdir)
   except OSError as error:
     pass
 
-  print(scratchdir)
-  assert os.path.isdir(scratchdir)
 
   # create a test database
-  os.system("cinema --database testing/scratch/cinema.cdb")
+  os.system("cinema --database {}".format(cdbdir))
+  assert os.path.isdir(scratchdir)
+  assert os.path.isdir(cdbpath)
 
   # open a cinema database
   cdb = cinemasci.CinemaDatabaseReader();
-  cdb.inputs["Path"].setValue( 'testing/scratch/cinema.cdb' );
+  cdb.inputs["Path"].setValue( cdbdir );
 
   # Select Some Data Products\n",
   query = cinemasci.DatabaseQuery();

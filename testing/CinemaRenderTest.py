@@ -20,13 +20,13 @@ def test_render():
 
 
   # create a test database
-  os.system("cinema --database {}".format(cdbdir))
+  os.system("cinema --database {}".format(cdbpath))
   assert os.path.isdir(scratchdir)
   assert os.path.isdir(cdbpath)
 
   # open a cinema database
   cdb = cinemasci.CinemaDatabaseReader();
-  cdb.inputs["Path"].setValue( cdbdir );
+  cdb.inputs["Path"].setValue( cdbpath );
 
   # Select Some Data Products\n",
   query = cinemasci.DatabaseQuery();

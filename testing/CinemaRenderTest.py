@@ -20,7 +20,7 @@ def test_render():
 
 
   # create a test database
-  os.system("cinema --database {}".format(cdbpath))
+  os.system("./cinema --database {}".format(cdbpath))
   assert os.path.isdir(scratchdir)
   assert os.path.isdir(cdbpath)
 

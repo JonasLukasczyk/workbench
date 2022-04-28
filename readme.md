@@ -31,7 +31,7 @@ make example
 
 # Design proposals
 
-- [CIS image proposal](doc/img-design.md)
+- [CIS image proposal](doc/cis_proposal.md)
 
 # Contributing to the workbench
 

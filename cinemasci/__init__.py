@@ -24,3 +24,6 @@ def new( vtype, args ):
         print("ERROR: unsupported viewer type: {}".format(vtype))
 
     return result
+
+def version():
+    return "2.0"

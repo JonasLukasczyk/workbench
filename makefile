@@ -5,6 +5,7 @@ TEST_DIR=$(SCRATCH_DIR)/hello
 clean:
 	rm -rf build
 	rm -rf cinemasci.egg-info
+	rm -rf dist
 	rm -rf $(SCRATCH_DIR) 
 
 example:

@@ -9,6 +9,8 @@ from .ArtifactSource import *
 from .CinemaArtifactSource import *
 from .TestImageArtifactSource import *
 from .DemoCDB import *
+from .ImageUI import *
+from .ParameterWidgets import *
 
 #
 # new factory function

@@ -12,6 +12,7 @@ class ImageRenderer(Filter):
 
         # create context
         self.ctx = moderngl.create_standalone_context(require=330)
+        # self.ctx.release()
 
         # fullscreen quad
         self.quad = self.ctx.buffer(

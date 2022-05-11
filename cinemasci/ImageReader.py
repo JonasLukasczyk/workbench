@@ -5,7 +5,7 @@ import imageio
 class ImageReader(Filter):
 
   def __init__(self):
-    super(ImageReader, self).__init__()
+    super().__init__()
     self.addInputPort("Table", "Table", [])
     self.addInputPort("FileColumn", "String", "FILE")
     self.addOutputPort("Images", "List", [])

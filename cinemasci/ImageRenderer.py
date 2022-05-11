@@ -6,7 +6,7 @@ from PIL import Image
 
 class ImageRenderer(Filter):
   def __init__(self):
-    super(ImageRenderer, self).__init__()
+    super().__init__()
     self.addInputPort("Image", "List", [])
     self.addOutputPort("Image", "List", [])
 

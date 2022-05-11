@@ -6,12 +6,12 @@ class Port():
         self._listeners = []
         self._value = value
 
-    def getValue(self):
+    def get(self):
         if isinstance(self._value, Port):
-            return self._value.getValue()
+            return self._value.get()
         return self._value;
 
-    def setValue(self, value, update = True):
+    def set(self, value, update = True):
         # if old value is a port stop listing for push events
         if isinstance(self._value, Port):
             self._value._listeners.remove(self)
@@ -32,16 +32,22 @@ class Port():
             for listener in self._listeners:
                 listener.parent.update()
 
+class PortList():
+    def __init__(self):
+        return
+
 class Filter():
     def __init__(self):
-        self.inputs = {}
-        self.outputs = {}
+        self.inputs = PortList()
+        self.outputs = PortList()
 
     def addInputPort(self, name, type, value):
-        self.inputs[name] = Port(type, value, self, True)
+        setattr(self.inputs, name, Port(type, value, self, True))
+        # self.inputs[name] = Port(type, value, self, True)
 
     def addOutputPort(self, name, type, value):
-        self.outputs[name] = Port(type, value, self)
+        setattr(self.outputs, name, Port(type, value, self))
+        # self.outputs[name] = Port(type, value, self)
 
     def update(self):
         # print("-> "+type(self).__name__)

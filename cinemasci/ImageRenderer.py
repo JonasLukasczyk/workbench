@@ -7,8 +7,8 @@ from PIL import Image
 class ImageRenderer(Filter):
     def __init__(self):
         super().__init__()
-        self.addInputPort("Image", "List", [])
-        self.addOutputPort("Image", "List", [])
+        self.addInputPort("Images", "List", [])
+        self.addOutputPort("Images", "List", [])
 
         # create context
         self.ctx = moderngl.create_standalone_context(require=330)
@@ -88,12 +88,12 @@ void main(){
     def update(self):
         super().update()
 
-        images = self.inputs["Image"].getValue();
+        images = self.inputs.Images.get()
 
         results = []
         for image in images:
             results.append( self.render(image) )
 
-        self.outputs["Image"].setValue(results);
+        self.outputs.Images.set(results)
 
-        return 1;
+        return 1

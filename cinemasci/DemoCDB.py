@@ -172,8 +172,8 @@ void main() {
 
     def render(self,phi,theta):
 
-        res = self.inputs["Resolution"].getValue()
-        time = self.inputs["Time"].getValue()
+        res = self.inputs.Resolution.get()
+        time = self.inputs.Time.get()
 
         # create framebuffer
         fbo = self.ctx.simple_framebuffer(res)
@@ -198,8 +198,8 @@ void main() {
     def update(self):
         super().update()
 
-        phiSamples = self.inputs["PhiSamples"].getValue();
-        thetaSamples = self.inputs["ThetaSamples"].getValue();
+        phiSamples = self.inputs.PhiSamples.get();
+        thetaSamples = self.inputs.ThetaSamples.get();
 
         results = []
         for theta in range(thetaSamples[0],thetaSamples[1]+[0,1][thetaSamples[0]==thetaSamples[1]],thetaSamples[2]):
@@ -213,6 +213,6 @@ void main() {
 
         # self.ctx.release()
 
-        self.outputs["Images"].setValue(results);
+        self.outputs.Images.set(results);
 
         return 1;

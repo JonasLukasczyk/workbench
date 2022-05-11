@@ -13,8 +13,8 @@ class ImageReader(Filter):
   def update(self):
     super().update()
 
-    table = self.inputs["Table"].getValue()
-    fileColumn = self.inputs["FileColumn"].getValue()
+    table = self.inputs.Table.get()
+    fileColumn = self.inputs.FileColumn.get()
 
     try:
       fileColumnIdx = table[0].index(fileColumn)
@@ -26,6 +26,6 @@ class ImageReader(Filter):
       path = table[i][fileColumnIdx]
       images.append( Image.open(path) )
 
-    self.outputs["Images"].setValue(images)
+    self.outputs.Images.set(images)
 
     return 1;

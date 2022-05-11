@@ -60,8 +60,8 @@ with open(f'{args.database}/data.csv', 'w') as dbinfo:
             im_name = f'{cur_image:03}.jpg'
 
             # provide input parameters and save the resulting images
-            artifactSource.inputs["Parameters"].setValue( {'phi': p, 'theta': t} );
-            images = artifactSource.outputs["Artifacts"].getValue();
+            artifactSource.inputs.Parameters.set( {'phi': p, 'theta': t} );
+            images = artifactSource.outputs.Artifacts.get();
             for i in images:
                 i.save(os.path.join(args.database, im_name))
                 cur_image += 1

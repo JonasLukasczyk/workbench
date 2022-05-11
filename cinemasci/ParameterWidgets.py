@@ -12,7 +12,7 @@ class ParameterWidgets(Filter):
 
     def generateWidgets(self):
 
-        table = self.inputs["Table"].getValue()
+        table = self.inputs.Table.get()
         header = table[0]
         self.widgets = []
 
@@ -45,7 +45,7 @@ class ParameterWidgets(Filter):
     def update(self):
         super().update()
 
-        table = self.inputs["Table"].getValue()
+        table = self.inputs.Table.get()
         header = table[0]
 
         sql = 'SELECT * FROM input WHERE '
@@ -66,6 +66,6 @@ class ParameterWidgets(Filter):
         if len(self.widgets) > 0:
             sql = sql[:-5]
 
-        self.outputs["SQL"].setValue(sql)
+        self.outputs.SQL.set(sql)
 
         return 1

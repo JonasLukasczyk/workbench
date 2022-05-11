@@ -14,7 +14,7 @@ class CinemaDatabaseReader(Filter):
     super().update()
 
     table = [];
-    dbPath = self.inputs["Path"].getValue();
+    dbPath = self.inputs.Path.get();
     dataCsvPath = dbPath + '/data.csv';
     with open(dataCsvPath, 'r+') as csvfile:
       spamreader = csv.reader(csvfile, delimiter=',')
@@ -25,10 +25,10 @@ class CinemaDatabaseReader(Filter):
     table = list(filter(lambda row: len(row)>0, table))
 
     # add dbPath prefix to file column
-    fileColumnIdx = table[0].index( self.inputs["FileColumn"].getValue() );
+    fileColumnIdx = table[0].index( self.inputs.FileColumn.get() );
     for i in range(1,len(table)):
       table[i][fileColumnIdx] = dbPath + '/' + table[i][fileColumnIdx];
 
-    self.outputs["Table"].setValue(table);
+    self.outputs.Table.set(table);
 
     return 1;

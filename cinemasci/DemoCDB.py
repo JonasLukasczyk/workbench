@@ -211,6 +211,8 @@ void main() {
                     )
                 )
 
+        # self.ctx.release()
+
         self.outputs["Images"].setValue(results);
 
         return 1;

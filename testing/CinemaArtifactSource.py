@@ -19,7 +19,7 @@ def setUp():
             pass
 
 
-def compare( a, b ): 
+def compare( a, b ):
     # '25' is a tolerance value, to be replaced when images can be inspected
     results = compare_images( a, b, 25 )
 
@@ -35,16 +35,16 @@ def test_artifact_source():
     artifactSource = cinemasci.TestImageArtifactSource();
 
     # provide input parameters and save the resulting images
-    artifactSource.inputs["Parameters"].setValue( {'phi': 25.5, 'theta': 50.0} );
-    images = artifactSource.outputs["Artifacts"].getValue();
+    artifactSource.inputs.Parameters.set( {'phi': 25.5, 'theta': 50.0} );
+    images = artifactSource.outputs.Artifacts.get();
     for i in images:
         i.save(os.path.join(scratch, "artifact", "imagesource.png"))
 
     # check the results
-    resdir = os.path.join(gold, "artifact", "imagesource.png" ) 
+    resdir = os.path.join(gold, "artifact", "imagesource.png" )
     scratch = os.path.join(scratch, "artifact", "imagesource.png" )
     assert os.path.exists(scratch)
-    result = compare( resdir, scratch ) 
+    result = compare( resdir, scratch )
     assert result
 
 def test_cinema_artifact_source():
@@ -55,5 +55,5 @@ def test_cinema_artifact_source():
     # create an artifact source
     artifactSource = cinemasci.CinemaArtifactSource()
     # point it to a database
-    artifactSource.path = os.path.join(gold, "artifact", "cinema.cdb") 
-    artifactSource.inputs["Parameters"].setValue( {'phi': 10.0, 'theta': 110.0} );
+    artifactSource.path = os.path.join(gold, "artifact", "cinema.cdb")
+    artifactSource.inputs.Parameters.set( {'phi': 10.0, 'theta': 110.0} );

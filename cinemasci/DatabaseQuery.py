@@ -66,13 +66,13 @@ class DatabaseQuery(Filter):
 
     db = sqlite3.connect(":memory:");
 
-    table = self.inputs["Table"].getValue();
+    table = self.inputs.Table.get();
 
     self.createTable(db, table);
     self.insertData(db, table);
 
-    output = self.queryData(db, self.inputs["Query"].getValue());
+    output = self.queryData(db, self.inputs.Query.get());
 
-    self.outputs["Table"].setValue(output);
+    self.outputs.Table.set(output);
 
     return 1;

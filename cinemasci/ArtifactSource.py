@@ -12,15 +12,15 @@ class ArtifactSource(Filter):
     def update(self):
         super().update()
 
-        kwargs = self.inputs["Parameters"].getValue()
+        kwargs = self.inputs.Parameters.get()
 
         artifacts = self.generate_artifacts(**kwargs)
-    
-        self.outputs["Artifacts"].setValue(artifacts)
+
+        self.outputs.Artifacts.set(artifacts)
 
         return 1;
 
-    # generate the artifacts 
+    # generate the artifacts
     def generate_artifacts(self, **kwargs):
         # must be overridden by subclasses
         return []

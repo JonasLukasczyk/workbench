@@ -19,7 +19,7 @@ class CinemaArtifactSource(ArtifactSource):
         self.addInputPort("Parameters", "Dictionary", [])
         self.addOutputPort("Artifacts", "List", [])
 
-        # instance variables 
+        # instance variables
         self.cdb = CinemaDatabaseReader();
         self.query = DatabaseQuery();
         self.imageReader = ImageReader();
@@ -30,20 +30,20 @@ class CinemaArtifactSource(ArtifactSource):
     #
     @property
     def path(self):
-        return self.cdb.inputs["Path"].getValue(); 
+        return self.cdb.inputs.Path.get();
 
     @path.setter
     def path(self, value):
-        self.cdb.inputs["Path"].setValue( value );
+        self.cdb.inputs.Path.set( value );
 
     #
-    # generate artifacts 
+    # generate artifacts
     #
     def generate_artifacts(self, **kwargs):
         # do the query
-        self.query.inputs["Table"].setValue(self.cdb.outputs['Table']);
-        self.query.inputs["Query"].setValue('SELECT * FROM input LIMIT 5 OFFSET 0');
-        self.imageReader.inputs["Table"].setValue(self.query.outputs['Table'])
-        # self.imageRenderer.inputs["Artifacts"].setValue( self.imageReader.outputs["Images"] );
+        self.query.inputs.Table.set(self.cdb.outputs.Table);
+        self.query.inputs.Query.set('SELECT * FROM input LIMIT 5 OFFSET 0');
+        self.imageReader.inputs.Table.set(self.query.outputs.Table)
+        # self.imageRenderer.inputs.Artifacts.set( self.imageReader.outputs.Images );
 
-        return self.imageReader.outputs["Images"]
+        return self.imageReader.outputs.Images

@@ -25,21 +25,21 @@ def test_render():
 
   # open a cinema database
   cdb = cinemasci.CinemaDatabaseReader();
-  cdb.inputs["Path"].setValue( cdbpath );
+  cdb.inputs.Path.set( cdbpath );
 
   # Select Some Data Products\n",
   query = cinemasci.DatabaseQuery();
-  query.inputs["Table"].setValue(cdb.outputs['Table']);
-  query.inputs["Query"].setValue('SELECT * FROM input LIMIT 5 OFFSET 0');
+  query.inputs.Table.set(cdb.outputs.Table);
+  query.inputs.Query.set('SELECT * FROM input LIMIT 5 OFFSET 0');
 
   # Read Data Products
   imageReader = cinemasci.ImageReader();
-  imageReader.inputs["Table"].setValue(query.outputs['Table'])
+  imageReader.inputs.Table.set(query.outputs.Table)
 
-  # Read Data Products
+  # Render Data Products
   imageRenderer = cinemasci.ImageRenderer();
-  imageRenderer.inputs["Image"].setValue( imageReader.outputs["Images"] );
+  imageRenderer.inputs.Images.set( imageReader.outputs.Images );
 
   # print images
-  images = imageRenderer.outputs["Image"].getValue();
+  images = imageRenderer.outputs.Images.get();
   print(images)

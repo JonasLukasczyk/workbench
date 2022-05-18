@@ -24,5 +24,6 @@ example:
 	@cp examples/demoCDB.ipynb $(TEST_DIR)
 	@cp examples/hello.ipynb $(TEST_DIR)
 	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
+	@cp examples/parameterWidgets.ipynb $(TEST_DIR)
 	@echo "Running jupyter notebook ..."
-	@pushd $(TEST_DIR); jupyter notebook imageArtifactSource.ipynb
+	@pushd $(TEST_DIR); jupyter notebook parameterWidgets.ipynb

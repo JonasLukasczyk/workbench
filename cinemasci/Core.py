@@ -1,3 +1,8 @@
+class Image():
+    def __init__(self):
+        self.origin = (0,0)
+        self.channels = {}
+
 class Port():
     def __init__(self, type, value, parent, isInput = False):
         self.type = type

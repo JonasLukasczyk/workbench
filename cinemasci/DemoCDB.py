@@ -2,7 +2,7 @@ from .Core import *
 
 import numpy as np
 import moderngl
-from PIL import Image
+import PIL
 
 class DemoCDB(Filter):
     def __init__(self):
@@ -53,7 +53,8 @@ void main(){
 #version 330
 
 in vec2 uv;
-out vec3 fragColor;
+out vec3 outColor;
+out float outDepth;
 uniform vec2 iResolution;
 uniform float iTime;
 uniform float iPhi;
@@ -62,6 +63,7 @@ uniform float iTheta;
 const int MAX_MARCHING_STEPS = 255;
 const float MIN_DIST = 0.1;
 const float MAX_DIST = 40.0;
+const float DELTA_DIST = MAX_DIST - MIN_DIST;
 const float EPSILON = 0.001;
 
 float planeSDF(vec3 p) {
@@ -146,7 +148,8 @@ void main() {
     vec3 hit = march(origin, rayDir, MIN_DIST, MAX_DIST);
 
     if (hit.z > MAX_DIST - EPSILON) {
-        fragColor = vec3(0);
+        outColor = vec3(0);
+        outDepth = 1.0;
         return;
     }
 
@@ -163,35 +166,39 @@ void main() {
     radiance += brdf * irradiance * vec3(1);
     radiance *= softshadow(p, lightDir, MIN_DIST, MAX_DIST);
 
-    fragColor = pow(radiance, vec3(1.0 / 2.2) ); // gamma correction
-
-    //fragColor = color*(hit.z-MIN_DIST)/(MAX_DIST-MIN_DIST);
-    //fragColor = estimateNormal(p);
+    outColor = pow(radiance, vec3(1.0 / 2.2) ); // gamma correction
+    outDepth = (hit.z-MIN_DIST)/DELTA_DIST;
 }
         """
 
-    def render(self,phi,theta):
+    def render(self,fbo,phi,theta):
 
-        res = self.inputs.Resolution.get()
-        time = self.inputs.Time.get()
-
-        # create framebuffer
-        fbo = self.ctx.simple_framebuffer(res)
-        fbo.use()
         fbo.clear(0.0, 0.0, 0.0, 1.0)
 
         # render
-        self.program['iResolution'].value = res
-        self.program['iTime'].value = time
+        self.program['iTime'].value = self.inputs.Time.get()
         self.program['iPhi'].value = phi
         self.program['iTheta'].value = theta
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
-        # read pixels
-        image = Image.frombytes('RGB', fbo.size, fbo.read(), 'raw', 'RGB', 0, -1)
+        # read color
+        rgb = PIL.Image.frombytes('RGB', fbo.size, fbo.read(attachment=0,components=3), 'raw', 'RGB', 0, -1)
 
-        # release resources
-        fbo.release()
+        # read depth
+        depthBuffer = fbo.read(attachment=1,components=1,dtype='f4')
+        temp = np.frombuffer(depthBuffer, dtype=np.float32)
+        array = temp.view()
+        array.shape = fbo.size
+        depth = PIL.Image.fromarray(array, mode='F')
+        # depth = Image.frombytes('F', fbo.size, fbo.read(attachment=1,components=1,dtype='f4'), 'raw', 'F', 0, -1)
+        # x = fbo.read(attachment=2)
+        # print(x[0])
+        # print(x[1])
+        # print(x[2])
+
+        image = Image()
+        image.channels["RGB"] = rgb
+        image.channels["Depth"] = depth
 
         return image
 
@@ -201,15 +208,32 @@ void main() {
         phiSamples = self.inputs.PhiSamples.get();
         thetaSamples = self.inputs.ThetaSamples.get();
 
+        # create framebuffer
+        res = self.inputs.Resolution.get()
+        self.program['iResolution'].value = res
+
+        # fbo = self.ctx.simple_framebuffer(res)
+        fbo = self.ctx.framebuffer(
+          color_attachments = [
+            self.ctx.renderbuffer(size=res, components=3),
+            self.ctx.renderbuffer(size=res, components=1, dtype='f4')
+          ]
+        )
+        fbo.use()
+
         results = []
         for theta in range(thetaSamples[0],thetaSamples[1]+[0,1][thetaSamples[0]==thetaSamples[1]],thetaSamples[2]):
             for phi in range(phiSamples[0],phiSamples[1]+[0,1][phiSamples[0]==phiSamples[1]],phiSamples[2]):
                 results.append(
                     self.render(
+                        fbo,
                         phi/360.0*2.0*np.pi,
                         (90-theta)/180.0*np.pi,
                     )
                 )
+
+        # release resources
+        fbo.release()
 
         # self.ctx.release()
 

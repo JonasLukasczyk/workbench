@@ -1,6 +1,6 @@
 from .Core import *
 
-from PIL import Image
+import PIL
 
 class ImageReader(Filter):
 
@@ -24,7 +24,11 @@ class ImageReader(Filter):
     images = [];
     for i in range(1, len(table)):
       path = table[i][fileColumnIdx]
-      images.append( Image.open(path) )
+      data = PIL.Image.open(path)
+      # image = cinemasci.Image()
+      # image.channels["RGB"] = data
+      # images.append( image )
+      images.append( data )
 
     self.outputs.Images.set(images)
 

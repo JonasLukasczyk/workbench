@@ -67,7 +67,7 @@ void main(){
     def render(self,image):
 
         # create texture
-        texture = self.ctx.texture(image.size, len(image.mode), image.tobytes(), alignment=4)
+        texture = self.ctx.texture(image.size, len(image.mode), image.tobytes(), alignment=1)
         texture.use(location=0)
 
         # create framebuffer

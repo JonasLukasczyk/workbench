@@ -1,3 +1,10 @@
+def isNumber(s):
+    if type(s) == int or type(s) == float:
+        return True
+    if type(s) == str:
+        return s.strip().lstrip('-').isnumeric()
+    return False
+
 class Port():
     def __init__(self, type, value, parent, isInput = False):
         self.type = type

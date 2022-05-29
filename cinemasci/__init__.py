@@ -11,6 +11,7 @@ from .TestImageArtifactSource import *
 from .DemoCDB import *
 from .ImageUI import *
 from .ParameterWidgets import *
+from .Annotation import *
 
 #
 # new factory function

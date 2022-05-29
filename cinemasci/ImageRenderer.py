@@ -2,7 +2,6 @@ from .Core import *
 
 import numpy as np
 import moderngl
-from PIL import Image
 
 class ImageRenderer(Filter):
     def __init__(self):
@@ -44,7 +43,6 @@ out vec2 uv;
 
 void main(){
     uv = position/2.0+0.5;
-    uv.y *= -1.0;
     gl_Position = vec4(position,0,1);
 }
 """
@@ -66,24 +64,32 @@ void main(){
 
     def render(self,image):
 
+        rgb = image.channel['RGB']
+
         # create texture
-        texture = self.ctx.texture(image.size, len(image.mode), image.tobytes(), alignment=1)
+        texture = self.ctx.texture(rgb.shape[:2], rgb.shape[2], rgb.tobytes(), alignment=1)
         texture.use(location=0)
 
         # create framebuffer
-        fbo = self.ctx.simple_framebuffer(image.size)
+        fbo = self.ctx.simple_framebuffer(rgb.shape[:2])
         fbo.use()
         fbo.clear(0.0, 0.0, 0.0, 1.0)
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
         # read pixels
-        image = Image.frombytes('RGB', fbo.size, fbo.read(), 'raw', 'RGB', 0, -1)
+        rgbBuffer = fbo.read(attachment=0,components=3)
+        rgbFlatArray = np.frombuffer(rgbBuffer, dtype=np.uint8)
+        rgbArray = rgbFlatArray.view()
+        rgbArray.shape = (fbo.size[0],fbo.size[1],3)
 
         # release resources
         texture.release()
         fbo.release()
 
-        return image
+        outImage = image.copy()
+        outImage.channel['RGB'] = rgbArray
+
+        return outImage
 
     def update(self):
         super().update()

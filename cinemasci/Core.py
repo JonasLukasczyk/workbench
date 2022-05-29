@@ -1,7 +1,24 @@
 class Image():
-    def __init__(self):
-        self.origin = (0,0)
-        self.channels = {}
+    def __init__(self, channel={}, meta={}, origin=(0,0)):
+        self.origin = origin
+        self.channel = channel
+        self.meta = meta
+
+    def copy(self):
+        return Image(
+            self.channel.copy(),
+            self.meta.copy(),
+            self.origin
+        )
+
+    @property
+    def shape(self):
+        if self.channel.size<1:
+            return (0,0,0)
+
+        # get first channel
+        for c in self.channel:
+            return self.channel[c].shape
 
 class Port():
     def __init__(self, type, value, parent, isInput = False):

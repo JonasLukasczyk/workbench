@@ -19,11 +19,11 @@ class DemoCDB(Filter):
         # fullscreen quad
         self.quad = self.ctx.buffer(
             np.array([
-                1.0,    1.0,
-                -1.0,    1.0,
+                 1.0,  1.0,
+                -1.0,  1.0,
                 -1.0, -1.0,
                  1.0, -1.0,
-                 1.0,    1.0
+                 1.0,  1.0
             ]).astype('f4').tobytes()
         )
 
@@ -43,7 +43,7 @@ in vec2 position;
 out vec2 uv;
 
 void main(){
-    uv = position;
+    uv = vec2(1,-1)*position;
     gl_Position = vec4(position,0,1);
 }
 """
@@ -182,23 +182,29 @@ void main() {
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
         # read color
-        rgb = PIL.Image.frombytes('RGB', fbo.size, fbo.read(attachment=0,components=3), 'raw', 'RGB', 0, -1)
+        rgbBuffer = fbo.read(attachment=0,components=3)
+        rgbFlatArray = np.frombuffer(rgbBuffer, dtype=np.uint8)
+        rgbArray = rgbFlatArray.view()
+        rgbArray.shape = (fbo.size[0],fbo.size[1],3)
 
         # read depth
-        depthBuffer = fbo.read(attachment=1,components=1,dtype='f4')
-        temp = np.frombuffer(depthBuffer, dtype=np.float32)
-        array = temp.view()
-        array.shape = fbo.size
-        depth = PIL.Image.fromarray(array, mode='F')
-        # depth = Image.frombytes('F', fbo.size, fbo.read(attachment=1,components=1,dtype='f4'), 'raw', 'F', 0, -1)
-        # x = fbo.read(attachment=2)
-        # print(x[0])
-        # print(x[1])
-        # print(x[2])
+        depthBuffer = fbo.read(attachment=1,components=1)
+        depthFlatArray = np.frombuffer(depthBuffer, dtype=np.uint8)
+        depthArray = depthFlatArray.view()
+        depthArray.shape = (fbo.size[0],fbo.size[1],1)
 
-        image = Image()
-        image.channels["RGB"] = rgb
-        image.channels["Depth"] = depth
+        # create output image
+        image = Image(
+            {
+                'RGB': rgbArray,
+                'Depth': depthArray
+            },
+            {
+                'Time': self.inputs.Time.get(),
+                'Phi': phi,
+                'Theta': theta
+            }
+        )
 
         return image
 

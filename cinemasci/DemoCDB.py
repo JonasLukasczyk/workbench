@@ -55,6 +55,8 @@ void main(){
 in vec2 uv;
 out vec3 outColor;
 out float outDepth;
+out float outId;
+out float outY;
 uniform vec2 iResolution;
 uniform float iTime;
 uniform float iPhi;
@@ -65,6 +67,8 @@ const float MIN_DIST = 0.1;
 const float MAX_DIST = 40.0;
 const float DELTA_DIST = MAX_DIST - MIN_DIST;
 const float EPSILON = 0.001;
+
+const float NAN = 0.0 / 0.0;
 
 float planeSDF(vec3 p) {
     return abs(p.y);
@@ -150,6 +154,8 @@ void main() {
     if (hit.z > MAX_DIST - EPSILON) {
         outColor = vec3(0);
         outDepth = 1.0;
+        outId = NAN;
+        outY = NAN;
         return;
     }
 
@@ -167,9 +173,19 @@ void main() {
     radiance *= softshadow(p, lightDir, MIN_DIST, MAX_DIST);
 
     outColor = pow(radiance, vec3(1.0 / 2.2) ); // gamma correction
-    outDepth = (hit.z-MIN_DIST)/DELTA_DIST;
+    //outDepth = (hit.z-MIN_DIST)/DELTA_DIST;
+    outDepth = 0.252;
+    outId = hit.y;
+    outY = p.y;
 }
         """
+
+    def getArray(self,fbo,attachment,components,dtype):
+        b = fbo.read(attachment=attachment,components=components, dtype = 'f1' if dtype==np.uint8 else 'f4' )
+        fa = np.frombuffer(b, dtype=dtype)
+        a = fa.view()
+        a.shape = (fbo.size[0],fbo.size[1],components)
+        return a
 
     def render(self,fbo,phi,theta):
 
@@ -181,23 +197,13 @@ void main() {
         self.program['iTheta'].value = theta
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
-        # read color
-        rgbBuffer = fbo.read(attachment=0,components=3)
-        rgbFlatArray = np.frombuffer(rgbBuffer, dtype=np.uint8)
-        rgbArray = rgbFlatArray.view()
-        rgbArray.shape = (fbo.size[0],fbo.size[1],3)
-
-        # read depth
-        depthBuffer = fbo.read(attachment=1,components=1)
-        depthFlatArray = np.frombuffer(depthBuffer, dtype=np.uint8)
-        depthArray = depthFlatArray.view()
-        depthArray.shape = (fbo.size[0],fbo.size[1],1)
-
         # create output image
         image = Image(
             {
-                'RGB': rgbArray,
-                'Depth': depthArray
+                'RGB': self.getArray(fbo,0,3,np.uint8),
+                'Depth': self.getArray(fbo,1,1,np.float32),
+                'ID': self.getArray(fbo,2,1,np.float32),
+                'Y': self.getArray(fbo,3,1,np.float32)
             },
             {
                 'Time': self.inputs.Time.get(),
@@ -221,7 +227,9 @@ void main() {
         # fbo = self.ctx.simple_framebuffer(res)
         fbo = self.ctx.framebuffer(
           color_attachments = [
-            self.ctx.renderbuffer(size=res, components=3),
+            self.ctx.renderbuffer(size=res, components=3, dtype='f1'),
+            self.ctx.renderbuffer(size=res, components=1, dtype='f4'),
+            self.ctx.renderbuffer(size=res, components=1, dtype='f4'),
             self.ctx.renderbuffer(size=res, components=1, dtype='f4')
           ]
         )

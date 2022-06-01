@@ -12,7 +12,9 @@ A single CIS image is the result of coloring and compositing a set of elements t
 <tr>
 <td><img src="composite.png"></img></td>
 <tr>
-<td>Diagram of layers and possible composited images. Images can be combined together in many ways, depending upon the information that is included, as well as the capabilities of the consumer of the data.</td>
+<td>
+Diagram of how a Cinema Compositable Image Set will be rendered using Cinema 2.0 filters.
+</td>
 </tr>
 </table>
 

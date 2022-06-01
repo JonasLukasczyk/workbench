@@ -28,8 +28,8 @@ class DatabaseQuery(Filter):
         continue
 
       sql = sql + ', ' + header[i];
-      if firstRow[i].isnumeric():
-        sql = sql + ' INTEGER';
+      if isNumber(firstRow[i]):
+        sql = sql + ' REAL';
       else:
         sql = sql + ' TEXT';
 

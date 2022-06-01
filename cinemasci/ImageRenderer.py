@@ -6,8 +6,8 @@ import moderngl
 class ImageRenderer(Filter):
     def __init__(self):
         super().__init__()
-        self.addInputPort("Images", "List", [])
-        self.addOutputPort("Images", "List", [])
+        self.addInputPort("Images", [])
+        self.addOutputPort("Images", [])
 
         # create context
         self.ctx = moderngl.create_standalone_context(require=330)

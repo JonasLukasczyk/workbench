@@ -2,7 +2,7 @@ from .Core import *
 
 import numpy as np
 import moderngl
-from PIL import Image
+import PIL
 
 class DemoCDB(Filter):
     def __init__(self):
@@ -19,11 +19,11 @@ class DemoCDB(Filter):
         # fullscreen quad
         self.quad = self.ctx.buffer(
             np.array([
-                1.0,    1.0,
-                -1.0,    1.0,
+                 1.0,  1.0,
+                -1.0,  1.0,
                 -1.0, -1.0,
                  1.0, -1.0,
-                 1.0,    1.0
+                 1.0,  1.0
             ]).astype('f4').tobytes()
         )
 
@@ -43,7 +43,7 @@ in vec2 position;
 out vec2 uv;
 
 void main(){
-    uv = position;
+    uv = vec2(1,-1)*position;
     gl_Position = vec4(position,0,1);
 }
 """
@@ -53,7 +53,10 @@ void main(){
 #version 330
 
 in vec2 uv;
-out vec3 fragColor;
+out vec3 outColor;
+out float outDepth;
+out float outId;
+out float outY;
 uniform vec2 iResolution;
 uniform float iTime;
 uniform float iPhi;
@@ -62,7 +65,10 @@ uniform float iTheta;
 const int MAX_MARCHING_STEPS = 255;
 const float MIN_DIST = 0.1;
 const float MAX_DIST = 40.0;
+const float DELTA_DIST = MAX_DIST - MIN_DIST;
 const float EPSILON = 0.001;
+
+const float NAN = 0.0 / 0.0;
 
 float planeSDF(vec3 p) {
     return abs(p.y);
@@ -146,7 +152,10 @@ void main() {
     vec3 hit = march(origin, rayDir, MIN_DIST, MAX_DIST);
 
     if (hit.z > MAX_DIST - EPSILON) {
-        fragColor = vec3(0);
+        outColor = vec3(0);
+        outDepth = 1.0;
+        outId = NAN;
+        outY = NAN;
         return;
     }
 
@@ -163,35 +172,45 @@ void main() {
     radiance += brdf * irradiance * vec3(1);
     radiance *= softshadow(p, lightDir, MIN_DIST, MAX_DIST);
 
-    fragColor = pow(radiance, vec3(1.0 / 2.2) ); // gamma correction
-
-    //fragColor = color*(hit.z-MIN_DIST)/(MAX_DIST-MIN_DIST);
-    //fragColor = estimateNormal(p);
+    outColor = pow(radiance, vec3(1.0 / 2.2) ); // gamma correction
+    //outDepth = (hit.z-MIN_DIST)/DELTA_DIST;
+    outDepth = 0.252;
+    outId = hit.y;
+    outY = p.y;
 }
         """
 
-    def render(self,phi,theta):
+    def getArray(self,fbo,attachment,components,dtype):
+        b = fbo.read(attachment=attachment,components=components, dtype = 'f1' if dtype==np.uint8 else 'f4' )
+        fa = np.frombuffer(b, dtype=dtype)
+        a = fa.view()
+        a.shape = (fbo.size[0],fbo.size[1],components)
+        return a
 
-        res = self.inputs.Resolution.get()
-        time = self.inputs.Time.get()
+    def render(self,fbo,phi,theta):
 
-        # create framebuffer
-        fbo = self.ctx.simple_framebuffer(res)
-        fbo.use()
         fbo.clear(0.0, 0.0, 0.0, 1.0)
 
         # render
-        self.program['iResolution'].value = res
-        self.program['iTime'].value = time
+        self.program['iTime'].value = self.inputs.Time.get()
         self.program['iPhi'].value = phi
         self.program['iTheta'].value = theta
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
-        # read pixels
-        image = Image.frombytes('RGB', fbo.size, fbo.read(), 'raw', 'RGB', 0, -1)
-
-        # release resources
-        fbo.release()
+        # create output image
+        image = Image(
+            {
+                'RGB': self.getArray(fbo,0,3,np.uint8),
+                'Depth': self.getArray(fbo,1,1,np.float32),
+                'ID': self.getArray(fbo,2,1,np.float32),
+                'Y': self.getArray(fbo,3,1,np.float32)
+            },
+            {
+                'Time': self.inputs.Time.get(),
+                'Phi': phi,
+                'Theta': theta
+            }
+        )
 
         return image
 
@@ -201,15 +220,34 @@ void main() {
         phiSamples = self.inputs.PhiSamples.get();
         thetaSamples = self.inputs.ThetaSamples.get();
 
+        # create framebuffer
+        res = self.inputs.Resolution.get()
+        self.program['iResolution'].value = res
+
+        # fbo = self.ctx.simple_framebuffer(res)
+        fbo = self.ctx.framebuffer(
+          color_attachments = [
+            self.ctx.renderbuffer(size=res, components=3, dtype='f1'),
+            self.ctx.renderbuffer(size=res, components=1, dtype='f4'),
+            self.ctx.renderbuffer(size=res, components=1, dtype='f4'),
+            self.ctx.renderbuffer(size=res, components=1, dtype='f4')
+          ]
+        )
+        fbo.use()
+
         results = []
         for theta in range(thetaSamples[0],thetaSamples[1]+[0,1][thetaSamples[0]==thetaSamples[1]],thetaSamples[2]):
             for phi in range(phiSamples[0],phiSamples[1]+[0,1][phiSamples[0]==phiSamples[1]],phiSamples[2]):
                 results.append(
                     self.render(
+                        fbo,
                         phi/360.0*2.0*np.pi,
                         (90-theta)/180.0*np.pi,
                     )
                 )
+
+        # release resources
+        fbo.release()
 
         # self.ctx.release()
 

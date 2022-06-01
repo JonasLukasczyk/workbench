@@ -13,7 +13,7 @@ A single CIS image is the result of coloring and compositing a set of elements t
 <td><img src="composite.png"></img></td>
 <tr>
 <td>
-Diagram of how a Cinema Compositable Image Set will be rendered using Cinema 2.0 filters.
+Diagram of how a Cinema Compositable Image Set will be rendered using Cinema 2.0 filters. Image Render Filters (1,2), take in channel data and render images. A Depth Composite Filter (3), performs a depth composite on its input images, and an Annotation Filter (4) adds annotation to an image. The results of all of these filter operations is a single output image (5).
 </td>
 </tr>
 </table>

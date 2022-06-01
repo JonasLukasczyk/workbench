@@ -24,7 +24,8 @@ example:
 	@cp -rf testing/gold/artifact/sphere.cdb $(TEST_DIR)
 	@cp examples/demoCDB.ipynb $(TEST_DIR)
 	@cp examples/hello.ipynb $(TEST_DIR)
+	@cp examples/image.ipynb $(TEST_DIR)
 	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
 	@cp examples/parameterWidgets.ipynb $(TEST_DIR)
 	@echo "Running jupyter notebook ..."
-	@pushd $(TEST_DIR); jupyter notebook parameterWidgets.ipynb
+	@pushd $(TEST_DIR); jupyter notebook image.ipynb

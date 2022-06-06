@@ -6,9 +6,9 @@ class CinemaDatabaseReader(Filter):
 
   def __init__(self):
     super().__init__();
-    self.addInputPort("Path", "String", "./");
-    self.addInputPort("FileColumn", "String", "FILE");
-    self.addOutputPort("Table", "Table", []);
+    self.addInputPort("Path", "./");
+    self.addInputPort("FileColumn", "FILE");
+    self.addOutputPort("Table", []);
 
   def update(self):
     super().update()

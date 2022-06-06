@@ -8,13 +8,13 @@ class Annotation(Filter):
     def __init__(self):
         super().__init__()
 
-        self.addInputPort("XY", "Tuple", (20,20))
-        self.addInputPort("Size", "Int", 20)
-        self.addInputPort("Spacing", "Int", 0)
-        self.addInputPort("Color", "Tuple", (0,0,0))
-        self.addInputPort("Images", "List", [])
-        self.addInputPort("Ignore", "List", ['FILE'])
-        self.addOutputPort("Images", "List", [])
+        self.addInputPort("XY", (20,20))
+        self.addInputPort("Size", 20)
+        self.addInputPort("Spacing", 0)
+        self.addInputPort("Color", (0,0,0))
+        self.addInputPort("Images", [])
+        self.addInputPort("Ignore", ['FILE'])
+        self.addOutputPort("Images", [])
 
     #
     # solution from:

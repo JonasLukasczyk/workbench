@@ -7,9 +7,9 @@ class ImageReader(Filter):
 
     def __init__(self):
         super(ImageReader, self).__init__()
-        self.addInputPort("Table", "Table", [])
-        self.addInputPort("FileColumn", "String", "FILE")
-        self.addOutputPort("Images", "List", [])
+        self.addInputPort("Table", [])
+        self.addInputPort("FileColumn", "FILE")
+        self.addOutputPort("Images", [])
 
     def update(self):
         super().update()

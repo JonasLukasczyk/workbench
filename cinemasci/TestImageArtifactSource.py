@@ -11,7 +11,7 @@ class TestImageArtifactSource(ArtifactSource):
     Im_fontsize   = 18
     Text_color    = (255, 255, 255)
     Text_offset   = 24
-    Margin_left   = 50 
+    Margin_left   = 50
     Margin_top    = 50
     Tab           = 200
 
@@ -19,8 +19,8 @@ class TestImageArtifactSource(ArtifactSource):
         super(TestImageArtifactSource, self).__init__()
 
         # input/output ports
-        self.addInputPort("Parameters", "Dictionary", [])
-        self.addOutputPort("Artifacts", "List", [])
+        self.addInputPort("Parameters", [])
+        self.addOutputPort("Artifacts", [])
 
         # pick up class defaults
         self.im_background = TestImageArtifactSource.Im_background
@@ -34,7 +34,7 @@ class TestImageArtifactSource(ArtifactSource):
 
         # non class defaults
         self.cur_image = 0
-        self.font = self.__get_font(self.im_fontsize) 
+        self.font = self.__get_font(self.im_fontsize)
 
     #
     # solution from:
@@ -74,12 +74,12 @@ class TestImageArtifactSource(ArtifactSource):
         # write the parameters into the image
         #
         cur_x = self.margin_left
-        cur_y = self.margin_top 
+        cur_y = self.margin_top
         for key, value in kwargs.items():
             cur_x  = self.margin_left
-            cur_y += self.text_offset 
+            cur_y += self.text_offset
             ImageDraw.Draw(img).text((cur_x, cur_y), f'{key}', font=self.font, fill=self.text_color)
-            cur_x += self.tab 
+            cur_x += self.tab
             ImageDraw.Draw(img).text((cur_x, cur_y), f'{value}', font=self.font, fill=self.text_color)
 
         self.cur_image += 1

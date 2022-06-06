@@ -6,8 +6,8 @@ class ArtifactSource(Filter):
         super(ArtifactSource, self).__init__()
 
         # input/output ports
-        self.addInputPort("Parameters", "Dictionary", [])
-        self.addOutputPort("Artifacts", "List", [])
+        self.addInputPort("Parameters", [])
+        self.addOutputPort("Artifacts", [])
 
     def update(self):
         super().update()

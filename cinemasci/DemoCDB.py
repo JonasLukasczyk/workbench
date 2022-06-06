@@ -7,11 +7,11 @@ import PIL
 class DemoCDB(Filter):
     def __init__(self):
         super().__init__()
-        self.addInputPort("Resolution", "vec2", (256,256))
-        self.addInputPort("PhiSamples", "vec3", (0,360,360))
-        self.addInputPort("ThetaSamples", "vec3", (20,20,1))
-        self.addInputPort("Time", "float", 0)
-        self.addOutputPort("Images", "List", [])
+        self.addInputPort("Resolution", (256,256))
+        self.addInputPort("PhiSamples", (0,360,360))
+        self.addInputPort("ThetaSamples", (20,20,1))
+        self.addInputPort("Time", 0)
+        self.addOutputPort("Images", [])
 
         # create context
         self.ctx = moderngl.create_standalone_context(require=330)

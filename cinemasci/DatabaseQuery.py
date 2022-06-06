@@ -6,9 +6,9 @@ class DatabaseQuery(Filter):
 
   def __init__(self):
     super().__init__();
-    self.addInputPort("Table", "Table", []);
-    self.addInputPort("Query", "String", "SELECT * FROM input");
-    self.addOutputPort("Table", "Table", []);
+    self.addInputPort("Table", []);
+    self.addInputPort("Query", "SELECT * FROM input");
+    self.addOutputPort("Table", []);
 
   def executeSQL(self,db,sql):
     try:

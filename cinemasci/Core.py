@@ -28,11 +28,11 @@ def isNumber(s):
     return False
 
 class Port():
-    def __init__(self, type, value, parent, isInput = False):
-        self.type = type
+    def __init__(self, value, parent, isInput = False):
         self.parent = parent
-        self.isInput = isInput
         self._listeners = []
+        if isInput:
+            self._listeners.append(self.parent)
         self._value = value
 
     def get(self):
@@ -52,14 +52,13 @@ class Port():
         if isinstance(self._value, Port):
             self._value._listeners.append(self)
 
-        # if value of an input port was changed trigger update of outputs
-        if update and self.isInput:
-            self.parent.update()
-
-        # if value of an output port was changed trigger update of listeners
-        if update and not self.isInput:
+        # if value of a port was changed trigger update of listeners
+        if update:
             for listener in self._listeners:
-                listener.parent.update()
+                if isinstance(listener, Port):
+                    listener.parent.update()
+                elif isinstance(listener, Filter):
+                    listener.update()
 
 class PortList():
     def __init__(self):
@@ -70,13 +69,11 @@ class Filter():
         self.inputs = PortList()
         self.outputs = PortList()
 
-    def addInputPort(self, name, type, value):
-        setattr(self.inputs, name, Port(type, value, self, True))
-        # self.inputs[name] = Port(type, value, self, True)
+    def addInputPort(self, name, value):
+        setattr(self.inputs, name, Port(value, self, True))
 
-    def addOutputPort(self, name, type, value):
-        setattr(self.outputs, name, Port(type, value, self))
-        # self.outputs[name] = Port(type, value, self)
+    def addOutputPort(self, name, value):
+        setattr(self.outputs, name, Port(value, self))
 
     def update(self):
         # print("-> "+type(self).__name__)

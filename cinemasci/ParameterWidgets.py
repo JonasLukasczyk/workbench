@@ -6,8 +6,8 @@ class ParameterWidgets(Filter):
 
     def __init__(self):
         super().__init__()
-        self.addInputPort("Table", "Table", [])
-        self.addOutputPort("SQL", "String", "SELECT * FROM input")
+        self.addInputPort("Table", [])
+        self.addOutputPort("SQL", "SELECT * FROM input")
         self.widgets = []
 
     def generateWidgets(self):

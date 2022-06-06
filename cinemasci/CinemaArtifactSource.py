@@ -16,8 +16,8 @@ class CinemaArtifactSource(ArtifactSource):
         super(CinemaArtifactSource, self).__init__()
 
         # input/output ports
-        self.addInputPort("Parameters", "Dictionary", [])
-        self.addOutputPort("Artifacts", "List", [])
+        self.addInputPort("Parameters", [])
+        self.addOutputPort("Artifacts", [])
 
         # instance variables
         self.cdb = CinemaDatabaseReader();

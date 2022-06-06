@@ -11,7 +11,7 @@ class ImageUI(Filter):
     def __init__(self):
         super().__init__()
 
-        self.addInputPort("Images", "List", [])
+        self.addInputPort("Images", [])
 
         self.nImages = -1
 
@@ -32,11 +32,11 @@ class ImageUI(Filter):
             for i,image in enumerate(images):
                 axis = self.fig.add_subplot(dim, dim, i+1)
                 axis.set_axis_off()
-                im = axis.imshow(image)
+                im = axis.imshow(image.channel['RGB'])
                 self.plots.append( [axis,im] )
 
         for i,image in enumerate(images):
-            self.plots[i][1].set_data(image)
+            self.plots[i][1].set_data(image.channel['RGB'])
 
         self.fig.canvas.draw()
 

@@ -12,6 +12,9 @@ from .DemoCDB import *
 from .ImageUI import *
 from .ParameterWidgets import *
 from .Annotation import *
+from .ColorMapping import *
+from .DepthCompositing import *
+from .ShaderSSAO import *
 
 #
 # new factory function

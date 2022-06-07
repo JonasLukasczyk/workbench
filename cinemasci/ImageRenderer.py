@@ -54,24 +54,24 @@ void main(){
 uniform sampler2D tex;
 
 in vec2 uv;
-out vec3 color;
+out vec4 color;
 
 void main(){
     vec4 c = texture(tex,uv);
-    color = vec3(0.299*c.r + 0.587*c.g + 0.114*c.b);
+    color = vec4(vec3(0.299*c.r + 0.587*c.g + 0.114*c.b),1.0);
 }
 """
 
     def render(self,image):
 
-        rgb = image.channel['RGB']
+        rgba = image.channel['RGBA']
 
         # create texture
-        texture = self.ctx.texture(rgb.shape[:2], rgb.shape[2], rgb.tobytes(), alignment=1)
+        texture = self.ctx.texture(rgba.shape[:2][::-1], rgba.shape[2], rgba.tobytes(), alignment=1)
         texture.use(location=0)
 
         # create framebuffer
-        fbo = self.ctx.simple_framebuffer(rgb.shape[:2])
+        fbo = self.ctx.simple_framebuffer(rgba.shape[:2][::-1], components=4)
         fbo.use()
         fbo.clear(0.0, 0.0, 0.0, 1.0)
         self.vao.render(moderngl.TRIANGLE_STRIP)
@@ -80,14 +80,14 @@ void main(){
         rgbBuffer = fbo.read(attachment=0,components=3)
         rgbFlatArray = np.frombuffer(rgbBuffer, dtype=np.uint8)
         rgbArray = rgbFlatArray.view()
-        rgbArray.shape = (fbo.size[0],fbo.size[1],3)
+        rgbArray.shape = (rgba.shape[0],rgba.shape[1],3)
 
         # release resources
         texture.release()
         fbo.release()
 
         outImage = image.copy()
-        outImage.channel['RGB'] = rgbArray
+        outImage.channel['RGBA'] = rgbArray
 
         return outImage
 

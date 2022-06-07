@@ -27,8 +27,10 @@ class ImageReader(Filter):
             row = table[i]
             path = row[fileColumnIdx]
             rawImage = PIL.Image.open(path)
+            if rawImage.mode == 'RGB':
+                rawImage.putalpha(1)
 
-            image = Image({ 'RGB': numpy.asarray(rawImage) })
+            image = Image({ 'RGBA': numpy.asarray(rawImage) })
             for j in range(0, len(row)):
                 image.meta[table[0][j]] = row[j]
 

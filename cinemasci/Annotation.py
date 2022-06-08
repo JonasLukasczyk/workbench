@@ -55,7 +55,7 @@ class Annotation(Filter):
         ignoreList = list(map(str.lower, self.inputs.Ignore.get()))
 
         for image in images:
-            rgbImage = PIL.Image.fromarray( image.channel["RGB"] )
+            rgbImage = PIL.Image.fromarray( image.channel["RGBA"] )
             text = ''
             for t in image.meta:
                 if t.lower() in ignoreList:
@@ -72,7 +72,7 @@ class Annotation(Filter):
             )
 
             outImage = image.copy()
-            outImage.channel['RGB'] = numpy.array(rgbImage)
+            outImage.channel['RGBA'] = numpy.array(rgbImage)
             result.append( outImage )
 
         self.outputs.Images.set(result)

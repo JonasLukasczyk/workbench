@@ -32,11 +32,11 @@ class ImageUI(Filter):
             for i,image in enumerate(images):
                 axis = self.fig.add_subplot(dim, dim, i+1)
                 axis.set_axis_off()
-                im = axis.imshow(image.channel['RGB'])
+                im = axis.imshow(image.channel['RGBA'])
                 self.plots.append( [axis,im] )
 
         for i,image in enumerate(images):
-            self.plots[i][1].set_data(image.channel['RGB'])
+            self.plots[i][1].set_data(image.channel['RGBA'])
 
         self.fig.canvas.draw()
 

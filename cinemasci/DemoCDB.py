@@ -11,6 +11,7 @@ class DemoCDB(Filter):
         self.addInputPort("PhiSamples", (0,360,360))
         self.addInputPort("ThetaSamples", (20,20,1))
         self.addInputPort("Time", 0)
+        self.addInputPort("Objects", (1,1,1))
         self.addOutputPort("Images", [])
 
         # create context
@@ -33,6 +34,7 @@ class DemoCDB(Filter):
             fragment_shader=self.getFragmentShaderCode(),
             varyings=["uv"]
         )
+        self.program['NAN'].value = np.nan
         self.vao = self.ctx.simple_vertex_array(self.program, self.quad, 'position')
 
     def getVertexShaderCode(self):
@@ -53,22 +55,22 @@ void main(){
 #version 330
 
 in vec2 uv;
-out vec3 outColor;
+out vec4 outColor;
 out float outDepth;
 out float outId;
 out float outY;
 uniform vec2 iResolution;
 uniform float iTime;
+uniform vec3 iObjects;
 uniform float iPhi;
 uniform float iTheta;
+uniform float NAN;
 
 const int MAX_MARCHING_STEPS = 255;
 const float MIN_DIST = 0.1;
-const float MAX_DIST = 40.0;
+const float MAX_DIST = 50.0;
 const float DELTA_DIST = MAX_DIST - MIN_DIST;
 const float EPSILON = 0.001;
-
-const float NAN = 0.0 / 0.0;
 
 float planeSDF(vec3 p) {
     return abs(p.y);
@@ -83,9 +85,17 @@ vec2 compare(vec2 hit, float d, float id){
 }
 
 vec2 sceneSDF(vec3 p) {
-    vec2 hit = vec2(planeSDF(p),0);
-    hit = compare(hit, sphereSDF(p-2.0*vec3(cos(iTime),0.25,sin(iTime)), 0.25), 1);
-    hit = compare(hit, sphereSDF(p-vec3(0,1,0),1), 2);
+    vec2 hit = vec2(MAX_DIST,-1);
+
+    if(iObjects.x>0.5)
+      hit = compare(hit, planeSDF(p), 0);
+
+    if(iObjects.y>0.5)
+      hit = compare(hit, sphereSDF(p-2.0*vec3(cos(iTime),0.25,sin(iTime)), 0.25), 1);
+
+    if(iObjects.z>0.5)
+      hit = compare(hit, sphereSDF(p-vec3(0,1,0),1), 2);
+
     return hit;
 }
 
@@ -152,7 +162,7 @@ void main() {
     vec3 hit = march(origin, rayDir, MIN_DIST, MAX_DIST);
 
     if (hit.z > MAX_DIST - EPSILON) {
-        outColor = vec3(0);
+        outColor = vec4(0);
         outDepth = 1.0;
         outId = NAN;
         outY = NAN;
@@ -172,19 +182,24 @@ void main() {
     radiance += brdf * irradiance * vec3(1);
     radiance *= softshadow(p, lightDir, MIN_DIST, MAX_DIST);
 
-    outColor = pow(radiance, vec3(1.0 / 2.2) ); // gamma correction
-    //outDepth = (hit.z-MIN_DIST)/DELTA_DIST;
-    outDepth = 0.252;
+    outColor = vec4(
+        pow(radiance, vec3(1.0 / 2.2) ), // gamma correction
+        1.0
+    );
+    outDepth = (hit.z-MIN_DIST)/DELTA_DIST;
     outId = hit.y;
     outY = p.y;
 }
         """
 
     def getArray(self,fbo,attachment,components,dtype):
-        b = fbo.read(attachment=attachment,components=components, dtype = 'f1' if dtype==np.uint8 else 'f4' )
+        b = fbo.read(attachment=attachment,components=components, dtype = dtype==np.uint8 and 'f1' or 'f4', alignment=1 )
         fa = np.frombuffer(b, dtype=dtype)
         a = fa.view()
-        a.shape = (fbo.size[0],fbo.size[1],components)
+        if components > 1:
+          a.shape = (fbo.size[1],fbo.size[0],components)
+        else:
+          a.shape = (fbo.size[1],fbo.size[0])
         return a
 
     def render(self,fbo,phi,theta):
@@ -193,6 +208,7 @@ void main() {
 
         # render
         self.program['iTime'].value = self.inputs.Time.get()
+        self.program['iObjects'].value = self.inputs.Objects.get()
         self.program['iPhi'].value = phi
         self.program['iTheta'].value = theta
         self.vao.render(moderngl.TRIANGLE_STRIP)
@@ -200,7 +216,7 @@ void main() {
         # create output image
         image = Image(
             {
-                'RGB': self.getArray(fbo,0,3,np.uint8),
+                'RGBA': self.getArray(fbo,0,4,np.uint8),
                 'Depth': self.getArray(fbo,1,1,np.float32),
                 'ID': self.getArray(fbo,2,1,np.float32),
                 'Y': self.getArray(fbo,3,1,np.float32)
@@ -227,7 +243,7 @@ void main() {
         # fbo = self.ctx.simple_framebuffer(res)
         fbo = self.ctx.framebuffer(
           color_attachments = [
-            self.ctx.renderbuffer(size=res, components=3, dtype='f1'),
+            self.ctx.renderbuffer(size=res, components=4, dtype='f1'),
             self.ctx.renderbuffer(size=res, components=1, dtype='f4'),
             self.ctx.renderbuffer(size=res, components=1, dtype='f4'),
             self.ctx.renderbuffer(size=res, components=1, dtype='f4')

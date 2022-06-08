@@ -13,12 +13,11 @@ class Image():
 
     @property
     def shape(self):
-        if self.channel.size<1:
-            return (0,0,0)
-
         # get first channel
         for c in self.channel:
             return self.channel[c].shape
+
+        return (0,0,0)
 
 def isNumber(s):
     if type(s) == int or type(s) == float:

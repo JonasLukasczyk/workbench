@@ -4,6 +4,7 @@ from .Core import *
 from .CinemaDatabaseReader import *
 from .DatabaseQuery import *
 from .ImageReader import *
+from .ImageWriter import *
 from .ImageRenderer import *
 from .ArtifactSource import *
 from .CinemaArtifactSource import *

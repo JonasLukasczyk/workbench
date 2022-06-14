@@ -1,8 +1,8 @@
 class Image():
-    def __init__(self, channel={}, meta={}, origin=(0,0)):
+    def __init__(self, channel=None, meta=None, origin=(0,0)):
         self.origin = origin
-        self.channel = channel
-        self.meta = meta
+        self.channel = channel or {}
+        self.meta = meta or {}
 
     def copy(self):
         return Image(

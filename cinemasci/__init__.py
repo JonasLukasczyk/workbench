@@ -16,6 +16,7 @@ from .Annotation import *
 from .ColorMapping import *
 from .DepthCompositing import *
 from .ShaderSSAO import *
+from .ImageGeneratorCNN import *
 
 #
 # new factory function

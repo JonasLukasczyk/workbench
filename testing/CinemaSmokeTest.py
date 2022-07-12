@@ -1,4 +1,5 @@
 import pytest
+import cinemasci
 
 gold    = "testing/gold"
 scratch = "testing/scratch"

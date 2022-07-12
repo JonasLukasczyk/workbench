@@ -27,6 +27,7 @@ setuptools.setup(
         "py",
         "Pillow",
         "ipywidgets",
+        "pytest",
         "moderngl<6"
     ],
     classifiers=[

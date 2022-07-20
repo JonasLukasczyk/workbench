@@ -69,7 +69,7 @@ out vec4 color;
 #define EULER 2.718281828459045
 
 float readDepth(vec2 coord){
-    return texture2D(depthTex,coord).r;
+    return texture(depthTex,coord).r;
 }
 
 const float gDisplace = 0.5;  // gauss bell center
@@ -127,7 +127,7 @@ void main(){
 
     float ao = depth>0.99 ? 1.0 : 1.-occlusion/samplesF;
 
-    vec4 rgba = texture2D(rgbaTex,uv);
+    vec4 rgba = texture(rgbaTex,uv);
     color = vec4(mix(vec3(0),rgba.rgb,ao+0.2),rgba.a);
 }
 

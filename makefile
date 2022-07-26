@@ -25,7 +25,7 @@ example:
 	@cp examples/demoCDB.ipynb $(TEST_DIR)
 	@cp examples/hello.ipynb $(TEST_DIR)
 	@cp examples/image.ipynb $(TEST_DIR)
-	@cp examples/image_convert.ipynb $(TEST_DIR)
+	@cp examples/image_greyscale.ipynb $(TEST_DIR)
 	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
 	@cp examples/parameterWidgets.ipynb $(TEST_DIR)
 	@echo "Running jupyter notebook ..."

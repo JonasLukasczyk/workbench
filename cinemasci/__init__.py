@@ -13,7 +13,6 @@ from .DemoCDB import *
 from .ImageUI import *
 from .ParameterWidgets import *
 from .Annotation import *
-from .Algorithm import *
 from .ConvertToColor import *
 from .ConvertToGreyscale import *
 from .ColorMapping import *

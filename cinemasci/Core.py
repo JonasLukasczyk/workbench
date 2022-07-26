@@ -77,3 +77,7 @@ class Filter():
     def update(self):
         # print("-> "+type(self).__name__)
         return
+
+class ImageConvertType():
+    COLOR = 0;
+    GREYSCALE = 1;

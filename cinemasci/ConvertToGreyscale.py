@@ -1,10 +1,8 @@
 from .Core import *
 
-import PIL
-import numpy
 import cv2 
 
-class Algorithm(Filter):
+class ConvertToGreyscale(Filter):
 
   def __init__(self):
     super().__init__();
@@ -18,8 +16,6 @@ class Algorithm(Filter):
     result = []
     for image in self.inputs.Images.get(): 
         outImage = image.copy()
-        # rgbImage = PIL.Image.fromarray( image.channel["RGBA"] )
-        # outImage.channel['RGBA'] = numpy.array(rgbImage)
         cvi = cv2.cvtColor(image.channel["RGBA"], cv2.COLOR_RGB2GRAY)
         cvfinal = cv2.cvtColor(cvi, cv2.COLOR_BGR2RGB)
         outImage.channel['RGBA'] = cvfinal

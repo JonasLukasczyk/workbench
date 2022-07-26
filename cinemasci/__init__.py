@@ -14,6 +14,8 @@ from .ImageUI import *
 from .ParameterWidgets import *
 from .Annotation import *
 from .Algorithm import *
+from .ConvertToColor import *
+from .ConvertToGreyscale import *
 from .ColorMapping import *
 from .DepthCompositing import *
 from .ShaderSSAO import *

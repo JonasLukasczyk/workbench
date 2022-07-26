@@ -12,7 +12,6 @@ class ConvertToGreyscale(Filter):
   def update(self):
     super().update()
 
-    # Black Magic
     result = []
     for image in self.inputs.Images.get(): 
         outImage = image.copy()

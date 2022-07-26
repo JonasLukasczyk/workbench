@@ -12,12 +12,11 @@ class ConvertToColor(Filter):
   def update(self):
     super().update()
 
-    # Black Magic
     result = []
     for image in self.inputs.Images.get(): 
-        outImage = image.copy()
         cvi = cv2.cvtColor(image.channel["RGBA"], cv2.COLOR_RGB2BGR)
         cvfinal = cv2.cvtColor(cvi, cv2.COLOR_BGR2RGB)
+        outImage = image.copy()
         outImage.channel['RGBA'] = cvfinal
         result.append(outImage)
 

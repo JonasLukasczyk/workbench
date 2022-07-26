@@ -47,7 +47,6 @@ class Annotation(Filter):
         super().update()
 
         images = self.inputs.Images.get()
-        nImages = len(images)
 
         font = self.__get_font(self.inputs.Size.get())
 

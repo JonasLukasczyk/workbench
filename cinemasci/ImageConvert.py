@@ -19,9 +19,9 @@ class ImageConvert(Filter):
     for image in self.inputs.Images.get(): 
 
         if self.inputs.Conversion == ImageConvertType.GREYSCALE:
-            outImage = image.copy()
             cvi = cv2.cvtColor(image.channel["RGBA"], cv2.COLOR_RGB2GRAY)
             cvfinal = cv2.cvtColor(cvi, cv2.COLOR_BGR2RGB)
+            outImage = image.copy()
             outImage.channel['RGBA'] = cvfinal
             result.append(outImage)
 

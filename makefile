@@ -1,4 +1,3 @@
-SHELL=/bin/bash
 SCRATCH_DIR=testing/scratch
 NEW_SCRATCH_DIR=testing/scratcher
 TEST_DIR=$(SCRATCH_DIR)/hello

@@ -6,11 +6,9 @@ class ImageConvert(Filter):
 
   def __init__(self):
     super().__init__();
-    self.addInputPort("Conversion", []);
+    self.addInputPort("Conversion", ImageConvertType.GREYSCALE);
     self.addInputPort("Images", []);
     self.addOutputPort("Images", []);
-
-    self.inputs.Conversion = ImageConvertType.GREYSCALE;
 
   def update(self):
     super().update()

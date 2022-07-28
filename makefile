@@ -30,4 +30,4 @@ example:
 	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
 	@cp examples/parameterWidgets.ipynb $(TEST_DIR)
 	@echo "Running jupyter notebook ..."
-	@pushd $(TEST_DIR); jupyter notebook image_canny.ipynb
+	@cd $(TEST_DIR); jupyter notebook image_canny.ipynb

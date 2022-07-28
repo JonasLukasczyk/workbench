@@ -22,10 +22,13 @@ class ImageCanny(Filter):
         # convert the input data into a form that cv uses
         cvimage = cv2.cvtColor(image.channel["RGBA"], cv2.COLOR_RGB2BGR)
         thresholds = self.inputs.Thresholds.get()
+
         # run the canny algorithm, using this object's thresholds
         canny   = cv2.Canny(cvimage, thresholds[0], thresholds[1]) 
+
         # convert to cinema format
         cvFinal = cv2.cvtColor(canny, cv2.COLOR_BGR2RGB)
+
         # copy and save output data
         outImage = image.copy()
         outImage.channel['RGBA'] = cvFinal 

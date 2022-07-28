@@ -1,6 +1,6 @@
 SCRATCH_DIR=testing/scratch
 NEW_SCRATCH_DIR=testing/scratcher
-TEST_DIR=$(SCRATCH_DIR)/hello
+TEST_DIR=$(SCRATCH_DIR)/example
 
 clean:
 	rm -rf build
@@ -30,4 +30,4 @@ example:
 	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
 	@cp examples/parameterWidgets.ipynb $(TEST_DIR)
 	@echo "Running jupyter notebook ..."
-	@pushd $(TEST_DIR); jupyter notebook image.ipynb
+	@pushd $(TEST_DIR); jupyter notebook image_canny.ipynb

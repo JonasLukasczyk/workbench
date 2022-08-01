@@ -29,7 +29,8 @@ setuptools.setup(
         "ipywidgets",
         "pytest",
         "moderngl<6",
-        "opencv-python"
+        "opencv-python",
+        "torch"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -13,6 +13,8 @@ from .DemoCDB import *
 from .ImageUI import *
 from .ParameterWidgets import *
 from .Annotation import *
+from .ImageConvert import *
+from .ImageCanny import *
 from .ColorMapping import *
 from .DepthCompositing import *
 from .ShaderSSAO import *

@@ -55,10 +55,10 @@ void main(){
 #version 330
 
 in vec2 uv;
-out vec4 outColor;
-out float outDepth;
-out float outId;
-out float outY;
+layout(location=0) out vec4 outColor;
+layout(location=1) out float outDepth;
+layout(location=2) out float outId;
+layout(location=3) out float outY;
 uniform vec2 iResolution;
 uniform float iTime;
 uniform vec3 iObjects;

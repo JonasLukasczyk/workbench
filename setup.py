@@ -27,7 +27,9 @@ setuptools.setup(
         "py",
         "Pillow",
         "ipywidgets",
-        "moderngl<6"
+        "pytest",
+        "moderngl<6",
+        "opencv-python"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

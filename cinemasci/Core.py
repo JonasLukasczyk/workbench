@@ -1,3 +1,5 @@
+from enum import Enum
+
 class Image():
     def __init__(self, channel=None, meta=None, origin=(0,0)):
         self.origin = origin
@@ -77,3 +79,7 @@ class Filter():
     def update(self):
         # print("-> "+type(self).__name__)
         return
+
+class ImageConvertType(Enum):
+    COLOR = 0;
+    GREYSCALE = 1;

@@ -19,6 +19,8 @@ from .ColorMapping import *
 from .DepthCompositing import *
 from .ShaderSSAO import *
 from .ImageGeneratorCNN import *
+from .Color import *
+from .MaskCompositing import *
 
 #
 # new factory function

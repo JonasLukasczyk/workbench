@@ -80,6 +80,9 @@ class Filter():
         # print("-> "+type(self).__name__)
         return
 
+    def help(self):
+        print('Documentation Missing')
+
 class ImageConvertType(Enum):
     COLOR = 0;
     GREYSCALE = 1;

@@ -5,6 +5,24 @@ import numpy
 import sys
 import os.path
 
+#
+# script to analyze a collection of cinema databases and
+# store the results of that analysis
+#
+
+#
+# TODO 
+#
+# 1. replace the command line argument handling section
+#    with code using argparse. 
+#    Needed: arg that is a list of directories to operate on
+#    example:
+#        python analysis.py --somename sphere.cdb cinema.cdb
+#
+
+#
+# handle command line arguments
+#
 databases = []
 if len(sys.argv) == 1:
     print("ERROR: Need a list of directories to work on")
@@ -35,7 +53,6 @@ for d in databases:
 
     # Run canny algorithm
     imageCanny = cinemasci.ImageCanny();
-    # imageCanny.inputs.Thresholds.set( [0, 70] )
     imageCanny.inputs.Images.set( imageConvert.outputs.Images );
 
     # Display Results

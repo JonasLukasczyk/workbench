@@ -100,17 +100,18 @@ class ImageGeneratorCNN(Filter):
   def update(self):
     super().update()
 
-    ## Load the trained model
+    # Load the trained model
     model = Model(vp=self.inputs.VP.get(), 
     				vpo=self.inputs.VPO.get(), 
     				ch=self.inputs.Channel.get());
+  
     checkpoint = torch.load(self.inputs.Model.get(), 
     						map_location=self.inputs.Device.get());
     model.load_state_dict(checkpoint["model_state_dict"]);
-    model.eval();
-
+    
     param = torch.from_numpy(np.asarray(self.inputs.Params.get(),
     									dtype='float32'))
+
     model.eval()
     out_image = model(param)
     out_image = ((out_image+ 1.) * .5)

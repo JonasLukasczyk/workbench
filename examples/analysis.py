@@ -15,6 +15,7 @@ import os.path
 #
 # 1. replace the command line argument handling section
 #    with code using argparse. 
+#
 #    Needed: arg that is a list of directories to operate on
 #    example:
 #        python analysis.py --somename sphere.cdb cinema.cdb

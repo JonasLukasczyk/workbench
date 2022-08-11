@@ -6,4 +6,5 @@ dist
 wbenv
 testing/scratch
 icsenv
+csenv
 examples/.ipynb_checkpoints

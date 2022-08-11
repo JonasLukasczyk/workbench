@@ -18,7 +18,7 @@ example:
 		echo "Creating test dir";\
 		mkdir $(TEST_DIR);\
 	fi
-	@echo "Creating test area ..."
+	@echo "Creating test area $(TEST_DIR)"
 	@cp -rf cinemasci $(TEST_DIR)
 	@./cinema --database $(TEST_DIR)/cinema.cdb
 	@cp -rf testing/gold/artifact/sphere.cdb $(TEST_DIR)

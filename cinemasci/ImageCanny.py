@@ -24,7 +24,8 @@ class ImageCanny(Filter):
         thresholds = self.inputs.Thresholds.get()
 
         # run the canny algorithm, using this object's thresholds
-        canny = cv2.Canny(cvimage, thresholds[0], thresholds[1])/255
+        # canny = cv2.Canny(cvimage, thresholds[0], thresholds[1])/255
+        canny = cv2.Canny(cvimage, thresholds[0], thresholds[1])
 
         outImage = image.copy()
         outImage.channel['Canny'] = canny

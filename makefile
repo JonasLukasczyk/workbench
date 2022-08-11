@@ -29,5 +29,4 @@ example:
 	@cp examples/image_canny.ipynb $(TEST_DIR)
 	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
 	@cp examples/parameterWidgets.ipynb $(TEST_DIR)
-	@echo "Running jupyter notebook ..."
-	@cd $(TEST_DIR); jupyter notebook image_canny.ipynb
+	@cp examples/analysis.py $(TEST_DIR)

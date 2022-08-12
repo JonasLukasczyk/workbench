@@ -4,7 +4,7 @@ from PIL import Image
 import numpy
 import sys
 import os.path
-
+import argparse
 #
 # script to analyze a collection of cinema databases and
 # store the results of that analysis
@@ -24,13 +24,21 @@ import os.path
 #
 # handle command line arguments
 #
-databases = []
-if len(sys.argv) == 1:
-    print("ERROR: Need a list of directories to work on")
-    exit()
+#------------------------------------------------------------
+def main():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('file', type=argparse.FileType('r'), nargs='+')
+	args = parser.parse_args()
+	
+	for d in args.file:
+		print (d)
+		
+if __name__ =='__main__':
+	main()
 
-else:
-    databases = sys.argv[1:] 
+#----------------------------------------------------------------------------------------------------------------------------------
+
+
 
 # use argparse to collect command line args
 for d in databases:

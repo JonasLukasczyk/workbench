@@ -25,23 +25,22 @@ import argparse
 # handle command line arguments
 #
 #------------------------------------------------------------
-def main():
-	parser = argparse.ArgumentParser()
-	parser.add_argument('file', type=argparse.FileType('r'), nargs='+')
-	args = parser.parse_args()
-	
-	for d in args.file:
-		print (d)
-		
-if __name__ =='__main__':
-	main()
-
+parser = argparse.ArgumentParser()
+parser.add_argument('--databases', 
+                    help="list of directories to analyze", 
+                    required=True,
+                    nargs='+')
+args = parser.parse_args()
+    
+for d in args.databases:
+    print (d)
+            
 #----------------------------------------------------------------------------------------------------------------------------------
 
 
 
 # use argparse to collect command line args
-for d in databases:
+for d in args.databases:
     # Open Cinema Database
     cdb  = cinemasci.CinemaDatabaseReader();
     cdb.inputs.Path.set( d ); 

@@ -28,8 +28,20 @@ import argparse
 #       2. compute the number of white pixels in the canny image
 #       3. compute the probability of a pixel being white
 #          in the canny image
-#       4. write out a line in the file that is:
-#          "average pixel r,g, b",num white pixels,probability of being an edge pixel
+#       4. write out a line in the file that is three values,
+#          each separated by a comma:
+#          a. average pixel value (r,g,b0
+#          b. num white pixels 
+#          c. probability that a pixel is an edge pixel 
+#          Each line should look like something like this:
+#             "124,34,145",234,0.9
+#
+# You will have to use the 'format' command to create the 
+# string to write into the file,
+#
+# Look at this link for an example of opening and closing a 
+# new text file:
+#     https://www.pythontutorial.net/python-basics/python-create-text-file/
 #
 #------------------------------------------------------------
 parser = argparse.ArgumentParser()

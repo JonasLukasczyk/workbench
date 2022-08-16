@@ -13,16 +13,23 @@ import argparse
 #
 # TODO 
 #
-# 1. replace the command line argument handling section
-#    with code using argparse. 
+# 1. add a command line argument that lets the user define 
+#    a name for an output file for analysis data, 
+#    with the default value being 'analysis.csv'
+#    This file will contain a line for each input image,
+#    which contains values we compute
 #
-#    Needed: arg that is a list of directories to operate on
-#    example:
-#        python analysis.py --somename sphere.cdb cinema.cdb
-#
-
-#
-# handle command line arguments
+# 2. For each database given in the directory list (in
+#    the 'directory' command line argument):
+#    a. create a file that is named what the 'file' command
+#       line argument is
+#    b. for each of the images you read in for that database
+#       1. compute the average pixel of the image (r,g,b)
+#       2. compute the number of white pixels in the canny image
+#       3. compute the probability of a pixel being white
+#          in the canny image
+#       4. write out a line in the file that is:
+#          "average pixel r,g, b",num white pixels,probability of being an edge pixel
 #
 #------------------------------------------------------------
 parser = argparse.ArgumentParser()

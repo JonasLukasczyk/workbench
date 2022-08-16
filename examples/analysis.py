@@ -13,11 +13,16 @@ import argparse
 #
 # TODO 
 #
-# 1. add a command line argument that lets the user define 
-#    a name for an output file for analysis data, 
-#    with the default value being 'analysis.csv'
+# 1. add a command line argument called 'output' that lets 
+#    the user define a name for an output file for analysis 
+#    data, with the default value being 'analysis.csv'
 #    This file will contain a line for each input image,
 #    which contains values we compute
+#
+#    Using the new command when you are done should look
+#    something like this:
+#    
+#      python3 analysis.py --dataases cinema.cdb sphere.cdb --output somefile.csv
 #
 # 2. For each database given in the directory list (in
 #    the 'directory' command line argument):

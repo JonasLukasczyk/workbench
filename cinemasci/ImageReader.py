@@ -50,7 +50,7 @@ class ImageReader(Filter):
             elif str.lower(extension) in ['png','jpg','jpeg']:
                 rawImage = PIL.Image.open(path)
                 if rawImage.mode == 'RGB':
-                    rawImage.putalpha(1)
+                    rawImage = rawImage.convert('RGBA')
 
                 image = Image({ 'RGBA': numpy.asarray(rawImage) })
                 for j in range(0, len(row)):

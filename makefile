@@ -2,6 +2,9 @@ SCRATCH_DIR=testing/scratch
 NEW_SCRATCH_DIR=testing/scratcher
 TEST_DIR=$(SCRATCH_DIR)/example
 
+null:
+	@:
+
 clean:
 	rm -rf build
 	rm -rf cinemasci.egg-info

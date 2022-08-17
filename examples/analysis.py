@@ -5,6 +5,7 @@ import numpy
 import sys
 import os.path
 import argparse
+import cv2 as cv
 #
 # script to analyze a collection of cinema databases and
 # store the results of that analysis
@@ -49,18 +50,23 @@ import argparse
 #     https://www.pythontutorial.net/python-basics/python-create-text-file/
 #
 #------------------------------------------------------------
+
+# Pulls a list of directories to analyze
 parser = argparse.ArgumentParser()
 parser.add_argument('--databases', 
                     help="list of directories to analyze", 
                     required=True,
                     nargs='+')
+parser.add_argument("-o",'--output',
+                    help="Name of the output file of your choice; somefile.csv", 
+                    required=True,
+                    nargs='+')
+                                   
 args = parser.parse_args()
-    
 for d in args.databases:
-    print (d)
-            
-#----------------------------------------------------------------------------------------------------------------------------------
-
+	print (d)
+	
+	#----------------------------------------------------------------------------------------------------------------------------------
 
 
 # use argparse to collect command line args
@@ -86,13 +92,21 @@ for d in args.databases:
     # Run canny algorithm
     imageCanny = cinemasci.ImageCanny();
     imageCanny.inputs.Images.set( imageConvert.outputs.Images );
-
+	
     # Display Results
     from IPython.display import display
     curid = 0
     for image in imageCanny.outputs.Images.get():
         img = Image.fromarray(image.channel['Canny'], 'L')
         path = os.path.join( d, "canny_{:03}.png".format(curid) )
+        white_pix = numpy.sum(img == 255)
+        black_pix = numpy.sum(img == 0)
+        #with open('analysis.txt', 'w') as output:
+        	#output.write(print("Average Pixel Value:", numpy.mean(img.size), ", Num white pixels: ", white_pix,", Num black pixels: ", black_pix, )
+        #print(img.size)
+        #print(numpy.mean(img.size))
         print(path)
         img.save(path)
-        curid += 1
+        curid += 1 
+with open('analysis.txt', 'w') as output:
+        	output.write(print("Average Pixel Value:{}, Num white pixels:{}  Num black pixels:{} ".format('numpy.mean(img.size)', 'white_pix', 'black_pix')))

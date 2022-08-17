@@ -23,6 +23,7 @@ example:
 	@./cinema --database $(TEST_DIR)/cinema.cdb
 	@cp -rf testing/gold/artifact/sphere.cdb $(TEST_DIR)
 	@cp examples/demoCDB.ipynb $(TEST_DIR)
+	@cp examples/edgeDetectAndComposite.ipynb $(TEST_DIR)
 	@cp examples/hello.ipynb $(TEST_DIR)
 	@cp examples/image.ipynb $(TEST_DIR)
 	@cp examples/image_convert.ipynb $(TEST_DIR)

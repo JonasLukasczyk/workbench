@@ -17,12 +17,14 @@ class DepthCompositing(Filter):
         imagesA = self.inputs.ImagesA.get()
         imagesB = self.inputs.ImagesB.get()
 
+        results = []
+
         nImages = len(imagesA)
         if nImages!=len(imagesB):
           print('ERROR', 'Input image lists must be of equal size.' )
+          self.outputs.Images.set(results)
           return 0
 
-        results = []
 
         depthChannel = self.inputs.DepthChannel.get()
 

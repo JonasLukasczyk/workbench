@@ -22,7 +22,8 @@ class ImageReader(Filter):
         try:
             fileColumnIdx = list(map(str.lower,table[0])).index(fileColumn.lower())
         except ValueError as e:
-            return print("Table does not contain '" + fileColumn + "' column!")
+            print("Table does not contain '" + fileColumn + "' column!")
+            return 0
 
         images = [];
         for i in range(1, len(table)):

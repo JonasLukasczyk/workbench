@@ -78,7 +78,7 @@ class Filter():
 
     def update(self):
         # print("-> "+type(self).__name__)
-        return
+        return 1
 
     def help(self):
         print('Documentation Missing')

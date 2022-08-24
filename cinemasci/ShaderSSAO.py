@@ -165,11 +165,12 @@ void main(){
     def update(self):
         super().update()
 
+        results = []
+
         images = self.inputs.Images.get()
         if len(images)<1:
+            self.outputs.Images.set(results)
             return 1
-
-        results = []
 
         # first image
         image0 = images[0]

@@ -21,6 +21,7 @@ from .ShaderSSAO import *
 from .ImageGeneratorCNN import *
 from .Color import *
 from .MaskCompositing import *
+from .Viewer import *
 
 #
 # new factory function

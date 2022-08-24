@@ -7,6 +7,7 @@ class ParameterWidgets(Filter):
     def __init__(self):
         super().__init__()
         self.addInputPort("Table", [])
+        self.addInputPort("Container", None)
         self.addOutputPort("SQL", "SELECT * FROM input")
         self.widgets = []
 
@@ -47,6 +48,9 @@ class ParameterWidgets(Filter):
             w.observe(on_change)
 
             self.widgets.append(w)
+        container = self.inputs.Container.get()
+        if container!=None:
+          container.children = self.widgets
 
     def update(self):
         super().update()

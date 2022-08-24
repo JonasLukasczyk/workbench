@@ -22,7 +22,8 @@ class ImageReader(Filter):
         try:
             fileColumnIdx = list(map(str.lower,table[0])).index(fileColumn.lower())
         except ValueError as e:
-            return print("Table does not contain '" + fileColumn + "' column!")
+            print("Table does not contain '" + fileColumn + "' column!")
+            return 0
 
         images = [];
         for i in range(1, len(table)):
@@ -50,7 +51,7 @@ class ImageReader(Filter):
             elif str.lower(extension) in ['png','jpg','jpeg']:
                 rawImage = PIL.Image.open(path)
                 if rawImage.mode == 'RGB':
-                    rawImage.putalpha(1)
+                  rawImage = rawImage.convert('RGBA')
 
                 image = Image({ 'RGBA': numpy.asarray(rawImage) })
                 for j in range(0, len(row)):

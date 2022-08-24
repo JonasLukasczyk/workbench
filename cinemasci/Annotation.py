@@ -11,7 +11,7 @@ class Annotation(Filter):
         self.addInputPort("XY", (20,20))
         self.addInputPort("Size", 20)
         self.addInputPort("Spacing", 0)
-        self.addInputPort("Color", (0,0,0))
+        self.addInputPort("Color", 'AUTO')
         self.addInputPort("Images", [])
         self.addInputPort("Ignore", ['FILE'])
         self.addOutputPort("Images", [])
@@ -48,13 +48,26 @@ class Annotation(Filter):
 
         images = self.inputs.Images.get()
 
+        results = []
+        if len(images)<1:
+          self.outputs.Images.set(results)
+          return 1
+
+        textColor = self.inputs.Color.get()
+        if textColor=='AUTO':
+            mean = images[0].channel['RGBA'].mean(axis=(0,1))
+            if (mean[0]+mean[1]+mean[2])/3<128:
+                textColor = (255,255,255)
+            else:
+                textColor = (0,0,0)
+
         font = self.__get_font(self.inputs.Size.get())
 
-        result = []
         ignoreList = list(map(str.lower, self.inputs.Ignore.get()))
 
         for image in images:
-            rgbImage = PIL.Image.fromarray( image.channel["RGBA"] )
+            rgba = image.channel["RGBA"]
+            rgbImage = PIL.Image.fromarray( rgba )
             text = ''
             for t in image.meta:
                 if t.lower() in ignoreList:
@@ -65,15 +78,15 @@ class Annotation(Filter):
             I1.multiline_text(
                 self.inputs.XY.get(),
                 text,
-                fill=self.inputs.Color.get(),
+                fill=textColor,
                 font=font,
                 spacing=self.inputs.Spacing.get()
             )
 
             outImage = image.copy()
             outImage.channel['RGBA'] = numpy.array(rgbImage)
-            result.append( outImage )
+            results.append( outImage )
 
-        self.outputs.Images.set(result)
+        self.outputs.Images.set(results)
 
         return 1

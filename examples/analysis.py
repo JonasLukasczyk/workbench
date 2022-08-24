@@ -4,41 +4,27 @@ from PIL import Image
 import numpy
 import sys
 import os.path
+from os import mkdir
 import argparse
+
 #
 # script to analyze a collection of cinema databases and
 # store the results of that analysis
 #
-
-#
-# TODO 
-#
-# 1. replace the command line argument handling section
-#    with code using argparse. 
-#
-#    Needed: arg that is a list of directories to operate on
-#    example:
-#        python analysis.py --somename sphere.cdb cinema.cdb
-#
-
-#
-# handle command line arguments
-#
 #------------------------------------------------------------
+
+# Pulls a list of directories to analyze
 parser = argparse.ArgumentParser()
 parser.add_argument('--databases', 
                     help="list of directories to analyze", 
                     required=True,
                     nargs='+')
+parser.add_argument("-o",'--output',
+                    help="Name of the output file of your choice; somefile.csv", 
+                    required=True)
+                                   
 args = parser.parse_args()
-    
-for d in args.databases:
-    print (d)
-            
-#----------------------------------------------------------------------------------------------------------------------------------
-
-
-
+	
 # use argparse to collect command line args
 for d in args.databases:
     # Open Cinema Database
@@ -62,13 +48,19 @@ for d in args.databases:
     # Run canny algorithm
     imageCanny = cinemasci.ImageCanny();
     imageCanny.inputs.Images.set( imageConvert.outputs.Images );
-
+	
     # Display Results
     from IPython.display import display
     curid = 0
-    for image in imageCanny.outputs.Images.get():
-        img = Image.fromarray(image.channel['Canny'], 'L')
-        path = os.path.join( d, "canny_{:03}.png".format(curid) )
-        print(path)
-        img.save(path)
-        curid += 1
+    os.mkdir(os.path.join(d, "canny"))
+    outpath = os.path.join(d, "canny", args.output)
+    with open(outpath, 'w') as output:
+        output.write("average pixel,num edge pixels\n")
+        for image in imageCanny.outputs.Images.get():
+            img = Image.fromarray(image.channel['Canny'], 'L')
+            path = os.path.join( d, "canny", "canny_{:03}.png".format(curid) )
+            white_pix = numpy.sum(image.channel['Canny'] == 1.0)
+            img.save(path)
+            curid += 1 
+
+            output.write("{},{}\n".format(numpy.mean(image.channel['Canny']), white_pix))

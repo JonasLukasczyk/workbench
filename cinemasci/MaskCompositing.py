@@ -12,6 +12,7 @@ class MaskCompositing(Filter):
         self.addInputPort('Masks', [])
         self.addInputPort('ColorChannel', 'RGBA')
         self.addInputPort('MaskChannel', 'Mask')
+        self.addInputPort('Opacity', 1.0)
         self.addOutputPort('Images', [])
 
     def update(self):
@@ -68,6 +69,8 @@ class MaskCompositing(Filter):
             if len(Ac.shape)>2 and Ac.shape[2]>1:
               mask = numpy.stack((mask,) * Ac.shape[2], axis=-1)
 
+            if self.inputs.Opacity.get() != 1.0:
+                mask = mask*self.inputs.Opacity.get()
             result.channel[colorChannel] = (1-mask)*Ac + mask*Bc
             if result.channel[colorChannel].dtype != Ac.dtype:
               result.channel[colorChannel] = result.channel[colorChannel].astype(Ac.dtype)

@@ -11,9 +11,9 @@ import ipywidgets
 
 class Viewer(Filter):
 
-    def __init__(self, path):
+    def __init__(self, path, preload_query="SELECT * FROM input"):
         super().__init__()
-
+        
         self.addInputPort("Path", "./")
 
         self.widgetContainer = ipywidgets.VBox();
@@ -22,9 +22,13 @@ class Viewer(Filter):
 
         self.cinemaDatabaseReader  = CinemaDatabaseReader()
         self.cinemaDatabaseReader.inputs.Path.set(self.inputs.Path, False)
+        
+        preload_results = DatabaseQuery();
+        preload_results.inputs.Table.set(self.cinemaDatabaseReader.outputs.Table, False);
+        preload_results.inputs.Query.set(preload_query, False);
 
         self.parameterWidgets = ParameterWidgets()
-        self.parameterWidgets.inputs.Table.set(self.cinemaDatabaseReader.outputs.Table,False)
+        self.parameterWidgets.inputs.Table.set(preload_results.outputs.Table,False)
         self.parameterWidgets.inputs.Container.set(self.widgetContainer,False)
 
         self.databaseQuery = DatabaseQuery()

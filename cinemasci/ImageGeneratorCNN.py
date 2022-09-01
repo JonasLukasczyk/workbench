@@ -101,16 +101,14 @@ class ImageGeneratorCNN(Filter):
     super().update()
 
     # Load the trained model
-    model = Model(vp=self.inputs.VP.get(), 
-    				vpo=self.inputs.VPO.get(), 
-    				ch=self.inputs.Channel.get());
+    model = Model(  vp=self.inputs.VP.get(), 
+                    vpo=self.inputs.VPO.get(), 
+                    ch=self.inputs.Channel.get());
   
-    checkpoint = torch.load(self.inputs.Model.get(), 
-    						map_location=self.inputs.Device.get());
+    checkpoint = torch.load(self.inputs.Model.get(), map_location=self.inputs.Device.get());
     model.load_state_dict(checkpoint["model_state_dict"]);
     
-    param = torch.from_numpy(np.asarray(self.inputs.Params.get(),
-    									dtype='float32'))
+    param = torch.from_numpy(np.asarray(self.inputs.Params.get(), dtype='float32'))
 
     model.eval()
     out_image = model(param)
@@ -125,17 +123,17 @@ class ImageGeneratorCNN(Filter):
 
     #self.outputs.Pop.set(out_image.detach())
 
-    ## This partt is not in use currently
+    params = self.inputs.Params.get()
     generatedImage = Image(
         {
-            'RGB': nparray # get numpy array from pytorch
+            'RGBA': nparray # get numpy array from pytorch
+        },
+        {
+            'Phi':      params[0][0],
+            'Theta':    params[0][1],
+            'Time':     params[0][2],
+            'Source':   'Estimated'
         }
-        # {
-        #     # Meta data goes here
-        #     'Time': 2.5,
-        #     'Phi': 4,
-        #     'Theta': 3
-        # }
     )
 
     self.outputs.Images.set([generatedImage]);

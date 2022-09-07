@@ -33,3 +33,12 @@ example:
 	@cp examples/*.ipynb $(TEST_DIR)
 	@cp examples/*.py $(TEST_DIR)
 	@cp testing/gold/artifact/MLModels/*.pth $(TEST_DIR)/testing/gold/artifact/MLModels
+
+module:
+	rm -rf build
+	rm -rf *.egg-info
+	rm -rf dist
+	python3 setup.py sdist
+
+module-upload:
+	twine upload dist/*

@@ -131,7 +131,6 @@ class ImageGeneratorCNN(Filter):
         {
             'Phi':      params[0][0],
             'Theta':    params[0][1],
-            'Time':     params[0][2],
             'Source':   'Estimated'
         }
     )

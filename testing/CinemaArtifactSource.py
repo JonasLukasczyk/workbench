@@ -1,5 +1,5 @@
 import pytest
-import cinemasci
+import pycinema
 import os
 from matplotlib.testing.compare import compare_images
 
@@ -32,7 +32,7 @@ def test_artifact_source():
     setUp()
 
     # create an artifact source
-    artifactSource = cinemasci.TestImageArtifactSource();
+    artifactSource = pycinema.TestImageArtifactSource();
 
     # provide input parameters and save the resulting images
     artifactSource.inputs.Parameters.set( {'phi': 25.5, 'theta': 50.0} );
@@ -53,7 +53,7 @@ def test_cinema_artifact_source():
     setUp()
 
     # create an artifact source
-    artifactSource = cinemasci.CinemaArtifactSource()
+    artifactSource = pycinema.CinemaArtifactSource()
     # point it to a database
     artifactSource.path = os.path.join(gold, "artifact", "cinema.cdb")
     artifactSource.inputs.Parameters.set( {'phi': 10.0, 'theta': 110.0} );

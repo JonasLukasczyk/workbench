@@ -1,6 +1,6 @@
 .DS_Store
 build
-cinemasci.egg-info
+pycinema.egg-info
 dist
 **/__pycache__
 wbenv

@@ -2,7 +2,7 @@
 
 import os
 import argparse
-import cinemasci
+import pycinema
 
 #
 # the cinema command line tool
@@ -50,7 +50,7 @@ print(f'Creating database: {args.database}')
 os.makedirs(args.database)
 
 # create an artifact source
-artifactSource = cinemasci.TestImageArtifactSource();
+artifactSource = pycinema.TestImageArtifactSource();
 
 with open(f'{args.database}/data.csv', 'w') as dbinfo:
     cur_image = 0

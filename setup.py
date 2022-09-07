@@ -7,17 +7,17 @@ with open(path.join(this_directory, 'doc/description.md'), encoding='utf-8') as 
     long_description = f.read()
 
 setuptools.setup(
-    name="cinemasci",
-    version="2.0",
+    name="pycinema",
+    version="0.1",
     author="David H. Rogers",
     author_email="dhr@lanl.gov",
     description="Cinema scientific toolset.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="https://github.com/cinemascience",
+    url="https://github.com/cinemascience/pycinema",
     include_package_data=True,
-    packages=[  "cinemasci",
-                "cinemasci.smoke"
+    packages=[  "pycinema",
+                "pycinema.smoke"
              ],
     install_requires=[
         "numpy",

@@ -1,7 +1,7 @@
 import pytest
 import pytest_xvfb
 
-import cinemasci
+import pycinema
 
 @pytest.fixture(autouse=True, scope='session')
 def ensure_xvfb():
@@ -15,7 +15,7 @@ def test_render():
     thetaSamples = (20,20,45)
     time = 0.1
 
-    planeImages = cinemasci.DemoCDB()
+    planeImages = pycinema.DemoCDB()
     planeImages.inputs.Objects.set((1,0,0),False) # Plane Only
     planeImages.inputs.Resolution.set(resolution,False)
     planeImages.inputs.PhiSamples.set(phiSamples,False)
@@ -23,7 +23,7 @@ def test_render():
     planeImages.inputs.Time.set(time,False)
     planeImages.update()
 
-    sphereImages = cinemasci.DemoCDB()
+    sphereImages = pycinema.DemoCDB()
     sphereImages.inputs.Objects.set((0,1,1),False) # Big and Small Sphere
     sphereImages.inputs.Resolution.set(resolution,False)
     sphereImages.inputs.PhiSamples.set(phiSamples,False)
@@ -31,24 +31,24 @@ def test_render():
     sphereImages.inputs.Time.set(time,False)
     sphereImages.update()
 
-    spheresColordByY = cinemasci.ColorMapping()
+    spheresColordByY = pycinema.ColorMapping()
     spheresColordByY.inputs.Channel.set( "Y", False )
     spheresColordByY.inputs.Map.set( "plasma", False )
     spheresColordByY.inputs.Range.set( (0,2), False )
     spheresColordByY.inputs.Images.set( sphereImages.outputs.Images )
 
-    depthCompositing = cinemasci.DepthCompositing()
+    depthCompositing = pycinema.DepthCompositing()
     depthCompositing.inputs.ImagesA.set(planeImages.outputs.Images, False )
     depthCompositing.inputs.ImagesB.set(spheresColordByY.outputs.Images, False )
     depthCompositing.update()
 
-    ssao = cinemasci.ShaderSSAO()
+    ssao = pycinema.ShaderSSAO()
     ssao.inputs.Radius.set( 0.1, False )
     ssao.inputs.Samples.set( 256, False )
     ssao.inputs.Diff.set( 0.5, False )
     ssao.inputs.Images.set( depthCompositing.outputs.Images )
 
-    annotation = cinemasci.Annotation()
+    annotation = pycinema.Annotation()
     annotation.inputs.Color.set( (255,255,255), False )
     annotation.inputs.Size.set( 10, False )
     annotation.inputs.XY.set( (0,0), False )

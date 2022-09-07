@@ -7,7 +7,7 @@ null:
 
 clean:
 	rm -rf build
-	rm -rf cinemasci.egg-info
+	rm -rf pycinema.egg-info
 	rm -rf dist
 	rm -rf $(SCRATCH_DIR) 
 
@@ -22,7 +22,7 @@ example:
 		mkdir $(TEST_DIR);\
 	fi
 	@echo "Creating test area $(TEST_DIR)"
-	@cp -rf cinemasci $(TEST_DIR)
+	@cp -rf pycinema $(TEST_DIR)
 	@./cinema --database $(TEST_DIR)/cinema.cdb
 	@cp -rf testing/gold/artifact/sphere.cdb $(TEST_DIR)
 	@cp -rf testing/DragonImages.cdb $(TEST_DIR)

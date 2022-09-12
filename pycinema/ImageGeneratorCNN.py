@@ -124,7 +124,7 @@ class ImageGeneratorCNN(Filter):
     #self.outputs.Pop.set(out_image.detach())
 
     params = self.inputs.Params.get()
-    if len(params) == 3:
+    if len(params[0]) == 3:
         generatedImage = Image(
             {
                 'RGBA': nparray # get numpy array from pytorch

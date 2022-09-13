@@ -45,10 +45,19 @@ class ImageWriter(Filter):
         super().update()
 
         images = self.inputs.Images.get()
+        for image in images:
+            image.meta.pop('FILE')
+
         path = self.inputs.Path.get()
 
         if len(images)<1:
             return 1
+
+        # ensure folder exists
+        try:
+          os.makedirs(path)
+        except:
+          pass
 
         # check if path is a cdb
         filename, extension = os.path.splitext(path)
@@ -87,20 +96,6 @@ class ImageWriter(Filter):
                     if csvData[i][fileColumnIdx] == fileName:
                         dbRowIdx = i
                         break
-                    # row = csvData[i]
-                    # allRowValuesAreEqual = True
-
-                    # for m in image.meta:
-                    #     idx = metaIdxMap[m]
-                    #     if idx == None:
-                    #         raise ValueError('Image has meta entry not recorded in CDB')
-                    #     if row[idx] != str(image.meta[m]):
-                    #         allRowValuesAreEqual = False
-                    #         break
-
-                    # if allRowValuesAreEqual:
-                    #     dbRowIdx = i
-                    #     break
 
                 if dbRowIdx<0:
                     newRow = [None]*len(csvData[0])

@@ -4,6 +4,8 @@ import PIL
 import numpy
 import h5py
 import os
+import vtk
+from vtk.util.numpy_support import vtk_to_numpy
 
 class ImageReader(Filter):
 
@@ -34,7 +36,23 @@ class ImageReader(Filter):
             extension = str.lower(extension[1:])
 
             image = None
-            if extension == 'h5':
+            if extension == 'vti':
+                reader = vtk.vtkXMLImageDataReader()
+                reader.SetFileName(path)
+                reader.Update()
+                x = reader.GetOutput()
+                dims = x.GetDimensions()
+                channels = {};
+                pointData = x.GetPointData();
+                for i in range(pointData.GetNumberOfArrays()):
+                  array = pointData.GetArray(i)
+                  channels[array.GetName()] = vtk_to_numpy(array).reshape((512,512))
+
+                image = Image(channels)
+                for j in range(0, len(row)):
+                    image.meta[table[0][j]] = row[j]
+
+            elif extension == 'h5':
                 image = Image()
                 file = h5py.File(path, 'r')
 
@@ -51,7 +69,7 @@ class ImageReader(Filter):
             elif str.lower(extension) in ['png','jpg','jpeg']:
                 rawImage = PIL.Image.open(path)
                 if rawImage.mode == 'RGB':
-                  rawImage = rawImage.convert('RGBA')
+                    rawImage = rawImage.convert('RGBA')
 
                 image = Image({ 'RGBA': numpy.asarray(rawImage) })
                 for j in range(0, len(row)):

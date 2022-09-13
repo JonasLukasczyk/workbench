@@ -57,7 +57,7 @@ class DatabaseQuery(Filter):
     res = c.fetchall();
     columns = [];
     for d in c.description:
-      columns.append(d[0]);
+      columns.append(d[0])
     res.insert(0,columns);
     return res;
 

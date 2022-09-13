@@ -7,7 +7,7 @@ class ShaderSSAO(Filter):
     def __init__(self):
         super().__init__()
         self.addInputPort("Images", [])
-        self.addInputPort("Radius", 0.3)
+        self.addInputPort("Radius", 0.03)
         self.addInputPort("Samples", 32)
         self.addInputPort("Diff", 0.5)
         self.addOutputPort("Images", [])
@@ -135,6 +135,8 @@ void main(){
 
     def createTexture(self,location,res,components,dtype='f1'):
         tex = self.ctx.texture(res, components, dtype=dtype, alignment=1)
+        tex.repeat_x = False
+        tex.repeat_y = False
         tex.use(location=location)
         return tex
 
@@ -174,7 +176,10 @@ void main(){
 
         # first image
         image0 = images[0]
-        res = image0.shape[:2][::-1]
+        shape = image0.channel['RGBA'].shape
+        if len(shape)!=3:
+            shape = (shape[0],shape[1],1)
+        res = shape[:2][::-1]
 
         # set uniforms
         self.program['resolution'].value = res
@@ -187,7 +192,7 @@ void main(){
         self.fbo.use()
 
         # create textures
-        self.rgbaTex = self.createTexture(0,res,image0.shape[2],dtype='f1')
+        self.rgbaTex = self.createTexture(0,res,shape[2],dtype='f1')
         self.depthTex = self.createTexture(1,res,1,dtype='f4')
 
         for image in images:

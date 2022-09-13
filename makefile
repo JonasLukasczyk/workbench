@@ -2,6 +2,9 @@ SCRATCH_DIR=testing/scratch
 NEW_SCRATCH_DIR=testing/scratcher
 TEST_DIR=$(SCRATCH_DIR)/example
 
+null:
+	@:
+
 clean:
 	rm -rf build
 	rm -rf cinemasci.egg-info
@@ -22,11 +25,7 @@ example:
 	@cp -rf cinemasci $(TEST_DIR)
 	@./cinema --database $(TEST_DIR)/cinema.cdb
 	@cp -rf testing/gold/artifact/sphere.cdb $(TEST_DIR)
-	@cp examples/demoCDB.ipynb $(TEST_DIR)
-	@cp examples/hello.ipynb $(TEST_DIR)
-	@cp examples/image.ipynb $(TEST_DIR)
-	@cp examples/image_convert.ipynb $(TEST_DIR)
-	@cp examples/image_canny.ipynb $(TEST_DIR)
-	@cp examples/imageArtifactSource.ipynb $(TEST_DIR)
-	@cp examples/parameterWidgets.ipynb $(TEST_DIR)
-	@cp examples/analysis.py $(TEST_DIR)
+	@cp -rf testing/DragonImages.cdb $(TEST_DIR)
+	@cp examples/*.ipynb $(TEST_DIR)
+	@cp examples/*.py $(TEST_DIR)
+	@cp testing/gold/artifact/MLModels/*.pth $(TEST_DIR)

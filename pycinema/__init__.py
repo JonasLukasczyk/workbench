@@ -14,6 +14,7 @@ from .DemoCDB import *
 from .ImageUI import *
 from .ParameterWidgets import *
 from .Annotation import *
+from .Border import *
 from .ImageConvert import *
 from .ImageCanny import *
 from .ColorMapping import *

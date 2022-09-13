@@ -2,8 +2,8 @@ from .Core import *
 from .CinemaDatabaseReader import *
 from .DatabaseQuery import *
 from .ImageReader import *
-from .Annotation import *
 from .ImageGeneratorCNN import *
+from .Border import *
 
 class ImageEstimator(Filter):
 
@@ -20,14 +20,13 @@ class ImageEstimator(Filter):
         self.dbreader    = CinemaDatabaseReader();
         self.query       = DatabaseQuery();
         self.imageReader = ImageReader();
-        self.annotation  = Annotation();
-        self.annotation.inputs.Color.set((255,0,0));
-        self.annotation.inputs.Ignore.set(['FILE', 'id', 'phi', 'theta']);
-        self.annotation.inputs.Size.set(6);
-        self.annotation.inputs.XY.set((5,5));
+
+        # both
+        self.border = Border();
+        self.border.inputs.Width.set(1);
 
         # estimator path
-        self.mlfilter = ImageGeneratorCNN()
+        self.mlfilter = ImageGeneratorCNN();
 
     def update(self):
         super().update()
@@ -48,8 +47,9 @@ class ImageEstimator(Filter):
         # otherwise, return an estimated image
         #
         if len(self.imageReader.outputs.Images.get()) > 0:
-            # add annotation
-            self.annotation.inputs.Images.set(self.imageReader.outputs.Images);
+            # add a border
+            self.border.inputs.Color.set("black");
+            self.border.inputs.Images.set(self.imageReader.outputs.Images);
 
         else:
             # return an estimated image 
@@ -61,9 +61,11 @@ class ImageEstimator(Filter):
             self.mlfilter.inputs.Channel.set(8,False);
             self.mlfilter.update();
 
-            # add annotation
-            self.annotation.inputs.Images.set(self.mlfilter.outputs.Images);
+            # add a border
+            self.border.inputs.Color.set("red");
+            self.border.inputs.Images.set(self.mlfilter.outputs.Images);
 
-        self.outputs.Artifacts.set(self.annotation.outputs.Images);
+
+        self.outputs.Artifacts.set(self.border.outputs.Images);
 
         return 1;

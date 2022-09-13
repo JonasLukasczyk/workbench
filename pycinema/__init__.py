@@ -3,7 +3,7 @@ __all__ = ["smoke"]
 from .Core import *
 from .CinemaDatabaseReader import *
 from .DatabaseQuery import *
-from .ImageEstimator import *
+from .HybridArtifactSource import *
 from .ImageReader import *
 from .ImageWriter import *
 from .ImageRenderer import *

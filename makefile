@@ -32,7 +32,7 @@ example:
 	@cp -rf testing/DragonImages.cdb $(TEST_DIR)/testing
 	@cp examples/*.ipynb $(TEST_DIR)
 	@cp examples/*.py $(TEST_DIR)
-	@cp -rf testing/gold/artifact/ML_ImageGeneratorTimevarying_Test.cdb $(TEST_DIR)/testing/gold/artifact
+	@cp -rf testing/gold/artifact/ML_ImageGenerator*.cdb $(TEST_DIR)/testing/gold/artifact
 	@cp testing/gold/artifact/MLModels/*.pth $(TEST_DIR)/testing/gold/artifact/MLModels
 
 module:

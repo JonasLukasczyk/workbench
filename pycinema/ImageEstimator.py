@@ -36,7 +36,7 @@ class ImageEstimator(Filter):
         # query for objects
         params = self.inputs.Parameters.get();
         self.query.inputs.Table.set(self.dbreader.outputs.Table);
-        qstring = "SELECT * FROM INPUT WHERE phi = '{}' AND theta = '{}' AND time = '{}'".format(params[0], params[1], params[2])
+        qstring = "SELECT * FROM INPUT WHERE phi = '{}' AND theta = '{}'".format(params[0], params[1])
         self.query.inputs.Query.set(qstring);
 
         # Read Data Products
@@ -56,7 +56,7 @@ class ImageEstimator(Filter):
             self.mlfilter.inputs.Model.set(self.inputs.ModelPath.get(), False);
             self.mlfilter.inputs.Device.set('cpu',False);
             self.mlfilter.inputs.Params.set([params],False);
-            self.mlfilter.inputs.VP.set(3,False);
+            self.mlfilter.inputs.VP.set(2,False);
             self.mlfilter.inputs.VPO.set(256,False);
             self.mlfilter.inputs.Channel.set(8,False);
             self.mlfilter.update();

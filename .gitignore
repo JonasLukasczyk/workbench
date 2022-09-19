@@ -1,4 +1,5 @@
 .DS_Store
+externaldata
 build
 pycinema.egg-info
 dist

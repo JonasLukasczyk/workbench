@@ -29,6 +29,7 @@ example:
 	@mkdir $(TEST_DIR)/testing/gold/artifact
 	@mkdir $(TEST_DIR)/testing/gold/artifact/MLModels
 	@cp -rf testing/gold/artifact/sphere.cdb $(TEST_DIR)/testing/gold/artifact
+	@cp -rf testing/gold/artifact/ocean.cdb $(TEST_DIR)/testing/gold/artifact
 	@cp -rf testing/DragonImages.cdb $(TEST_DIR)/testing
 	@cp examples/*.ipynb $(TEST_DIR)
 	@cp examples/*.py $(TEST_DIR)

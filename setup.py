@@ -6,9 +6,13 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'doc/description.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+version_text = ""
+with open(path.join(this_directory, 'version.md'), encoding='utf-8') as f:
+    version_text = f.read().strip()
+
 setuptools.setup(
     name="pycinema",
-    version="0.1",
+    version=version_text,
     author="David H. Rogers",
     author_email="dhr@lanl.gov",
     description="Cinema scientific toolset.",
@@ -18,7 +22,7 @@ setuptools.setup(
     include_package_data=True,
     packages=[  "pycinema",
                 "pycinema.smoke"
-             ],
+    ],
     install_requires=[
         "numpy",
         "scipy",
@@ -39,6 +43,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     scripts=[
-        "cinema"
+        'cinema',
+        'doc/description.md', 
+        'version.md'
     ],
 )

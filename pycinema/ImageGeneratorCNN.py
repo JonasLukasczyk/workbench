@@ -91,7 +91,7 @@ class ImageGeneratorCNN(Filter):
     self.addInputPort("Params",[[0.0,0.0]]);
     self.addInputPort("Model", "PathToModel");
     self.addInputPort("Channel",8);
-    self.addInputPort("VP",2);
+    self.addInputPort("VP",3);
     self.addInputPort("VPO",256);
     self.addInputPort("Device","cpu");
     self.addOutputPort("Images", []);
@@ -124,17 +124,29 @@ class ImageGeneratorCNN(Filter):
     #self.outputs.Pop.set(out_image.detach())
 
     params = self.inputs.Params.get()
-    generatedImage = Image(
-        {
-            'RGBA': nparray # get numpy array from pytorch
-        },
-        {
-            'Phi':      params[0][0],
-            'Theta':    params[0][1],
-            'Time':     params[0][2],
-            'Source':   'Estimated'
-        }
-    )
+    if len(params[0]) == 3:
+        generatedImage = Image(
+            {
+                'RGBA': nparray # get numpy array from pytorch
+            },
+            {
+                'Phi':      params[0][0],
+                'Theta':    params[0][1],
+                'Time':     params[0][2],
+                'Source':   'Estimated'
+            }
+        )
+    else:
+        generatedImage = Image(
+            {
+                'RGBA': nparray # get numpy array from pytorch
+            },
+            {
+                'Phi':      params[0][0],
+                'Theta':    params[0][1],
+                'Source':   'Estimated'
+            }
+        )
 
     self.outputs.Images.set([generatedImage]);
 

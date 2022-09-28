@@ -29,6 +29,18 @@ source csenv/bin/activate
 make example
 ```
 
+# Making and uploading the python module
+
+```
+make module
+``` 
+
+And then to upload it to `pypi` (assuming you have permission):
+
+```
+make module-upload
+```
+
 # Design proposals
 
 - [CIS image proposal](doc/cis_proposal.md)

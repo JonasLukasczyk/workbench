@@ -3,6 +3,7 @@ __all__ = ["smoke"]
 from .Core import *
 from .CinemaDatabaseReader import *
 from .DatabaseQuery import *
+from .HybridArtifactSource import *
 from .ImageReader import *
 from .ImageWriter import *
 from .ImageRenderer import *
@@ -13,6 +14,7 @@ from .DemoCDB import *
 from .ImageUI import *
 from .ParameterWidgets import *
 from .Annotation import *
+from .Border import *
 from .ImageConvert import *
 from .ImageCanny import *
 from .ColorMapping import *
@@ -22,6 +24,7 @@ from .ImageGeneratorCNN import *
 from .Color import *
 from .MaskCompositing import *
 from .Viewer import *
+from .Display import *
 
 #
 # new factory function

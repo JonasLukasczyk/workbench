@@ -1,4 +1,4 @@
-import cinemasci
+import pycinema
 import matplotlib
 from PIL import Image
 import numpy
@@ -28,25 +28,25 @@ args = parser.parse_args()
 # use argparse to collect command line args
 for d in args.databases:
     # Open Cinema Database
-    cdb  = cinemasci.CinemaDatabaseReader();
+    cdb  = pycinema.CinemaDatabaseReader();
     cdb.inputs.Path.set( d ); 
 
     # Select Some Data Products
-    query = cinemasci.DatabaseQuery();
+    query = pycinema.DatabaseQuery();
     query.inputs.Table.set(cdb.outputs.Table);
     query.inputs.Query.set('SELECT * FROM input');
 
     # Read Data Products
-    imageReader = cinemasci.ImageReader();
+    imageReader = pycinema.ImageReader();
     imageReader.inputs.Table.set(query.outputs.Table);
 
     # Render in black and white# Run an algorithm on the images
-    imageConvert = cinemasci.ImageConvert();
-    imageConvert.inputs.Conversion.set( cinemasci.ImageConvertType.COLOR );
+    imageConvert = pycinema.ImageConvert();
+    imageConvert.inputs.Conversion.set( pycinema.ImageConvertType.COLOR );
     imageConvert.inputs.Images.set( imageReader.outputs.Images );
 
     # Run canny algorithm
-    imageCanny = cinemasci.ImageCanny();
+    imageCanny = pycinema.ImageCanny();
     imageCanny.inputs.Images.set( imageConvert.outputs.Images );
 	
     # Display Results

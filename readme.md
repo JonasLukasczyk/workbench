@@ -1,4 +1,4 @@
-# Cinema Engine prototyping and design repository
+# Cinema Engine repository 
 ![smoke](https://github.com/cinemascience/workbench/actions/workflows/CinemaSmokeTest.yml/badge.svg)
 ![base](https://github.com/cinemascience/workbench/actions/workflows/CinemaComparisonTest.yml/badge.svg)
 ![rendering](https://github.com/cinemascience/workbench/actions/workflows/CinemaRenderTest.yml/badge.svg)

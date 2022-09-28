@@ -24,6 +24,7 @@ setuptools.setup(
                 "pycinema.smoke"
     ],
     install_requires=[
+        "cv2",
         "numpy",
         "scipy",
         "h5py",

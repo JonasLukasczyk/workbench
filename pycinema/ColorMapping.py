@@ -19,6 +19,8 @@ class ColorMapping(Filter):
 
         images = self.inputs.Images.get()
 
+        iChannel = self.inputs.Channel.get()
+
         results = []
 
         cmap = cm.get_cmap( self.inputs.Map.get() )
@@ -26,9 +28,12 @@ class ColorMapping(Filter):
         r = self.inputs.Range.get()
         d = r[1]-r[0]
         for image in images:
+            if not iChannel in image.channel or iChannel=='RGBA':
+                results.append(image)
+                continue
+
+            normalized = (image.channel[ iChannel ]-r[0])/d
             result = image.copy()
-            channel = result.channel[ self.inputs.Channel.get() ]
-            normalized = (channel-r[0])/d
             result.channel["RGBA"] = cmap(normalized, bytes=True)
             results.append(result)
 

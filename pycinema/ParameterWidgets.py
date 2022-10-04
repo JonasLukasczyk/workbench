@@ -22,7 +22,7 @@ class ParameterWidgets(Filter):
                 self.update()
 
         for i in range(0,len(header)):
-            if header[i].lower() == 'file':
+            if header[i].lower() == 'file' or header[i].lower() == 'id':
                 continue
 
             vdic = set()

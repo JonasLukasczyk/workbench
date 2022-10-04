@@ -25,7 +25,11 @@ def isNumber(s):
     if type(s) == int or type(s) == float:
         return True
     if type(s) == str:
-        return s.strip().lstrip('-').isnumeric()
+        try:
+            sf = float(s)
+            return True
+        except ValueError:
+            return False
     return False
 
 class Port():

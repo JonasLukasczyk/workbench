@@ -13,7 +13,7 @@ class Annotation(Filter):
         self.addInputPort("Spacing", 0)
         self.addInputPort("Color", 'AUTO')
         self.addInputPort("Images", [])
-        self.addInputPort("Ignore", ['FILE'])
+        self.addInputPort("Ignore", ['FILE','id'])
         self.addOutputPort("Images", [])
 
     #

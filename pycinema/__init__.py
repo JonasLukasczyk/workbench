@@ -18,6 +18,7 @@ from .Border import *
 from .ImageConvert import *
 from .ImageCanny import *
 from .ColorMapping import *
+from .ColorMappingWidgets import *
 from .DepthCompositing import *
 from .ShaderSSAO import *
 from .ImageGeneratorCNN import *

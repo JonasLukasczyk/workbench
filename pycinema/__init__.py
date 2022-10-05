@@ -18,6 +18,7 @@ from .Border import *
 from .ImageConvert import *
 from .ImageCanny import *
 from .ColorMapping import *
+from .ColorMappingWidgets import *
 from .DepthCompositing import *
 from .ShaderSSAO import *
 from .ImageGeneratorCNN import *
@@ -25,6 +26,7 @@ from .Color import *
 from .MaskCompositing import *
 from .Viewer import *
 from .Display import *
+from .NumberWidget import *
 
 #
 # new factory function

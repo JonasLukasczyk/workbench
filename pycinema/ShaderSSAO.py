@@ -187,9 +187,9 @@ void main(){
 
         # set uniforms
         self.program['resolution'].value = res
-        self.program['radius'].value = self.inputs.Radius.get()
-        self.program['samples'].value = self.inputs.Samples.get()
-        self.program['diff_area'].value = self.inputs.Diff.get()
+        self.program['radius'].value = float(self.inputs.Radius.get())
+        self.program['samples'].value = int(self.inputs.Samples.get())
+        self.program['diff_area'].value = float(self.inputs.Diff.get())
 
         # create framebuffer
         self.fbo = self.ctx.simple_framebuffer(res)

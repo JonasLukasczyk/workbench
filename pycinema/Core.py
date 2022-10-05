@@ -33,8 +33,9 @@ def isNumber(s):
     return False
 
 class Port():
-    def __init__(self, value, parent, isInput = False):
+    def __init__(self, name, value, parent, isInput = False):
         self.parent = parent
+        self.name = name
         self._listeners = []
         if isInput:
             self._listeners.append(self.parent)
@@ -75,10 +76,10 @@ class Filter():
         self.outputs = PortList()
 
     def addInputPort(self, name, value):
-        setattr(self.inputs, name, Port(value, self, True))
+        setattr(self.inputs, name, Port(name, value, self, True))
 
     def addOutputPort(self, name, value):
-        setattr(self.outputs, name, Port(value, self))
+        setattr(self.outputs, name, Port(name, value, self))
 
     def update(self):
         # print("-> "+type(self).__name__)

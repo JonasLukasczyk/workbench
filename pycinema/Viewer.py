@@ -8,6 +8,7 @@ from .ImageUI import *
 from .ShaderSSAO import *
 from .ColorMappingWidgets import *
 from .ColorMapping import *
+from .NumberWidget import *
 
 import IPython
 import ipywidgets
@@ -22,13 +23,16 @@ class Viewer(Filter):
         # Layout
         self.parameterWidgetsContainer = ipywidgets.VBox();
         self.colorMappingWidgetsContainer = ipywidgets.VBox();
+        self.shadingWidgetsContainer = ipywidgets.VBox();
 
         self.leftColumn = ipywidgets.VBox([
-          ipywidgets.Accordion(children=[self.parameterWidgetsContainer]),
-          ipywidgets.Accordion(children=[self.colorMappingWidgetsContainer])
+            ipywidgets.Accordion(children=[self.parameterWidgetsContainer]),
+            ipywidgets.Accordion(children=[self.colorMappingWidgetsContainer]),
+            ipywidgets.Accordion(children=[self.shadingWidgetsContainer])
         ]);
         self.leftColumn.children[0].set_title(0,'Parameters')
         self.leftColumn.children[1].set_title(0,'Color Mapping')
+        self.leftColumn.children[2].set_title(0,'Shading')
 
         self.imageContainer = ipywidgets.Output()
         self.globalContainer = ipywidgets.HBox([self.leftColumn,self.imageContainer]);
@@ -64,6 +68,11 @@ class Viewer(Filter):
 
         self.shaderSSAO = ShaderSSAO()
         self.shaderSSAO.inputs.Images.set(self.colorMapping.outputs.Images,False)
+
+        self.shadingWidgetsContainer.children = [
+            NumberWidget(self.shaderSSAO.inputs.Radius, range=[0,1,0.01]).widget,
+            NumberWidget(self.shaderSSAO.inputs.Samples, range=[1,256,1]).widget,
+        ]
 
         self.annotation = Annotation()
         self.annotation.inputs.Images.set(self.shaderSSAO.outputs.Images,False)

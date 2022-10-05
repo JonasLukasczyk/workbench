@@ -26,6 +26,7 @@ from .Color import *
 from .MaskCompositing import *
 from .Viewer import *
 from .Display import *
+from .NumberWidget import *
 
 #
 # new factory function

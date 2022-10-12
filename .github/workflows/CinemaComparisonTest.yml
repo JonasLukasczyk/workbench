@@ -3,6 +3,9 @@
 
 name: CinemaComparisonTest
 
+runs:
+  using: 'node16'
+
 on:
   push:
 

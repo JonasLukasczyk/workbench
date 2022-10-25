@@ -11,7 +11,10 @@ class ImageReader(Filter):
         super().__init__()
         self.addInputPort("Table", [])
         self.addInputPort("FileColumn", "FILE")
+        self.addInputPort("Cache", True)
         self.addOutputPort("Images", [])
+
+        self.cache = {}
 
     def update(self):
         super().update()
@@ -26,6 +29,8 @@ class ImageReader(Filter):
             return 0
 
         images = [];
+        useCache = self.inputs.Cache.get()
+
         for i in range(1, len(table)):
             row = table[i]
             path = row[fileColumnIdx]
@@ -34,6 +39,10 @@ class ImageReader(Filter):
             extension = str.lower(extension[1:])
 
             image = None
+            if useCache and path in self.cache:
+                images.append(self.cache[path])
+                continue
+
             if extension == 'h5':
                 image = Image()
                 file = h5py.File(path, 'r')
@@ -59,6 +68,9 @@ class ImageReader(Filter):
 
             else:
                 raise ValueError('Unable to read image: '+path)
+
+            if useCache:
+                self.cache[path] = image
 
             images.append( image )
 

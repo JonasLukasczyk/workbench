@@ -22,9 +22,10 @@ class Image():
         return (0,0,0)
 
 def isNumber(s):
-    if type(s) == int or type(s) == float:
+    t = type(s)
+    if t == int or t == float:
         return True
-    if type(s) == str:
+    if t == str:
         try:
             sf = float(s)
             return True

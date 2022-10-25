@@ -21,6 +21,8 @@ from .ColorMapping import *
 from .ColorMappingWidgets import *
 from .DepthCompositing import *
 from .ShaderSSAO import *
+from .ShaderPBR import *
+from .ShaderPhong import *
 from .ImageGeneratorCNN import *
 from .Color import *
 from .MaskCompositing import *

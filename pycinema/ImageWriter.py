@@ -25,11 +25,9 @@ class ImageWriter(Filter):
     def writeH5(self,path,image):
         file = h5py.File(path, 'w')
 
-        file.create_dataset('origin', data=image.origin)
-
-        fChannel = file.create_group('channel')
-        for k in image.channel:
-            fChannel.create_dataset(k,data=image.channel[k], compression='gzip', compression_opts=9)
+        fChannel = file.create_group('channels')
+        for k in image.channels:
+            fChannel.create_dataset(k,data=image.channels[k], compression='gzip', compression_opts=9)
 
         fMeta = file.create_group('meta')
         for k in image.meta:

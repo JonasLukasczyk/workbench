@@ -10,8 +10,8 @@ class MaskCompositing(Filter):
         self.addInputPort('ImagesA', [])
         self.addInputPort('ImagesB', [])
         self.addInputPort('Masks', [])
-        self.addInputPort('ColorChannel', 'RGBA')
-        self.addInputPort('MaskChannel', 'Mask')
+        self.addInputPort('ColorChannel', 'rgba')
+        self.addInputPort('MaskChannel', 'mask')
         self.addInputPort('Opacity', 1.0)
         self.addOutputPort('Images', [])
 
@@ -47,20 +47,20 @@ class MaskCompositing(Filter):
 
             Ac = None
             Bc = None
-            Mc = M.channel[maskChannel]
+            Mc = M.channels[maskChannel]
 
             if type(A) is tuple:
                 result = B.copy()
-                Bc = B.channel[colorChannel]
+                Bc = B.channels[colorChannel]
                 Ac = numpy.full(Bc.shape,A)
             elif type(B) is tuple:
                 result = A.copy()
-                Ac = A.channel[colorChannel]
+                Ac = A.channels[colorChannel]
                 Bc = numpy.full(Ac.shape,B)
             else:
                 result = A.copy()
-                Ac = A.channel[colorChannel]
-                Bc = B.channel[colorChannel]
+                Ac = A.channels[colorChannel]
+                Bc = B.channels[colorChannel]
 
             mask = Mc
             if numpy.isnan(mask).any():
@@ -71,9 +71,9 @@ class MaskCompositing(Filter):
 
             if self.inputs.Opacity.get() != 1.0:
                 mask = mask*self.inputs.Opacity.get()
-            result.channel[colorChannel] = (1-mask)*Ac + mask*Bc
-            if result.channel[colorChannel].dtype != Ac.dtype:
-              result.channel[colorChannel] = result.channel[colorChannel].astype(Ac.dtype)
+            result.channels[colorChannel] = (1-mask)*Ac + mask*Bc
+            if result.channels[colorChannel].dtype != Ac.dtype:
+              result.channels[colorChannel] = result.channels[colorChannel].astype(Ac.dtype)
 
             results.append( result )
 

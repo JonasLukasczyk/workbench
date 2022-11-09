@@ -12,14 +12,14 @@ class ColorMappingWidgets(Filter):
         self.addOutputPort("Map", "plasma")
         self.addOutputPort("NaN", (0,0,0,0))
         self.addOutputPort("Range", (0,1))
-        self.addOutputPort("Channel", "Depth")
+        self.addOutputPort("Channel", "depth")
 
         def on_change(change):
             if change['type'] == 'change' and change['name'] == 'value':
                 self.update()
         def rgba_observer(change):
             if change['type'] == 'change' and change['name'] == 'value':
-                disabled = change['new'] == 'RGBA'
+                disabled = change['new'] == 'rgba'
                 self.mapWidget.disabled = disabled
                 self.minWidget.disabled = disabled
                 self.maxWidget.disabled = disabled
@@ -63,11 +63,13 @@ class ColorMappingWidgets(Filter):
         if len(images):
             firstImage = images[0]
             if len(self.channelWidget.options)<1:
-                channels = list(firstImage.channel.keys())
+                channels = list(firstImage.channels.keys())
                 channels.sort()
                 self.channelWidget.options = channels
-                if 'RGBA' in channels:
-                    self.channelWidget.value = 'RGBA'
+                if 'rgba' in channels:
+                    self.channelWidget.value = 'rgba'
+                else:
+                    self.channelWidget.value = channels[0]
 
         # add widgets to container
         container = self.inputs.Container.get()

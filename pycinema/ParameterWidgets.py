@@ -37,17 +37,29 @@ class ParameterWidgets(Filter):
             o.sort()
             if isListOfNumbers:
                 o = [str(x) for x in o]
-            o.insert(0,'ANY')
-            w = ipywidgets.SelectionSlider(
-                options=o,
-                value=o[1],
-                description=header[i],
-                callback_policy='mouseup'
-            )
 
-            w.observe(on_change)
+            w = None
+            if header[i].startswith('object'):
+                w = ipywidgets.SelectMultiple(
+                    options=o,
+                    value=o,
+                    #rows=10,
+                    description=header[i]
+                )
+            else:
+                o.insert(0,'ANY')
+                w = ipywidgets.SelectionSlider(
+                    options=o,
+                    value=o[1],
+                    description=header[i],
+                    # callback_policy='mouseup',
+                    # continuous_update=False
+                )
 
-            self.widgets.append(w)
+            if w != None:
+              w.observe(on_change)
+              self.widgets.append(w)
+
         container = self.inputs.Container.get()
         if container!=None:
           container.children = self.widgets
@@ -65,13 +77,23 @@ class ParameterWidgets(Filter):
             self.generateWidgets()
 
         for i in range(0,len(self.widgets)):
-            if self.widgets[i].value == 'ANY':
+            print(self.widgets[i].description,self.widgets[i].value)
+            v = self.widgets[i].value
+            if v == 'ANY':
                 continue
 
-            if self.widgets[i].value.isnumeric():
-                sql = sql + '"' + self.widgets[i].description + '"=' + self.widgets[i].value + ' AND '
+            if type(v) is tuple:
+                if len(v)==0:
+                    sql += '"' + self.widgets[i].description + '" IN () AND '
+                elif len(v)==1:
+                    sql += '"' + self.widgets[i].description + '" IN (' + str(v[0]) + ') AND '
+                else:
+                    sql += '"' + self.widgets[i].description + '" IN ' + str(v) + ' AND '
+
+            elif v.isnumeric():
+                sql += '"' + self.widgets[i].description + '"=' + v + ' AND '
             else:
-                sql = sql + '"' + self.widgets[i].description + '"="' + self.widgets[i].value + '" AND '
+                sql += '"' + self.widgets[i].description + '"="' + v + '" AND '
 
         if len(self.widgets) > 0:
             sql = sql[:-5]

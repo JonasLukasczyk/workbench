@@ -216,15 +216,15 @@ void main() {
         # create output image
         image = Image(
             {
-                'RGBA': self.getArray(fbo,0,4,np.uint8),
-                'Depth': self.getArray(fbo,1,1,np.float32),
-                'ID': self.getArray(fbo,2,1,np.float32),
-                'Y': self.getArray(fbo,3,1,np.float32)
+                'rgba': self.getArray(fbo,0,4,np.uint8),
+                'depth': self.getArray(fbo,1,1,np.float32),
+                'id': self.getArray(fbo,2,1,np.float32),
+                'y': self.getArray(fbo,3,1,np.float32)
             },
             {
-                'Time': self.inputs.Time.get(),
-                'Phi': phi,
-                'Theta': theta
+                'time': self.inputs.Time.get(),
+                'phi': phi,
+                'theta': theta
             }
         )
 

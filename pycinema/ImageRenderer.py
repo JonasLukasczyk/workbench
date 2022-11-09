@@ -64,7 +64,7 @@ void main(){
 
     def render(self,image):
 
-        rgba = image.channel['RGBA']
+        rgba = image.channels['rgba']
 
         # create texture
         texture = self.ctx.texture(rgba.shape[:2][::-1], rgba.shape[2], rgba.tobytes(), alignment=1)
@@ -87,7 +87,7 @@ void main(){
         fbo.release()
 
         outImage = image.copy()
-        outImage.channel['RGBA'] = rgbArray
+        outImage.channels['rgba'] = rgbArray
 
         return outImage
 

@@ -1,17 +1,15 @@
 from .Core import *
 
 import matplotlib.pyplot as plt
-
 import math
 
-class ImageUI(Filter):
+class ImageViewer(Filter):
 
     def __init__(self):
         super().__init__()
 
         self.addInputPort("Images", [])
         self.addInputPort("Container", None)
-        self.container = None
 
         self.nImages = -1
 
@@ -23,9 +21,10 @@ class ImageUI(Filter):
         super().update()
 
         container = self.inputs.Container.get()
-        if self.container!=container:
-            self.container = container
-            with self.container:
+        if container == None:
+            self.fig.show()
+        else:
+            with container:
                 self.fig.show()
 
         images = self.inputs.Images.get()
@@ -39,11 +38,20 @@ class ImageUI(Filter):
             for i,image in enumerate(images):
                 axis = self.fig.add_subplot(dim, dim, i+1)
                 axis.set_axis_off()
-                im = axis.imshow(image.channel['RGBA'])
-                self.plots.append( [axis,im] )
+
+                if not 'rgba' in image.channels:
+                    self.plots.append( [axis,None] )
+                else:
+                    im = axis.imshow(image.channels['rgba'])
+                    self.plots.append( [axis,im] )
 
         for i,image in enumerate(images):
-            self.plots[i][1].set_data(image.channel['RGBA'])
+            if not 'rgba' in image.channels:
+                continue
+            if self.plots[i][1] == None:
+                self.plots[i][1] = self.plots[i][0].imshow(image.channels['rgba'])
+            else:
+                self.plots[i][1].set_data(image.channels['rgba'])
 
         self.fig.subplots_adjust(
             left=0,

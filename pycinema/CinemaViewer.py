@@ -2,9 +2,10 @@ from .Core import *
 from .CinemaDatabaseReader import *
 from .DatabaseQuery import *
 from .ImageReader import *
+from .DepthCompositing import *
 from .ParameterWidgets import *
 from .Annotation import *
-from .ImageUI import *
+from .ImageViewer import *
 from .ShaderSSAO import *
 from .ColorMappingWidgets import *
 from .ColorMapping import *
@@ -13,7 +14,7 @@ from .NumberWidget import *
 import IPython
 import ipywidgets
 
-class Viewer(Filter):
+class CinemaViewer(Filter):
 
     def __init__(self, path, preload_query="SELECT * FROM input"):
         super().__init__()
@@ -56,12 +57,15 @@ class Viewer(Filter):
         self.imageReader = ImageReader()
         self.imageReader.inputs.Table.set(self.databaseQuery.outputs.Table,False)
 
+        self.depthCompositing = DepthCompositing()
+        self.depthCompositing.inputs.ImagesA.set(self.imageReader.outputs.Images,False)
+
         self.colorMappingWidgets = ColorMappingWidgets()
-        self.colorMappingWidgets.inputs.Images.set(self.imageReader.outputs.Images,False)
+        self.colorMappingWidgets.inputs.Images.set(self.depthCompositing.outputs.Images,False)
         self.colorMappingWidgets.inputs.Container.set(self.colorMappingWidgetsContainer,False)
 
         self.colorMapping = ColorMapping()
-        self.colorMapping.inputs.Images.set(self.imageReader.outputs.Images,False)
+        self.colorMapping.inputs.Images.set(self.depthCompositing.outputs.Images,False)
         self.colorMapping.inputs.Map.set(self.colorMappingWidgets.outputs.Map,False)
         self.colorMapping.inputs.Range.set(self.colorMappingWidgets.outputs.Range,False)
         self.colorMapping.inputs.Channel.set(self.colorMappingWidgets.outputs.Channel,False)
@@ -77,9 +81,9 @@ class Viewer(Filter):
         self.annotation = Annotation()
         self.annotation.inputs.Images.set(self.shaderSSAO.outputs.Images,False)
 
-        self.imageUI = ImageUI()
-        self.imageUI.inputs.Images.set( self.annotation.outputs.Images, False )
-        self.imageUI.inputs.Container.set(self.imageContainer,False)
+        self.imageViewer = ImageViewer()
+        self.imageViewer.inputs.Images.set( self.annotation.outputs.Images, False )
+        self.imageViewer.inputs.Container.set(self.imageContainer,False)
 
         IPython.display.display(self.globalContainer)
 

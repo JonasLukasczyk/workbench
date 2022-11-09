@@ -11,7 +11,7 @@ from .ArtifactSource import *
 from .CinemaArtifactSource import *
 from .TestImageArtifactSource import *
 from .DemoCDB import *
-from .ImageUI import *
+from .ImageViewer import *
 from .ParameterWidgets import *
 from .Annotation import *
 from .Border import *
@@ -26,7 +26,7 @@ from .ShaderPhong import *
 from .ImageGeneratorCNN import *
 from .Color import *
 from .MaskCompositing import *
-from .Viewer import *
+from .CinemaViewer import *
 from .Display import *
 from .NumberWidget import *
 

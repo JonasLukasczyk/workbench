@@ -24,7 +24,7 @@ class Border(Filter):
 
         color = self.inputs.Color.get()
         if color=='AUTO':
-            mean = images[0].channel['RGBA'].mean(axis=(0,1))
+            mean = images[0].channels['rgba'].mean(axis=(0,1))
             if (mean[0]+mean[1]+mean[2])/3<128:
                 color = (255,255,255)
             else:
@@ -32,7 +32,7 @@ class Border(Filter):
 
         for image in images:
             # copy the input image
-            rgba = image.channel["RGBA"]
+            rgba = image.channels['rgba']
             rgbImage = PIL.Image.fromarray( rgba )
 
             I1 = PIL.ImageDraw.Draw(rgbImage)
@@ -40,7 +40,7 @@ class Border(Filter):
             I1.rectangle( shape, outline=color, width = self.inputs.Width.get() )
 
             outImage = image.copy()
-            outImage.channel['RGBA'] = numpy.array(rgbImage)
+            outImage.channels['rgba'] = numpy.array(rgbImage)
             results.append( outImage )
 
         self.outputs.Images.set(results)

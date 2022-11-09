@@ -16,7 +16,7 @@ class Display(Filter):
         if len(artifacts) > 0:
             for i in range(len(artifacts)):
                 artifact = artifacts[i]
-                pyplot.imshow(artifact.channel['RGBA'])
+                pyplot.imshow(artifact.channels['rgba'])
                 pyplot.axis('off')
                 pyplot.show()
 

@@ -55,24 +55,42 @@ class Annotation(Filter):
 
         textColor = self.inputs.Color.get()
         if textColor=='AUTO':
-            mean = images[0].channel['RGBA'].mean(axis=(0,1))
-            if (mean[0]+mean[1]+mean[2])/3<128:
-                textColor = (255,255,255)
-            else:
-                textColor = (0,0,0)
+            for image in images:
+                if not 'rgba' in image.channels:
+                    continue
+
+                mean = images[0].channels['rgba'].mean(axis=(0,1))
+                if (mean[0]+mean[1]+mean[2])/3<128:
+                    textColor = (255,255,255)
+                else:
+                    textColor = (0,0,0)
+                break
 
         font = self.__get_font(self.inputs.Size.get())
 
         ignoreList = list(map(str.lower, self.inputs.Ignore.get()))
 
         for image in images:
-            rgba = image.channel["RGBA"]
+            if not 'rgba' in image.channels:
+                results.append( image )
+                continue
+
+            rgba = image.channels["rgba"]
             rgbImage = PIL.Image.fromarray( rgba )
             text = ''
             for t in image.meta:
                 if t.lower() in ignoreList:
                     continue
-                text = text + ' ' + t+': '+str(image.meta[t]) + '\n'
+                m = image.meta[t]
+                if isinstance(m, numpy.ndarray):
+                    if m.ndim == 0:
+                        text = text + ' ' + t+': '+str(m)+'\n'
+                    elif m.ndim==1 and len(m)==1:
+                        text = text + ' ' + t+': '+str(m[0])+'\n'
+                    else:
+                        text = text + ' ' + t+': ['+', '.join([str(x) for x in m])+']\n'
+                else:
+                    text = text + ' ' + t+': '+str(m) + '\n'
 
             I1 = PIL.ImageDraw.Draw(rgbImage)
             I1.multiline_text(
@@ -84,7 +102,7 @@ class Annotation(Filter):
             )
 
             outImage = image.copy()
-            outImage.channel['RGBA'] = numpy.array(rgbImage)
+            outImage.channels['rgba'] = numpy.array(rgbImage)
             results.append( outImage )
 
         self.outputs.Images.set(results)

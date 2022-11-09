@@ -20,14 +20,14 @@ class ImageCanny(Filter):
     # iterate over all the images in the input images
     for image in self.inputs.Images.get():
         # convert the input data into a form that cv uses
-        cvimage = cv2.cvtColor(image.channel["RGBA"], cv2.COLOR_RGB2BGR)
+        cvimage = cv2.cvtColor(image.channels['rgba'], cv2.COLOR_RGB2BGR)
         thresholds = self.inputs.Thresholds.get()
 
         # run the canny algorithm, using this object's thresholds
         canny = cv2.Canny(cvimage, thresholds[0], thresholds[1])/255
 
         outImage = image.copy()
-        outImage.channel['Canny'] = canny
+        outImage.channels['canny'] = canny
         result.append(outImage)
 
     self.outputs.Images.set(result)

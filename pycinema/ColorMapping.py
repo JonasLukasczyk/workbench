@@ -10,7 +10,7 @@ class ColorMapping(Filter):
         self.addInputPort("Map", "plasma")
         self.addInputPort("NaN", (0,0,0,0))
         self.addInputPort("Range", (0,1))
-        self.addInputPort("Channel", "Depth")
+        self.addInputPort("Channel", "depth")
         self.addInputPort("Images", [])
         self.addOutputPort("Images", [])
 
@@ -28,13 +28,13 @@ class ColorMapping(Filter):
         r = self.inputs.Range.get()
         d = r[1]-r[0]
         for image in images:
-            if not iChannel in image.channel or iChannel=='RGBA':
+            if not iChannel in image.channels or iChannel=='rgba':
                 results.append(image)
                 continue
 
-            normalized = (image.channel[ iChannel ]-r[0])/d
+            normalized = (image.channels[ iChannel ]-r[0])/d
             result = image.copy()
-            result.channel["RGBA"] = cmap(normalized, bytes=True)
+            result.channels["rgba"] = cmap(normalized, bytes=True)
             results.append(result)
 
         self.outputs.Images.set(results)

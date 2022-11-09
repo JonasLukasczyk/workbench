@@ -142,8 +142,8 @@ void main(){
 
     def render(self,image):
 
-        rgba = image.channel['RGBA']
-        depth = image.channel['Depth']
+        rgba = image.channels['rgba']
+        depth = image.channels['depth']
 
         # create texture
         self.rgbaTex.write(rgba.tobytes())
@@ -160,7 +160,7 @@ void main(){
         rgbaArray.shape = (self.fbo.size[1],self.fbo.size[0],4)
 
         outImage = image.copy()
-        outImage.channel['RGBA'] = rgbaArray
+        outImage.channels['rgba'] = rgbaArray
 
         return outImage
 
@@ -176,11 +176,11 @@ void main(){
 
         # first image
         image0 = images[0]
-        if not 'Depth' in image0.channel:
+        if not 'depth' in image0.channels or not 'rgba' in image0.channels:
             self.outputs.Images.set(images)
             return 1
 
-        shape = image0.channel['RGBA'].shape
+        shape = image0.channels['rgba'].shape
         if len(shape)!=3:
             shape = (shape[0],shape[1],1)
         res = shape[:2][::-1]

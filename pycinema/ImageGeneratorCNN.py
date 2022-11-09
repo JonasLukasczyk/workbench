@@ -46,7 +46,7 @@ class BasicModel(nn.Module):
     return out + residual
 
 class Model(nn.Module):
-    
+
     def __init__(self, vp=2, vpo=256, ch=16):
         super(Model, self).__init__()
 
@@ -63,9 +63,9 @@ class Model(nn.Module):
             ,nn.Linear(2*vpo,  4 * 4 * 32 * ch, bias=False)
         )
 
-        # subnet for image 
+        # subnet for image
         self.img_subnet = nn.Sequential(
-            BasicModel(ch * 32, ch * 16, kernel_size=3, stride=1, padding=1), # in = 4x4, out = 8x8 
+            BasicModel(ch * 32, ch * 16, kernel_size=3, stride=1, padding=1), # in = 4x4, out = 8x8
             BasicModel(ch * 16, ch * 8, kernel_size=3, stride=1, padding=1), # in = 8x8, out = 16x16
             BasicModel(ch * 8, ch * 4, kernel_size=3, stride=1, padding=1), # in = 16x16, out = 32x32
             BasicModel(ch * 4, ch * 2, kernel_size=3, stride=1, padding=1), # in = 32x32, out = 64x64
@@ -75,7 +75,7 @@ class Model(nn.Module):
             nn.Conv2d(ch, 3, kernel_size=3, stride=1, padding=1),
             nn.Tanh()
         )
-        
+
     # Forward function
     def forward(self,vp):
         vp = self.vparams_subnet(vp)
@@ -101,13 +101,13 @@ class ImageGeneratorCNN(Filter):
     super().update()
 
     # Load the trained model
-    model = Model(  vp=self.inputs.VP.get(), 
-                    vpo=self.inputs.VPO.get(), 
+    model = Model(  vp=self.inputs.VP.get(),
+                    vpo=self.inputs.VPO.get(),
                     ch=self.inputs.Channel.get());
-  
+
     checkpoint = torch.load(self.inputs.Model.get(), map_location=self.inputs.Device.get());
     model.load_state_dict(checkpoint["model_state_dict"]);
-    
+
     param = torch.from_numpy(np.asarray(self.inputs.Params.get(), dtype='float32'))
 
     model.eval()
@@ -127,24 +127,24 @@ class ImageGeneratorCNN(Filter):
     if len(params[0]) == 3:
         generatedImage = Image(
             {
-                'RGBA': nparray # get numpy array from pytorch
+                'rgba': nparray # get numpy array from pytorch
             },
             {
-                'Phi':      params[0][0],
-                'Theta':    params[0][1],
-                'Time':     params[0][2],
-                'Source':   'Estimated'
+                'phi':      params[0][0],
+                'theta':    params[0][1],
+                'time':     params[0][2],
+                'source':   'Estimated'
             }
         )
     else:
         generatedImage = Image(
             {
-                'RGBA': nparray # get numpy array from pytorch
+                'rgba': nparray # get numpy array from pytorch
             },
             {
-                'Phi':      params[0][0],
-                'Theta':    params[0][1],
-                'Source':   'Estimated'
+                'phi':      params[0][0],
+                'theta':    params[0][1],
+                'source':   'Estimated'
             }
         )
 

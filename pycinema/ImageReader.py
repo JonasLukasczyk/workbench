@@ -46,28 +46,28 @@ class ImageReader(Filter):
             if extension == 'h5':
                 image = Image()
                 file = h5py.File(path, 'r')
-
-                image.origin = numpy.array(file.get('origin'))
-                for (g,v) in [('channel',image.channel), ('meta',image.meta)]:
+                for (g,v) in [('channels',image.channels), ('meta',image.meta)]:
                     group = file.get(g)
                     if group==None:
                         raise ValueError('h5 file not formatted correctly')
                     for k in group.keys():
-                        v[k] = numpy.array(group.get(k))
-
+                        v[k.lower()] = numpy.array(group.get(k))
                 file.close()
 
             elif str.lower(extension) in ['png','jpg','jpeg']:
                 rawImage = PIL.Image.open(path)
                 if rawImage.mode == 'RGB':
                     rawImage = rawImage.convert('RGBA')
-
-                image = Image({ 'RGBA': numpy.asarray(rawImage) })
-                for j in range(0, len(row)):
-                    image.meta[table[0][j]] = row[j]
+                image = Image({ 'rgba': numpy.asarray(rawImage) })
 
             else:
                 raise ValueError('Unable to read image: '+path)
+
+            # add meta data from data.csv
+            for j in range(0, len(row)):
+                key = table[0][j]
+                if not key.lower() in image.meta:
+                    image.meta[key.lower()] = row[j]
 
             if useCache:
                 self.cache[path] = image

@@ -1,23 +1,21 @@
 from enum import Enum
 
 class Image():
-    def __init__(self, channel=None, meta=None, origin=(0,0)):
-        self.origin = origin
-        self.channel = channel or {}
+    def __init__(self, channels=None, meta=None):
+        self.channels = channels or {}
         self.meta = meta or {}
 
     def copy(self):
         return Image(
-            self.channel.copy(),
-            self.meta.copy(),
-            self.origin
+            self.channels.copy(),
+            self.meta.copy()
         )
 
     @property
     def shape(self):
         # get first channel
-        for c in self.channel:
-            return self.channel[c].shape
+        for c in self.channels:
+            return self.channels[c].shape
 
         return (0,0,0)
 

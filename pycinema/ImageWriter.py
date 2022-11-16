@@ -10,8 +10,8 @@ class ImageWriter(Filter):
 
     def __init__(self):
         super().__init__()
-        self.addInputPort("Path", "")
-        self.addInputPort("Images", [])
+        self.addInputPort("path", "")
+        self.addInputPort("images", [])
 
     def getImageHash(self,image):
         keys = list(image.meta.keys())
@@ -42,8 +42,8 @@ class ImageWriter(Filter):
     def update(self):
         super().update()
 
-        images = self.inputs.Images.get()
-        path = self.inputs.Path.get()
+        images = self.inputs.images.get()
+        path = self.inputs.path.get()
 
         if len(images)<1:
             return 1

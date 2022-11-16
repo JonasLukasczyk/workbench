@@ -9,27 +9,27 @@ class ImageReader(Filter):
 
     def __init__(self):
         super().__init__()
-        self.addInputPort("Table", [])
-        self.addInputPort("FileColumn", "FILE")
-        self.addInputPort("Cache", True)
-        self.addOutputPort("Images", [])
+        self.addInputPort("table", [])
+        self.addInputPort("file_column", "FILE")
+        self.addInputPort("cache", True)
+        self.addOutputPort("images", [])
 
         self.cache = {}
 
     def update(self):
         super().update()
 
-        table = self.inputs.Table.get()
-        fileColumn = self.inputs.FileColumn.get()
+        table = self.inputs.table.get()
+        fileColumn = self.inputs.file_column.get()
 
         try:
             fileColumnIdx = list(map(str.lower,table[0])).index(fileColumn.lower())
         except ValueError as e:
-            print("Table does not contain '" + fileColumn + "' column!")
+            print("table does not contain '" + fileColumn + "' column!")
             return 0
 
         images = [];
-        useCache = self.inputs.Cache.get()
+        cache = self.inputs.cache.get()
 
         for i in range(1, len(table)):
             row = table[i]
@@ -39,7 +39,7 @@ class ImageReader(Filter):
             extension = str.lower(extension[1:])
 
             image = None
-            if useCache and path in self.cache:
+            if cache and path in self.cache:
                 images.append(self.cache[path])
                 continue
 
@@ -69,11 +69,11 @@ class ImageReader(Filter):
                 if not key.lower() in image.meta:
                     image.meta[key.lower()] = row[j]
 
-            if useCache:
+            if cache:
                 self.cache[path] = image
 
             images.append( image )
 
-        self.outputs.Images.set(images)
+        self.outputs.images.set(images)
 
         return 1

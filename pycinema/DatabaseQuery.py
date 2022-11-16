@@ -6,9 +6,9 @@ class DatabaseQuery(Filter):
 
   def __init__(self):
     super().__init__();
-    self.addInputPort("Table", []);
-    self.addInputPort("Query", "SELECT * FROM input");
-    self.addOutputPort("Table", []);
+    self.addInputPort("table", []);
+    self.addInputPort("sql", "SELECT * FROM input");
+    self.addOutputPort("table", []);
 
   def executeSQL(self,db,sql):
     try:
@@ -66,13 +66,13 @@ class DatabaseQuery(Filter):
 
     db = sqlite3.connect(":memory:");
 
-    table = self.inputs.Table.get();
+    table = self.inputs.table.get();
 
     self.createTable(db, table);
     self.insertData(db, table);
 
-    output = self.queryData(db, self.inputs.Query.get());
+    output = self.queryData(db, self.inputs.sql.get());
 
-    self.outputs.Table.set(output);
+    self.outputs.table.set(output);
 
     return 1;

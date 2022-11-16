@@ -4,15 +4,15 @@ import numpy as np
 import moderngl
 import PIL
 
-class DemoCDB(Filter):
+class DemoScene(Filter):
     def __init__(self):
         super().__init__()
-        self.addInputPort("Resolution", (256,256))
-        self.addInputPort("PhiSamples", (0,360,360))
-        self.addInputPort("ThetaSamples", (20,20,1))
-        self.addInputPort("Time", 0)
-        self.addInputPort("Objects", (1,1,1))
-        self.addOutputPort("Images", [])
+        self.addInputPort("resolution", (256,256))
+        self.addInputPort("phi_samples", (0,360,360))
+        self.addInputPort("theta_samples", (20,20,1))
+        self.addInputPort("time", 0)
+        self.addInputPort("objects", (1,1,1))
+        self.addOutputPort("images", [])
 
         # create context
         self.ctx = moderngl.create_standalone_context(require=330)
@@ -207,8 +207,8 @@ void main() {
         fbo.clear(0.0, 0.0, 0.0, 1.0)
 
         # render
-        self.program['iTime'].value = self.inputs.Time.get()
-        self.program['iObjects'].value = self.inputs.Objects.get()
+        self.program['iTime'].value = self.inputs.time.get()
+        self.program['iObjects'].value = self.inputs.objects.get()
         self.program['iPhi'].value = phi
         self.program['iTheta'].value = theta
         self.vao.render(moderngl.TRIANGLE_STRIP)
@@ -222,7 +222,7 @@ void main() {
                 'y': self.getArray(fbo,3,1,np.float32)
             },
             {
-                'time': self.inputs.Time.get(),
+                'time': self.inputs.time.get(),
                 'phi': phi,
                 'theta': theta
             }
@@ -233,11 +233,11 @@ void main() {
     def update(self):
         super().update()
 
-        phiSamples = self.inputs.PhiSamples.get();
-        thetaSamples = self.inputs.ThetaSamples.get();
+        phiSamples = self.inputs.phi_samples.get();
+        thetaSamples = self.inputs.theta_samples.get();
 
         # create framebuffer
-        res = self.inputs.Resolution.get()
+        res = self.inputs.resolution.get()
         self.program['iResolution'].value = res
 
         # fbo = self.ctx.simple_framebuffer(res)
@@ -267,6 +267,6 @@ void main() {
 
         # self.ctx.release()
 
-        self.outputs.Images.set(results);
+        self.outputs.images.set(results);
 
         return 1;

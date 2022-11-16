@@ -11,12 +11,12 @@ class HybridArtifactSource(Filter):
         super(HybridArtifactSource, self).__init__()
 
         # input/output ports
-        self.addInputPort("DBPath", "./")
-        self.addInputPort("ForceDatabase", False)
-        self.addInputPort("ForceEstimator", False)
-        self.addInputPort("ModelPath", "./")
-        self.addInputPort("Parameters", [])
-        self.addOutputPort("Artifacts", [])
+        self.addInputPort("db_path", "./")
+        self.addInputPort("force_database", False)
+        self.addInputPort("force_estimator", False)
+        self.addInputPort("model_path", "./")
+        self.addInputPort("parameters", [])
+        self.addOutputPort("artifacts", [])
 
         # db path
         self.dbreader    = CinemaDatabaseReader();
@@ -34,51 +34,51 @@ class HybridArtifactSource(Filter):
         super().update()
 
         # depending upon state, load from different sources
-        if self.inputs.ForceDatabase.get():
+        if self.inputs.force_database.get():
             self.loadFromDatabase()
-        elif self.inputs.ForceEstimator.get():
+        elif self.inputs.force_estimator.get():
             self.loadFromEstimator()
         else:
             numLoaded = self.loadFromDatabase();
             if numLoaded <= 0:
                 self.loadFromEstimator();
 
-        self.outputs.Artifacts.set(self.border.outputs.Images);
+        self.outputs.artifacts.set(self.border.outputs.images);
 
         return 1;
 
     def loadFromDatabase(self):
         # read the database
-        self.dbreader.inputs.Path.set( self.inputs.DBPath.get() ); 
+        self.dbreader.inputs.path.set( self.inputs.db_path.get() );
 
         # query for objects
-        params = self.inputs.Parameters.get();
-        self.query.inputs.Table.set(self.dbreader.outputs.Table);
+        params = self.inputs.parameters.get();
+        self.query.inputs.table.set(self.dbreader.outputs.table);
         qstring = "SELECT * FROM INPUT WHERE phi = '{}' AND theta = '{}'".format(params[0], params[1])
-        self.query.inputs.Query.set(qstring);
+        self.query.inputs.query.set(qstring);
 
         # Read Data Products
-        self.imageReader.inputs.Table.set(self.query.outputs.Table);
+        self.imageReader.inputs.table.set(self.query.outputs.table);
 
         # add a border
-        self.border.inputs.Color.set("black");
-        self.border.inputs.Images.set(self.imageReader.outputs.Images);
+        self.border.inputs.color.set("black");
+        self.border.inputs.images.set(self.imageReader.outputs.images);
 
-        return len(self.imageReader.outputs.Images.get());
+        return len(self.imageReader.outputs.images.get());
 
     def loadFromEstimator(self):
-        params = self.inputs.Parameters.get();
+        params = self.inputs.parameters.get();
 
-        self.mlfilter.inputs.Model.set(self.inputs.ModelPath.get(), False);
-        self.mlfilter.inputs.Device.set('cpu',False);
-        self.mlfilter.inputs.Params.set([params],False);
-        self.mlfilter.inputs.VP.set(2,False);
-        self.mlfilter.inputs.VPO.set(256,False);
-        self.mlfilter.inputs.Channel.set(8,False);
+        self.mlfilter.inputs.model.set(self.inputs.model_path.get(), False);
+        self.mlfilter.inputs.device.set('cpu',False);
+        self.mlfilter.inputs.params.set([params],False);
+        self.mlfilter.inputs.vp.set(2,False);
+        self.mlfilter.inputs.vpo.set(256,False);
+        self.mlfilter.inputs.channel.set(8,False);
         self.mlfilter.update();
 
         # add a border
-        self.border.inputs.Color.set("red");
-        self.border.inputs.Images.set(self.mlfilter.outputs.Images);
+        self.border.inputs.color.set("red");
+        self.border.inputs.images.set(self.mlfilter.outputs.images);
 
         return 1;

@@ -6,14 +6,14 @@ class ParameterWidgets(Filter):
 
     def __init__(self):
         super().__init__()
-        self.addInputPort("Table", [])
-        self.addInputPort("Container", None)
-        self.addOutputPort("SQL", "SELECT * FROM input")
+        self.addInputPort("table", [])
+        self.addInputPort("container", None)
+        self.addOutputPort("sql", "SELECT * FROM input")
         self.widgets = []
 
     def generateWidgets(self):
 
-        table = self.inputs.Table.get()
+        table = self.inputs.table.get()
         header = table[0]
         self.widgets = []
 
@@ -43,7 +43,6 @@ class ParameterWidgets(Filter):
                 w = ipywidgets.SelectMultiple(
                     options=o,
                     value=o,
-                    #rows=10,
                     description=header[i]
                 )
             else:
@@ -60,14 +59,14 @@ class ParameterWidgets(Filter):
               w.observe(on_change)
               self.widgets.append(w)
 
-        container = self.inputs.Container.get()
+        container = self.inputs.container.get()
         if container!=None:
           container.children = self.widgets
 
     def update(self):
         super().update()
 
-        table = self.inputs.Table.get()
+        table = self.inputs.table.get()
         header = table[0]
 
         sql = 'SELECT * FROM input WHERE '
@@ -77,7 +76,6 @@ class ParameterWidgets(Filter):
             self.generateWidgets()
 
         for i in range(0,len(self.widgets)):
-            print(self.widgets[i].description,self.widgets[i].value)
             v = self.widgets[i].value
             if v == 'ANY':
                 continue
@@ -98,6 +96,6 @@ class ParameterWidgets(Filter):
         if len(self.widgets) > 0:
             sql = sql[:-5]
 
-        self.outputs.SQL.set(sql)
+        self.outputs.sql.set(sql)
 
         return 1

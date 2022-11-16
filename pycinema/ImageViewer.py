@@ -8,8 +8,8 @@ class ImageViewer(Filter):
     def __init__(self):
         super().__init__()
 
-        self.addInputPort("Images", [])
-        self.addInputPort("Container", None)
+        self.addInputPort("images", [])
+        self.addInputPort("container", None)
 
         self.nImages = -1
 
@@ -20,14 +20,14 @@ class ImageViewer(Filter):
     def update(self):
         super().update()
 
-        container = self.inputs.Container.get()
+        container = self.inputs.container.get()
         if container == None:
             self.fig.show()
         else:
             with container:
                 self.fig.show()
 
-        images = self.inputs.Images.get()
+        images = self.inputs.images.get()
         nImages = len(images)
 
         if self.nImages != nImages:

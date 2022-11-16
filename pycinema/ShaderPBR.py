@@ -1,56 +1,16 @@
-from .Core import *
+from .Shader import *
 
-import numpy as np
-import moderngl
-
-class ShaderPBR(Filter):
+class ShaderPBR(Shader):
     def __init__(self):
         super().__init__()
-        self.addInputPort("Images", [])
-        self.addInputPort("Ambient", 0.2)
-        self.addInputPort("Diffuse", 1.0)
-        self.addInputPort("Roughness", 0.2)
-        self.addInputPort("Metallic", 0.0)
-        self.addOutputPort("Images", [])
+        self.addInputPort("images", [])
+        self.addInputPort("ambient", 0.2)
+        self.addInputPort("diffuse", 1.0)
+        self.addInputPort("roughness", 0.2)
+        self.addInputPort("metallic", 0.0)
+        self.addOutputPort("images", [])
 
-        # create context
-        self.ctx = moderngl.create_standalone_context(require=330)
-        # self.ctx.release()
-
-        # fullscreen quad
-        self.quad = self.ctx.buffer(
-            np.array([
-                 1.0,  1.0,
-                -1.0,  1.0,
-                -1.0, -1.0,
-                 1.0, -1.0,
-                 1.0,  1.0
-            ]).astype('f4').tobytes()
-        )
-
-        # program
-        self.program = self.ctx.program(
-            vertex_shader=self.getVertexShaderCode(),
-            fragment_shader=self.getFragmentShaderCode(),
-            varyings=["uv"]
-        )
-        self.program['rgbaTex'] = 0
-        self.program['depthTex'] = 1
-
-        self.vao = self.ctx.simple_vertex_array(self.program, self.quad, 'position')
-
-    def getVertexShaderCode(self):
-        return """
-#version 330
-
-in vec2 position;
-out vec2 uv;
-
-void main(){
-    uv = position/2.0+0.5;
-    gl_Position = vec4(position,0,1);
-}
-"""
+        self.init(['rgbaTex','depthTex'])
 
     def getFragmentShaderCode(self):
         return """
@@ -266,13 +226,6 @@ void main(){
 
 """
 
-    def createTexture(self,location,res,components,dtype='f1'):
-        tex = self.ctx.texture(res, components, dtype=dtype, alignment=1)
-        tex.repeat_x = False
-        tex.repeat_y = False
-        tex.use(location=location)
-        return tex
-
     def render(self,image):
 
         rgba = image.channels['rgba']
@@ -288,7 +241,7 @@ void main(){
 
         # read pixels
         rgbaBuffer = self.fbo.read(attachment=0,components=4)
-        rgbaFlatArray = np.frombuffer(rgbaBuffer, dtype=np.uint8)
+        rgbaFlatArray = numpy.frombuffer(rgbaBuffer, dtype=numpy.uint8)
         rgbaArray = rgbaFlatArray.view()
         rgbaArray.shape = (self.fbo.size[1],self.fbo.size[0],4)
 
@@ -302,15 +255,15 @@ void main(){
 
         results = []
 
-        images = self.inputs.Images.get()
+        images = self.inputs.images.get()
         if len(images)<1:
-            self.outputs.Images.set(results)
+            self.outputs.images.set(results)
             return 1
 
         # first image
         image0 = images[0]
         if not 'depth' in image0.channels or not 'rgba' in image0.channels:
-            self.outputs.Images.set(images)
+            self.outputs.images.set(images)
             return 1
 
         shape = image0.channels['rgba'].shape
@@ -320,10 +273,10 @@ void main(){
 
         # set uniforms
         self.program['uResolution'].value = res
-        self.program['uAmbient'].value = float(self.inputs.Ambient.get())
-        self.program['uDiffuse'].value = float(self.inputs.Diffuse.get())
-        self.program['uRoughness'].value = float(self.inputs.Roughness.get())
-        self.program['uMetallic'].value = float(self.inputs.Metallic.get())
+        self.program['uAmbient'].value = float(self.inputs.ambient.get())
+        self.program['uDiffuse'].value = float(self.inputs.diffuse.get())
+        self.program['uRoughness'].value = float(self.inputs.roughness.get())
+        self.program['uMetallic'].value = float(self.inputs.metallic.get())
 
         # create framebuffer
         self.fbo = self.ctx.simple_framebuffer(res)
@@ -340,6 +293,6 @@ void main(){
         self.depthTex.release()
         self.fbo.release()
 
-        self.outputs.Images.set(results)
+        self.outputs.images.set(results)
 
         return 1

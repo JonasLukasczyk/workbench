@@ -6,15 +6,15 @@ class CinemaDatabaseReader(Filter):
 
   def __init__(self):
     super().__init__();
-    self.addInputPort("Path", "./");
-    self.addInputPort("FileColumn", "FILE");
-    self.addOutputPort("Table", []);
+    self.addInputPort("path", "./");
+    self.addInputPort("file_column", "FILE");
+    self.addOutputPort("table", []);
 
   def update(self):
     super().update()
 
     table = [];
-    dbPath = self.inputs.Path.get();
+    dbPath = self.inputs.path.get();
     dataCsvPath = dbPath + '/data.csv';
     with open(dataCsvPath, 'r+') as csvfile:
         rows = csv.reader(csvfile, delimiter=',')
@@ -25,10 +25,10 @@ class CinemaDatabaseReader(Filter):
     table = list(filter(lambda row: len(row)>0, table))
 
     # add dbPath prefix to file column
-    fileColumnIdx = table[0].index( self.inputs.FileColumn.get() );
+    fileColumnIdx = table[0].index( self.inputs.file_column.get() );
     for i in range(1,len(table)):
         table[i][fileColumnIdx] = dbPath + '/' + table[i][fileColumnIdx];
 
-    self.outputs.Table.set(table);
+    self.outputs.table.set(table);
 
     return 1;

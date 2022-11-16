@@ -7,22 +7,22 @@ class Border(Filter):
     def __init__(self):
         super().__init__()
 
-        self.addInputPort("Width", 10)
-        self.addInputPort("Color", 'AUTO')
-        self.addInputPort("Images", [])
-        self.addOutputPort("Images", [])
+        self.addInputPort("width", 10)
+        self.addInputPort("color", 'AUTO')
+        self.addInputPort("images", [])
+        self.addOutputPort("images", [])
 
     def update(self):
         super().update()
 
-        images = self.inputs.Images.get()
+        images = self.inputs.images.get()
 
         results = []
         if len(images)<1:
-          self.outputs.Images.set(results)
+          self.outputs.images.set(results)
           return 1
 
-        color = self.inputs.Color.get()
+        color = self.inputs.color.get()
         if color=='AUTO':
             mean = images[0].channels['rgba'].mean(axis=(0,1))
             if (mean[0]+mean[1]+mean[2])/3<128:
@@ -37,12 +37,12 @@ class Border(Filter):
 
             I1 = PIL.ImageDraw.Draw(rgbImage)
             shape = ((0,0), (rgba.shape[1] - 1, rgba.shape[0] - 1))
-            I1.rectangle( shape, outline=color, width = self.inputs.Width.get() )
+            I1.rectangle( shape, outline=color, width = self.inputs.width.get() )
 
             outImage = image.copy()
             outImage.channels['rgba'] = numpy.array(rgbImage)
             results.append( outImage )
 
-        self.outputs.Images.set(results)
+        self.outputs.images.set(results)
 
         return 1

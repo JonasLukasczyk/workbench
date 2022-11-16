@@ -6,13 +6,13 @@ class ColorMappingWidgets(Filter):
 
     def __init__(self):
         super().__init__()
-        self.addInputPort("Images", [])
-        self.addInputPort("Container", None)
+        self.addInputPort("images", [])
+        self.addInputPort("container", None)
 
-        self.addOutputPort("Map", "plasma")
-        self.addOutputPort("NaN", (0,0,0,0))
-        self.addOutputPort("Range", (0,1))
-        self.addOutputPort("Channel", "depth")
+        self.addOutputPort("map", "plasma")
+        self.addOutputPort("nan", (0,0,0,0))
+        self.addOutputPort("range", (0,1))
+        self.addOutputPort("channel", "depth")
 
         def on_change(change):
             if change['type'] == 'change' and change['name'] == 'value':
@@ -57,7 +57,7 @@ class ColorMappingWidgets(Filter):
     def update(self):
         super().update()
 
-        images = self.inputs.Images.get()
+        images = self.inputs.images.get()
 
         # update channels if necessary
         if len(images):
@@ -72,7 +72,7 @@ class ColorMappingWidgets(Filter):
                     self.channelWidget.value = channels[0]
 
         # add widgets to container
-        container = self.inputs.Container.get()
+        container = self.inputs.container.get()
         if container!=None and len(container.children)==0:
             container.children = [
               self.channelWidget,
@@ -82,12 +82,12 @@ class ColorMappingWidgets(Filter):
             ]
 
         # sync outputs with widgets
-        if self.outputs.Map.get() != self.mapWidget.value:
-            self.outputs.Map.set(self.mapWidget.value)
-        if self.outputs.Channel.get() != self.channelWidget.value:
-            self.outputs.Channel.set(self.channelWidget.value)
-        range = self.outputs.Range.get()
+        if self.outputs.map.get() != self.mapWidget.value:
+            self.outputs.map.set(self.mapWidget.value)
+        if self.outputs.channel.get() != self.channelWidget.value:
+            self.outputs.channel.set(self.channelWidget.value)
+        range = self.outputs.range.get()
         if range[0] != self.minWidget.value or range[1] != self.maxWidget.value:
-            self.outputs.Range.set((self.minWidget.value,self.maxWidget.value))
+            self.outputs.range.set((self.minWidget.value,self.maxWidget.value))
 
         return 1

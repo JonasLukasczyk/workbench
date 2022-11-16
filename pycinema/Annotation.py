@@ -1,20 +1,21 @@
 from .Core import *
-import PIL
+
 import numpy
 import sys
+import PIL.Image, PIL.ImageFont, PIL.ImageDraw
 
 class Annotation(Filter):
 
     def __init__(self):
         super().__init__()
 
-        self.addInputPort("XY", (20,20))
-        self.addInputPort("Size", 20)
-        self.addInputPort("Spacing", 0)
-        self.addInputPort("Color", 'AUTO')
-        self.addInputPort("Images", [])
-        self.addInputPort("Ignore", ['FILE','id'])
-        self.addOutputPort("Images", [])
+        self.addInputPort("xy", (20,20))
+        self.addInputPort("size", 20)
+        self.addInputPort("spacing", 0)
+        self.addInputPort("color", 'AUTO')
+        self.addInputPort("images", [])
+        self.addInputPort("ignore", ['FILE','id'])
+        self.addOutputPort("images", [])
 
     #
     # solution from:
@@ -26,12 +27,13 @@ class Annotation(Filter):
         We don't make much of an effort, but it's what we can reasonably do without
         incorporating additional dependencies for this task.
         """
-        if sys.platform == 'win32':
-            font_names = ['Arial']
-        elif sys.platform in ['linux', 'linux2']:
-            font_names = ['DejaVuSans-Bold', 'DroidSans-Bold']
-        elif sys.platform == 'darwin':
-            font_names = ['Menlo', 'Helvetica']
+        font_names = ['../fonts/NotoSansMono-VariableFont_wdth,wght.ttf']
+        # if sys.platform == 'win32':
+        #     font_names.extend( ['Arial'] )
+        # elif sys.platform in ['linux', 'linux2']:
+        #     font_names.extend( ['DejaVuSans-Bold', 'DroidSans-Bold'] )
+        # elif sys.platform == 'darwin':
+        #     font_names.extend( ['Menlo', 'Helvetica'] )
 
         font = None
         for font_name in font_names:
@@ -46,14 +48,14 @@ class Annotation(Filter):
     def update(self):
         super().update()
 
-        images = self.inputs.Images.get()
+        images = self.inputs.images.get()
 
         results = []
         if len(images)<1:
-          self.outputs.Images.set(results)
+          self.outputs.images.set(results)
           return 1
 
-        textColor = self.inputs.Color.get()
+        textColor = self.inputs.color.get()
         if textColor=='AUTO':
             for image in images:
                 if not 'rgba' in image.channels:
@@ -66,9 +68,9 @@ class Annotation(Filter):
                     textColor = (0,0,0)
                 break
 
-        font = self.__get_font(self.inputs.Size.get())
+        font = self.__get_font(self.inputs.size.get())
 
-        ignoreList = list(map(str.lower, self.inputs.Ignore.get()))
+        ignoreList = list(map(str.lower, self.inputs.ignore.get()))
 
         for image in images:
             if not 'rgba' in image.channels:
@@ -94,17 +96,17 @@ class Annotation(Filter):
 
             I1 = PIL.ImageDraw.Draw(rgbImage)
             I1.multiline_text(
-                self.inputs.XY.get(),
+                self.inputs.xy.get(),
                 text,
                 fill=textColor,
                 font=font,
-                spacing=self.inputs.Spacing.get()
+                spacing=self.inputs.spacing.get()
             )
 
             outImage = image.copy()
             outImage.channels['rgba'] = numpy.array(rgbImage)
             results.append( outImage )
 
-        self.outputs.Images.set(results)
+        self.outputs.images.set(results)
 
         return 1

@@ -1,7 +1,7 @@
 from .Core import *
 import numpy
 
-class Color(Filter):
+class ColorSource(Filter):
 
     def __init__(self):
         super().__init__()
@@ -12,8 +12,8 @@ class Color(Filter):
     def update(self):
         super().update()
 
-        self.outputs.RGBA.set(
-          self.inputs.RGBA.get()
+        self.outputs.rgba.set(
+          self.inputs.rgba.get()
         )
 
         return 1

@@ -7,12 +7,12 @@ class NumberWidget(Filter):
     def __init__(self,port,range=None):
         super().__init__()
 
-        self.addOutputPort("Number", port.get())
+        self.addOutputPort("number", port.get())
 
         def on_change(change):
             if change['type'] == 'change' and change['name'] == 'value':
-                if self.outputs.Number.get() != change['new']:
-                    self.outputs.Number.set(change['new'])
+                if self.outputs.number.get() != change['new']:
+                    self.outputs.number.set(change['new'])
 
         if range:
             self.widget = ipywidgets.FloatSlider(
@@ -30,7 +30,7 @@ class NumberWidget(Filter):
 
         self.widget.observe(on_change)
 
-        port.set(self.outputs.Number)
+        port.set(self.outputs.number)
 
     def update(self):
         super().update()

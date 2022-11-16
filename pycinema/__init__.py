@@ -1,34 +1,31 @@
 __all__ = ["smoke"]
 
 from .Core import *
-from .CinemaDatabaseReader import *
-from .DatabaseQuery import *
-from .HybridArtifactSource import *
-from .ImageReader import *
-from .ImageWriter import *
-from .ImageRenderer import *
-from .ArtifactSource import *
-from .CinemaArtifactSource import *
-from .TestImageArtifactSource import *
-from .DemoCDB import *
-from .ImageViewer import *
-from .ParameterWidgets import *
+
 from .Annotation import *
 from .Border import *
-from .ImageConvert import *
-from .ImageCanny import *
+from .CinemaDatabaseReader import *
+from .CinemaViewer import *
 from .ColorMapping import *
 from .ColorMappingWidgets import *
+from .ColorSource import *
+from .DatabaseQuery import *
+from .DemoScene import *
 from .DepthCompositing import *
-from .ShaderSSAO import *
+from .HybridArtifactSource import *
+from .ImageCanny import *
+from .ImageConvert import *
+from .ImageGeneratorCNN import *
+from .ImageReader import *
+from .ImageViewer import *
+from .ImageWriter import *
+from .MaskCompositing import *
+from .NumberWidget import *
+from .ParameterWidgets import *
+from .Shader import *
 from .ShaderPBR import *
 from .ShaderPhong import *
-from .ImageGeneratorCNN import *
-from .Color import *
-from .MaskCompositing import *
-from .CinemaViewer import *
-from .Display import *
-from .NumberWidget import *
+from .ShaderSSAO import *
 
 #
 # new factory function

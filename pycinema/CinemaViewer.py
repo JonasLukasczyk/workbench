@@ -19,7 +19,7 @@ class CinemaViewer(Filter):
     def __init__(self, path, preload_query="SELECT * FROM input"):
         super().__init__()
 
-        self.addInputPort("Path", "./")
+        self.addInputPort("path", "./")
 
         # Layout
         self.parameterWidgetsContainer = ipywidgets.VBox();
@@ -40,54 +40,54 @@ class CinemaViewer(Filter):
 
         # Pipeline
         self.cinemaDatabaseReader  = CinemaDatabaseReader()
-        self.cinemaDatabaseReader.inputs.Path.set(self.inputs.Path, False)
+        self.cinemaDatabaseReader.inputs.path.set(self.inputs.path, False)
 
         preload_results = DatabaseQuery();
-        preload_results.inputs.Table.set(self.cinemaDatabaseReader.outputs.Table, False);
-        preload_results.inputs.Query.set(preload_query, False);
+        preload_results.inputs.table.set(self.cinemaDatabaseReader.outputs.table, False);
+        preload_results.inputs.sql.set(preload_query, False);
 
         self.parameterWidgets = ParameterWidgets()
-        self.parameterWidgets.inputs.Table.set(preload_results.outputs.Table,False)
-        self.parameterWidgets.inputs.Container.set(self.parameterWidgetsContainer,False)
+        self.parameterWidgets.inputs.table.set(preload_results.outputs.table,False)
+        self.parameterWidgets.inputs.container.set(self.parameterWidgetsContainer,False)
 
         self.databaseQuery = DatabaseQuery()
-        self.databaseQuery.inputs.Table.set(self.cinemaDatabaseReader.outputs.Table,False)
-        self.databaseQuery.inputs.Query.set(self.parameterWidgets.outputs.SQL,False)
+        self.databaseQuery.inputs.table.set(self.cinemaDatabaseReader.outputs.table,False)
+        self.databaseQuery.inputs.sql.set(self.parameterWidgets.outputs.sql,False)
 
         self.imageReader = ImageReader()
-        self.imageReader.inputs.Table.set(self.databaseQuery.outputs.Table,False)
+        self.imageReader.inputs.table.set(self.databaseQuery.outputs.table,False)
 
         self.depthCompositing = DepthCompositing()
-        self.depthCompositing.inputs.ImagesA.set(self.imageReader.outputs.Images,False)
+        self.depthCompositing.inputs.images_a.set(self.imageReader.outputs.images,False)
 
         self.colorMappingWidgets = ColorMappingWidgets()
-        self.colorMappingWidgets.inputs.Images.set(self.depthCompositing.outputs.Images,False)
-        self.colorMappingWidgets.inputs.Container.set(self.colorMappingWidgetsContainer,False)
+        self.colorMappingWidgets.inputs.images.set(self.depthCompositing.outputs.images,False)
+        self.colorMappingWidgets.inputs.container.set(self.colorMappingWidgetsContainer,False)
 
         self.colorMapping = ColorMapping()
-        self.colorMapping.inputs.Images.set(self.depthCompositing.outputs.Images,False)
-        self.colorMapping.inputs.Map.set(self.colorMappingWidgets.outputs.Map,False)
-        self.colorMapping.inputs.Range.set(self.colorMappingWidgets.outputs.Range,False)
-        self.colorMapping.inputs.Channel.set(self.colorMappingWidgets.outputs.Channel,False)
+        self.colorMapping.inputs.images.set(self.depthCompositing.outputs.images,False)
+        self.colorMapping.inputs.map.set(self.colorMappingWidgets.outputs.map,False)
+        self.colorMapping.inputs.range.set(self.colorMappingWidgets.outputs.range,False)
+        self.colorMapping.inputs.channel.set(self.colorMappingWidgets.outputs.channel,False)
 
         self.shaderSSAO = ShaderSSAO()
-        self.shaderSSAO.inputs.Images.set(self.colorMapping.outputs.Images,False)
+        self.shaderSSAO.inputs.images.set(self.colorMapping.outputs.images,False)
 
         self.shadingWidgetsContainer.children = [
-            NumberWidget(self.shaderSSAO.inputs.Radius, range=[0,1,0.01]).widget,
-            NumberWidget(self.shaderSSAO.inputs.Samples, range=[1,256,1]).widget,
+            NumberWidget(self.shaderSSAO.inputs.radius, range=[0,1,0.01]).widget,
+            NumberWidget(self.shaderSSAO.inputs.samples, range=[1,256,1]).widget,
         ]
 
         self.annotation = Annotation()
-        self.annotation.inputs.Images.set(self.shaderSSAO.outputs.Images,False)
+        self.annotation.inputs.images.set(self.shaderSSAO.outputs.images,False)
 
         self.imageViewer = ImageViewer()
-        self.imageViewer.inputs.Images.set( self.annotation.outputs.Images, False )
-        self.imageViewer.inputs.Container.set(self.imageContainer,False)
+        self.imageViewer.inputs.images.set( self.annotation.outputs.images, False )
+        self.imageViewer.inputs.container.set(self.imageContainer,False)
 
         IPython.display.display(self.globalContainer)
 
-        self.inputs.Path.set(path)
+        self.inputs.path.set(path)
 
     def update(self):
         super().update()

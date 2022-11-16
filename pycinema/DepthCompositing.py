@@ -6,10 +6,10 @@ class DepthCompositing(Filter):
     def __init__(self):
         super().__init__()
 
-        self.addInputPort('ImagesA', [])
-        self.addInputPort('ImagesB', [])
-        self.addInputPort('DepthChannel', 'depth')
-        self.addOutputPort('Images', [])
+        self.addInputPort('images_a', [])
+        self.addInputPort('images_b', [])
+        self.addInputPort('depth_channel', 'depth')
+        self.addOutputPort('images', [])
 
     def compose(self,A,B,depthChannel):
 
@@ -27,18 +27,18 @@ class DepthCompositing(Filter):
     def update(self):
         super().update()
 
-        imagesA = self.inputs.ImagesA.get()
-        imagesB = self.inputs.ImagesB.get()
+        imagesA = self.inputs.images_a.get()
+        imagesB = self.inputs.images_b.get()
 
         results = []
 
         nImages = len(imagesA)
         if len(imagesB)>0 and nImages!=len(imagesB):
           print('ERROR', 'Input image lists must be of equal size.' )
-          self.outputs.Images.set(results)
+          self.outputs.images.set(results)
           return 0
 
-        depthChannel = self.inputs.DepthChannel.get()
+        depthChannel = self.inputs.depth_channel.get()
 
         if len(imagesA)==len(imagesB):
             for i in range(0,nImages):
@@ -55,6 +55,6 @@ class DepthCompositing(Filter):
                 result = self.compose(result,imagesA[i],depthChannel)
             results.append(result)
 
-        self.outputs.Images.set(results)
+        self.outputs.images.set(results)
 
         return 1

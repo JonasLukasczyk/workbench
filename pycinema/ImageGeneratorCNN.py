@@ -88,27 +88,27 @@ class ImageGeneratorCNN(Filter):
   def __init__(self):
     super().__init__();
     #self.addInputPort("Query", "SELECT * FROM input");
-    self.addInputPort("Params",[[0.0,0.0]]);
-    self.addInputPort("Model", "PathToModel");
-    self.addInputPort("Channel",8);
-    self.addInputPort("VP",3);
-    self.addInputPort("VPO",256);
-    self.addInputPort("Device","cpu");
-    self.addOutputPort("Images", []);
-    #self.addOutputPort("Pop", []);
+    self.addInputPort("params",[[0.0,0.0]]);
+    self.addInputPort("model", "PathToModel");
+    self.addInputPort("channel",8);
+    self.addInputPort("vp",3);
+    self.addInputPort("vpo",256);
+    self.addInputPort("device","cpu");
+    self.addOutputPort("images", []);
+    #self.addOutputPort("pop", []);
 
   def update(self):
     super().update()
 
     # Load the trained model
-    model = Model(  vp=self.inputs.VP.get(),
-                    vpo=self.inputs.VPO.get(),
-                    ch=self.inputs.Channel.get());
+    model = Model(  vp=self.inputs.vp.get(),
+                    vpo=self.inputs.vpo.get(),
+                    ch=self.inputs.channel.get());
 
-    checkpoint = torch.load(self.inputs.Model.get(), map_location=self.inputs.Device.get());
+    checkpoint = torch.load(self.inputs.model.get(), map_location=self.inputs.device.get());
     model.load_state_dict(checkpoint["model_state_dict"]);
 
-    param = torch.from_numpy(np.asarray(self.inputs.Params.get(), dtype='float32'))
+    param = torch.from_numpy(np.asarray(self.inputs.params.get(), dtype='float32'))
 
     model.eval()
     out_image = model(param)
@@ -121,9 +121,9 @@ class ImageGeneratorCNN(Filter):
     # Swap 0 - 2 axes to go from pytorch to numpy array form
     nparray = np.swapaxes(nparray,0,2)
 
-    #self.outputs.Pop.set(out_image.detach())
+    #self.outputs.pop.set(out_image.detach())
 
-    params = self.inputs.Params.get()
+    params = self.inputs.params.get()
     if len(params[0]) == 3:
         generatedImage = Image(
             {
@@ -148,6 +148,6 @@ class ImageGeneratorCNN(Filter):
             }
         )
 
-    self.outputs.Images.set([generatedImage]);
+    self.outputs.images.set([generatedImage]);
 
     return 1;

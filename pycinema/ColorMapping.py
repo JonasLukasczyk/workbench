@@ -15,7 +15,6 @@ class ColorMapping(Filter):
         self.addOutputPort("images", [])
 
     def update(self):
-        super().update()
 
         images = self.inputs.images.get()
 

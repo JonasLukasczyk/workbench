@@ -18,7 +18,6 @@ class ImageViewer(Filter):
         self.fig.tight_layout()
 
     def update(self):
-        super().update()
 
         container = self.inputs.container.get()
         if container == None:

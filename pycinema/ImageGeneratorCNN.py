@@ -7,43 +7,43 @@ import torch.nn.functional as F
 
 ################################################################
 class BasicModel(nn.Module):
-  def __init__(self, in_channels, out_channels, kernel_size=3, stride=1,
-               padding=1, activation=F.relu, upsample=True):
-    super(BasicModel, self).__init__()
+    def __init__(self, in_channels, out_channels, kernel_size=3, stride=1,
+                 padding=1, activation=F.relu, upsample=True):
+        super(BasicModel, self).__init__()
 
-    self.activation = activation
-    self.upsample = upsample
-    self.conv_res = None
-    if self.upsample or in_channels != out_channels:
-      self.conv_res = nn.Conv2d(in_channels, out_channels,
-                                1, 1, 0, bias=False)
+        self.activation = activation
+        self.upsample = upsample
+        self.conv_res = None
+        if self.upsample or in_channels != out_channels:
+          self.conv_res = nn.Conv2d(in_channels, out_channels,
+                                    1, 1, 0, bias=False)
 
-    self.bn0 = nn.BatchNorm2d(in_channels)
-    self.conv0 = nn.Conv2d(in_channels, out_channels, kernel_size,
-                           stride, padding, bias=False)
+        self.bn0 = nn.BatchNorm2d(in_channels)
+        self.conv0 = nn.Conv2d(in_channels, out_channels, kernel_size,
+                               stride, padding, bias=False)
 
-    self.bn1 = nn.BatchNorm2d(out_channels)
-    self.conv1 = nn.Conv2d(out_channels, out_channels, kernel_size,
-                           stride, padding, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        self.conv1 = nn.Conv2d(out_channels, out_channels, kernel_size,
+                             stride, padding, bias=False)
 
-  def forward(self, x):
-    residual = x
-    if self.upsample:
-      residual = F.interpolate(residual, scale_factor=2)
-    if self.conv_res is not None:
-      residual = self.conv_res(residual)
+    def forward(self, x):
+        residual = x
+        if self.upsample:
+          residual = F.interpolate(residual, scale_factor=2)
+        if self.conv_res is not None:
+          residual = self.conv_res(residual)
 
-    out = self.bn0(x)
-    out = self.activation(out)
-    if self.upsample:
-      out = F.interpolate(out, scale_factor=2)
-    out = self.conv0(out)
+        out = self.bn0(x)
+        out = self.activation(out)
+        if self.upsample:
+          out = F.interpolate(out, scale_factor=2)
+        out = self.conv0(out)
 
-    out = self.bn1(out)
-    out = self.activation(out)
-    out = self.conv1(out)
+        out = self.bn1(out)
+        out = self.activation(out)
+        out = self.conv1(out)
 
-    return out + residual
+        return out + residual
 
 class Model(nn.Module):
 
@@ -85,69 +85,67 @@ class Model(nn.Module):
 
 class ImageGeneratorCNN(Filter):
 
-  def __init__(self):
-    super().__init__();
-    #self.addInputPort("Query", "SELECT * FROM input");
-    self.addInputPort("params",[[0.0,0.0]]);
-    self.addInputPort("model", "PathToModel");
-    self.addInputPort("channel",8);
-    self.addInputPort("vp",3);
-    self.addInputPort("vpo",256);
-    self.addInputPort("device","cpu");
-    self.addOutputPort("images", []);
-    #self.addOutputPort("pop", []);
+    def __init__(self):
+        super().__init__();
+        #self.addInputPort("Query", "SELECT * FROM input");
+        self.addInputPort("params",[[0.0,0.0]]);
+        self.addInputPort("model", "PathToModel");
+        self.addInputPort("channel",8);
+        self.addInputPort("vp",3);
+        self.addInputPort("vpo",256);
+        self.addInputPort("device","cpu");
+        self.addOutputPort("images", []);
+        #self.addOutputPort("pop", []);
 
-  def update(self):
-    super().update()
+    def update(self):
+        # Load the trained model
+        model = Model(  vp=self.inputs.vp.get(),
+                        vpo=self.inputs.vpo.get(),
+                        ch=self.inputs.channel.get());
 
-    # Load the trained model
-    model = Model(  vp=self.inputs.vp.get(),
-                    vpo=self.inputs.vpo.get(),
-                    ch=self.inputs.channel.get());
+        checkpoint = torch.load(self.inputs.model.get(), map_location=self.inputs.device.get());
+        model.load_state_dict(checkpoint["model_state_dict"]);
 
-    checkpoint = torch.load(self.inputs.model.get(), map_location=self.inputs.device.get());
-    model.load_state_dict(checkpoint["model_state_dict"]);
+        param = torch.from_numpy(np.asarray(self.inputs.params.get(), dtype='float32'))
 
-    param = torch.from_numpy(np.asarray(self.inputs.params.get(), dtype='float32'))
+        model.eval()
+        out_image = model(param)
+        out_image = ((out_image+ 1.) * .5)
 
-    model.eval()
-    out_image = model(param)
-    out_image = ((out_image+ 1.) * .5)
+        # Discard first axis from output
+        nparray = out_image.detach().numpy()[0,:,:,:]
+        # Change the range to 0 - 255 with uint8 type
+        nparray = (nparray*255.0).astype(np.uint8)
+        # Swap 0 - 2 axes to go from pytorch to numpy array form
+        nparray = np.swapaxes(nparray,0,2)
 
-    # Discard first axis from output
-    nparray = out_image.detach().numpy()[0,:,:,:]
-    # Change the range to 0 - 255 with uint8 type
-    nparray = (nparray*255.0).astype(np.uint8)
-    # Swap 0 - 2 axes to go from pytorch to numpy array form
-    nparray = np.swapaxes(nparray,0,2)
+        #self.outputs.pop.set(out_image.detach())
 
-    #self.outputs.pop.set(out_image.detach())
+        params = self.inputs.params.get()
+        if len(params[0]) == 3:
+            generatedImage = Image(
+                {
+                    'rgba': nparray # get numpy array from pytorch
+                },
+                {
+                    'phi':      params[0][0],
+                    'theta':    params[0][1],
+                    'time':     params[0][2],
+                    'source':   'Estimated'
+                }
+            )
+        else:
+            generatedImage = Image(
+                {
+                    'rgba': nparray # get numpy array from pytorch
+                },
+                {
+                    'phi':      params[0][0],
+                    'theta':    params[0][1],
+                    'source':   'Estimated'
+                }
+            )
 
-    params = self.inputs.params.get()
-    if len(params[0]) == 3:
-        generatedImage = Image(
-            {
-                'rgba': nparray # get numpy array from pytorch
-            },
-            {
-                'phi':      params[0][0],
-                'theta':    params[0][1],
-                'time':     params[0][2],
-                'source':   'Estimated'
-            }
-        )
-    else:
-        generatedImage = Image(
-            {
-                'rgba': nparray # get numpy array from pytorch
-            },
-            {
-                'phi':      params[0][0],
-                'theta':    params[0][1],
-                'source':   'Estimated'
-            }
-        )
+        self.outputs.images.set([generatedImage]);
 
-    self.outputs.images.set([generatedImage]);
-
-    return 1;
+        return 1;

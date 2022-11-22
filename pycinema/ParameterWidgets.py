@@ -52,7 +52,7 @@ class ParameterWidgets(Filter):
                     value=o[1],
                     description=header[i],
                     # callback_policy='mouseup',
-                    # continuous_update=False
+                    # continuousupdate=False
                 )
 
             if w != None:
@@ -64,7 +64,6 @@ class ParameterWidgets(Filter):
           container.children = self.widgets
 
     def update(self):
-        super().update()
 
         table = self.inputs.table.get()
         header = table[0]
@@ -84,7 +83,7 @@ class ParameterWidgets(Filter):
                 if len(v)==0:
                     sql += '"' + self.widgets[i].description + '" IN () AND '
                 elif len(v)==1:
-                    sql += '"' + self.widgets[i].description + '" IN (' + str(v[0]) + ') AND '
+                    sql += '"' + self.widgets[i].description + '" IN ("' + str(v[0]) + '") AND '
                 else:
                     sql += '"' + self.widgets[i].description + '" IN ' + str(v) + ' AND '
 

@@ -1,5 +1,3 @@
-from enum import Enum
-
 class Image():
     def __init__(self, channels=None, meta=None):
         self.channels = channels or {}
@@ -81,7 +79,7 @@ class Filter():
         setattr(self.outputs, name, Port(name, value, self))
 
     def update(self):
-        # print("-> "+type(self).__name__)
+        # needs to be overriden
         return 1
 
     def help(self):

@@ -20,9 +20,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url="https://github.com/cinemascience/pycinema",
     include_package_data=True,
-    packages=[  "pycinema",
-                "pycinema.smoke"
-    ],
+    packages=[  "pycinema"  ],
     install_requires=[
         "numpy==1.23.2",
         "scipy==1.9.1",
@@ -34,8 +32,7 @@ setuptools.setup(
         "pytest==7.1.3",
         "pytest-xvfb==2.0.0",
         "moderngl<6",
-        "opencv-python==4.6.0.66",
-        "torch==1.12.1"
+        "opencv-python==4.6.0.66"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -44,7 +41,7 @@ setuptools.setup(
     ],
     scripts=[
         'cinema',
-        'doc/description.md', 
+        'doc/description.md',
         'version.md'
     ],
 )

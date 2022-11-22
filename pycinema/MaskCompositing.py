@@ -15,7 +15,6 @@ class MaskCompositing(Filter):
         self.addOutputPort('images', [])
 
     def update(self):
-        super().update()
 
         imagesA = self.inputs.images_a.get()
         imagesB = self.inputs.images_b.get()

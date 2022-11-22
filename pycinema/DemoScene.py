@@ -1,6 +1,6 @@
 from .Core import *
 
-import numpy as np
+import numpy
 import moderngl
 import PIL
 
@@ -19,7 +19,7 @@ class DemoScene(Filter):
 
         # fullscreen quad
         self.quad = self.ctx.buffer(
-            np.array([
+            numpy.array([
                  1.0,  1.0,
                 -1.0,  1.0,
                 -1.0, -1.0,
@@ -34,7 +34,7 @@ class DemoScene(Filter):
             fragment_shader=self.getFragmentShaderCode(),
             varyings=["uv"]
         )
-        self.program['NAN'].value = np.nan
+        self.program['NAN'].value = numpy.nan
         self.vao = self.ctx.simple_vertex_array(self.program, self.quad, 'position')
 
     def getVertexShaderCode(self):
@@ -193,8 +193,8 @@ void main() {
         """
 
     def getArray(self,fbo,attachment,components,dtype):
-        b = fbo.read(attachment=attachment,components=components, dtype = dtype==np.uint8 and 'f1' or 'f4', alignment=1 )
-        fa = np.frombuffer(b, dtype=dtype)
+        b = fbo.read(attachment=attachment,components=components, dtype = dtype==numpy.uint8 and 'f1' or 'f4', alignment=1 )
+        fa = numpy.frombuffer(b, dtype=dtype)
         a = fa.view()
         if components > 1:
           a.shape = (fbo.size[1],fbo.size[0],components)
@@ -202,7 +202,7 @@ void main() {
           a.shape = (fbo.size[1],fbo.size[0])
         return a
 
-    def render(self,fbo,phi,theta):
+    def render(self,fbo,phi,theta,objects_meta):
 
         fbo.clear(0.0, 0.0, 0.0, 1.0)
 
@@ -216,22 +216,22 @@ void main() {
         # create output image
         image = Image(
             {
-                'rgba': self.getArray(fbo,0,4,np.uint8),
-                'depth': self.getArray(fbo,1,1,np.float32),
-                'id': self.getArray(fbo,2,1,np.float32),
-                'y': self.getArray(fbo,3,1,np.float32)
+                'rgba': self.getArray(fbo,0,4,numpy.uint8),
+                'depth': self.getArray(fbo,1,1,numpy.float32),
+                'id': self.getArray(fbo,2,1,numpy.float32),
+                'y': self.getArray(fbo,3,1,numpy.float32)
             },
             {
                 'time': self.inputs.time.get(),
                 'phi': phi,
-                'theta': theta
+                'theta': theta,
+                'object_id': objects_meta
             }
         )
 
         return image
 
     def update(self):
-        super().update()
 
         phiSamples = self.inputs.phi_samples.get();
         thetaSamples = self.inputs.theta_samples.get();
@@ -251,14 +251,20 @@ void main() {
         )
         fbo.use()
 
+        objects = self.inputs.objects.get()
+        objects_meta = ['p','s0','s1']
+        objects_meta = [objects_meta[i] for i in range(3) if objects[i]]
+        objects_meta = '+'.join(objects_meta)
+
         results = []
         for theta in range(thetaSamples[0],thetaSamples[1]+[0,1][thetaSamples[0]==thetaSamples[1]],thetaSamples[2]):
             for phi in range(phiSamples[0],phiSamples[1]+[0,1][phiSamples[0]==phiSamples[1]],phiSamples[2]):
                 results.append(
                     self.render(
                         fbo,
-                        phi/360.0*2.0*np.pi,
-                        (90-theta)/180.0*np.pi,
+                        phi/360.0*2.0*numpy.pi,
+                        (90-theta)/180.0*numpy.pi,
+                        objects_meta
                     )
                 )
 

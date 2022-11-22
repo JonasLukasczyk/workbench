@@ -46,14 +46,13 @@ class Annotation(Filter):
         return font
 
     def update(self):
-        super().update()
 
         images = self.inputs.images.get()
 
         results = []
         if len(images)<1:
-          self.outputs.images.set(results)
-          return 1
+            self.outputs.images.set(results)
+            return 1
 
         textColor = self.inputs.color.get()
         if textColor=='AUTO':

@@ -55,7 +55,6 @@ class ColorMappingWidgets(Filter):
         self.channelWidget.observe(rgba_observer)
 
     def update(self):
-        super().update()
 
         images = self.inputs.images.get()
 

@@ -31,7 +31,6 @@ class HybridArtifactSource(Filter):
         self.mlfilter = ImageGeneratorCNN();
 
     def update(self):
-        super().update()
 
         # depending upon state, load from different sources
         if self.inputs.force_database.get():

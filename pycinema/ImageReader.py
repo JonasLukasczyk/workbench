@@ -17,7 +17,6 @@ class ImageReader(Filter):
         self.cache = {}
 
     def update(self):
-        super().update()
 
         table = self.inputs.table.get()
         fileColumn = self.inputs.file_column.get()
@@ -51,7 +50,11 @@ class ImageReader(Filter):
                     if group==None:
                         raise ValueError('h5 file not formatted correctly')
                     for k in group.keys():
-                        v[k.lower()] = numpy.array(group.get(k))
+                        # print(k.lower(),group.get(k))
+                        data = numpy.array(group.get(k))
+                        if data.dtype == '|S10' and len(data)==1:
+                            data = data[0].decode('UTF-8')
+                        v[k.lower()] = data
                 file.close()
 
             elif str.lower(extension) in ['png','jpg','jpeg']:

@@ -10,7 +10,6 @@ class ColorSource(Filter):
         self.addOutputPort('rgba', (0,0,0,255))
 
     def update(self):
-        super().update()
 
         self.outputs.rgba.set(
           self.inputs.rgba.get()

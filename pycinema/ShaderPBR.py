@@ -251,7 +251,6 @@ void main(){
         return outImage
 
     def update(self):
-        super().update()
 
         results = []
 

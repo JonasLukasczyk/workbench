@@ -33,6 +33,5 @@ class NumberWidget(Filter):
         port.set(self.outputs.number)
 
     def update(self):
-        super().update()
 
         return 1

@@ -57,6 +57,3 @@ void main(){
         tex.repeat_y = False
         tex.use(location=location)
         return tex
-
-    def update(self):
-        return 1

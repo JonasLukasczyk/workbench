@@ -40,7 +40,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     scripts=[
-        'cinema',
         'doc/description.md',
         'version.md'
     ],

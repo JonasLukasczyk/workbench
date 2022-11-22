@@ -61,7 +61,7 @@ class Annotation(Filter):
                     continue
 
                 mean = images[0].channels['rgba'].mean(axis=(0,1))
-                if (mean[0]+mean[1]+mean[2])/3<128:
+                if (mean[0]+mean[1]+mean[2])/3<128 and mean[3]>128:
                     textColor = (255,255,255)
                 else:
                     textColor = (0,0,0)

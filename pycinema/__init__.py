@@ -14,7 +14,6 @@ from .DepthCompositing import *
 from .HybridArtifactSource import *
 from .ImageCanny import *
 from .ImageConvert import *
-from .ImageGeneratorCNN import *
 from .ImageReader import *
 from .ImageViewer import *
 from .MaskCompositing import *

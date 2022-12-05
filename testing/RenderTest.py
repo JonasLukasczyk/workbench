@@ -17,14 +17,14 @@ def test_render():
     resolution = (512,256)
     phi_samples = (20,360,60)
     theta_samples = (20,20,45)
-    time = 0.1
+    time_samples = 0.1
 
     plane_images = pycinema.DemoScene()
     plane_images.inputs.objects.set((1,0,0),False) # Plane Only
     plane_images.inputs.resolution.set(resolution,False)
     plane_images.inputs.phi_samples.set(phi_samples,False)
     plane_images.inputs.theta_samples.set(theta_samples,False)
-    plane_images.inputs.time.set(time,False)
+    plane_images.inputs.time_samples.set(time_samples,False)
     plane_images.update()
 
     sphere_images = pycinema.DemoScene()
@@ -32,7 +32,7 @@ def test_render():
     sphere_images.inputs.resolution.set(resolution,False)
     sphere_images.inputs.phi_samples.set(phi_samples,False)
     sphere_images.inputs.theta_samples.set(theta_samples,False)
-    sphere_images.inputs.time.set(time,False)
+    sphere_images.inputs.time_samples.set(time_samples,False)
     sphere_images.update()
 
     spheres_colored_by_y = pycinema.ColorMapping()

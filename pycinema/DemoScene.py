@@ -10,7 +10,7 @@ class DemoScene(Filter):
         self.addInputPort("resolution", (256,256))
         self.addInputPort("phi_samples", (0,360,360))
         self.addInputPort("theta_samples", (20,20,1))
-        self.addInputPort("time", 0)
+        self.addInputPort("time_samples", (0,0,1))
         self.addInputPort("objects", (1,1,1))
         self.addOutputPort("images", [])
 
@@ -81,7 +81,7 @@ float sphereSDF(vec3 p, float r) {
 }
 
 vec2 compare(vec2 hit, float d, float id){
-  return hit.x<d ? hit : vec2(d,id);
+    return hit.x<d ? hit : vec2(d,id);
 }
 
 vec2 sceneSDF(vec3 p) {
@@ -91,10 +91,11 @@ vec2 sceneSDF(vec3 p) {
       hit = compare(hit, planeSDF(p), 0);
 
     if(iObjects.y>0.5)
-      hit = compare(hit, sphereSDF(p-2.0*vec3(cos(iTime),0.25,sin(iTime)), 0.25), 1);
+      hit = compare(hit, sphereSDF(p-vec3(0.7,0.25,0.7), 0.2), 1);
+      //hit = compare(hit, sphereSDF(p-2.0*vec3(cos(iTime),0.25,sin(iTime)), 0.25), 1);
 
     if(iObjects.z>0.5)
-      hit = compare(hit, sphereSDF(p-vec3(0,1,0),1), 2);
+      hit = compare(hit, sphereSDF(p-vec3(0,1,0),max(0.1,1.0-iTime)), 2);
 
     return hit;
 }
@@ -123,23 +124,23 @@ vec3 estimateNormal(vec3 p) {
 }
 
 vec3 phongBRDF(vec3 lightDir, vec3 rayDir, vec3 normal, vec3 diff, vec3 spec, float shininess) {
-  vec3 color = diff;
-  vec3 reflectDir = reflect(-lightDir, normal);
-  float specDot = max(dot(reflectDir, rayDir), 0.0);
-  color += pow(specDot, shininess) * spec;
-  return color;
+    vec3 color = diff;
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float specDot = max(dot(reflectDir, rayDir), 0.0);
+    color += pow(specDot, shininess) * spec;
+    return color;
 }
 
 float softshadow(vec3 ro, vec3 rd, float tmin, float tmax)
 {
-  float res = 1.0;
-  vec3 hit = vec3(0,-1,tmin);
-  for (int i = 0; i < 16; i++) {
-      hit.xy = sceneSDF(ro + hit.z * rd);
-      res = min( res, 8.0*hit.x/hit.z );
-      hit.z += hit.x;
-  }
-  return clamp( res, 0.0, 1.0 );
+    float res = 1.0;
+    vec3 hit = vec3(0,-1,tmin);
+    for (int i = 0; i < 16; i++) {
+        hit.xy = sceneSDF(ro + hit.z * rd);
+        res = min( res, 8.0*hit.x/hit.z );
+        hit.z += hit.x;
+    }
+    return clamp( res, 0.0, 1.0 );
 }
 
 void main() {
@@ -202,15 +203,18 @@ void main() {
           a.shape = (fbo.size[1],fbo.size[0])
         return a
 
-    def render(self,fbo,phi,theta,objects_meta):
+    def render(self,fbo,phi,theta,time,objects_meta):
 
         fbo.clear(0.0, 0.0, 0.0, 1.0)
 
+        phi_rad = phi/360.0*2.0*numpy.pi
+        theta_rad = (90-theta)/180.0*numpy.pi
+
         # render
-        self.program['iTime'].value = self.inputs.time.get()
         self.program['iObjects'].value = self.inputs.objects.get()
-        self.program['iPhi'].value = phi
-        self.program['iTheta'].value = theta
+        self.program['iTime'].value = time
+        self.program['iPhi'].value = phi_rad
+        self.program['iTheta'].value = theta_rad
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
         # create output image
@@ -222,7 +226,7 @@ void main() {
                 'y': self.getArray(fbo,3,1,numpy.float32)
             },
             {
-                'time': self.inputs.time.get(),
+                'time': time,
                 'phi': phi,
                 'theta': theta,
                 'object_id': objects_meta
@@ -231,10 +235,22 @@ void main() {
 
         return image
 
+    def getRange(self,bounds,mod=0):
+        if numpy.isscalar(bounds):
+            return [bounds]
+
+        array = numpy.arange(bounds[0],bounds[1]+bounds[2],bounds[2])
+        if mod != 0:
+            array = list(map(lambda x: x % mod, array))
+            array = numpy.unique(array)
+
+        return array
+
     def update(self):
 
-        phiSamples = self.inputs.phi_samples.get();
-        thetaSamples = self.inputs.theta_samples.get();
+        phi_samples = self.getRange(self.inputs.phi_samples.get(),360)
+        theta_samples = self.getRange(self.inputs.theta_samples.get(),360)
+        time_samples = self.getRange(self.inputs.time_samples.get())
 
         # create framebuffer
         res = self.inputs.resolution.get()
@@ -257,16 +273,19 @@ void main() {
         objects_meta = '+'.join(objects_meta)
 
         results = []
-        for theta in range(thetaSamples[0],thetaSamples[1]+[0,1][thetaSamples[0]==thetaSamples[1]],thetaSamples[2]):
-            for phi in range(phiSamples[0],phiSamples[1]+[0,1][phiSamples[0]==phiSamples[1]],phiSamples[2]):
-                results.append(
-                    self.render(
-                        fbo,
-                        phi/360.0*2.0*numpy.pi,
-                        (90-theta)/180.0*numpy.pi,
-                        objects_meta
+
+        for time in time_samples:
+            for theta in theta_samples:
+                for phi in phi_samples:
+                    results.append(
+                        self.render(
+                            fbo,
+                            phi,
+                            theta,
+                            time,
+                            objects_meta
+                        )
                     )
-                )
 
         # release resources
         fbo.release()

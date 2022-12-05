@@ -52,9 +52,13 @@ class CinemaDatabaseWriter(Filter):
         # check if path is a cdb
         filename, extension = os.path.splitext(path)
         extension = str.lower(extension[1:])
+
+        # ensure folder exists
+        if not os.path.exists(path):
+            os.makedirs(path)
+
         if extension == 'cdb':
             # cdb folder
-
             csvPath = path+'/data.csv'
             csvData = []
 

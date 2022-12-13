@@ -7,9 +7,9 @@ The PyCinema image data object has two attributes:
 - **channels**: a dictionary where each key-value pair records a single data channel.
   - Each key is a lower-case string representing the name of a channel (e.g., *rgba*, *depth*, or *some_scalar_data*).
   - Each dictionary value is a numpy array holding the information of the channel, where the first two dimensions of the array must correspond to the resolution of the image, and the third dimension determines how many values are recorded per pixel. For instance, a *depth* channel corresponds to a numpy array with a shape of (width,height,1) since the array records one scalar per pixel, while an *rgba* channel corresponds to a (width,height,4) array since it records four values per pixel.
-  - Note: a PyCinema image can have any number of channels storing any kind of scalars or vectors per pixel. However, certain channels have a special interpretation within PyCinema, such as the *rgba* and *depth* channels.
+  - Note: a PyCinema image can have any number of channels storing any kind of scalars or vectors per pixel. However, certain channels have an automatically inferred interpretation, such as the *rgba* and *depth* channels.
 
-# Storing PyCinema Images as HDF5  Files
+# Storing PyCinema Image Data Objects as HDF5 Files
 - PyCinema supports common image formats such as *png* and *jpeg* files. However, these formats have limited support for meta data and multiple channels per image.
 - The *Hierarchical Data Format (HDF)* is an abstract data container format that can represent any kind of information. An hdf5 file is essentially a tree where intermediate nodes are called **groups**, and leaf nodes are called **datasets**. Groups can be thought of as directories, and datasets as named numpy arrays.
 - A PyCinema image stored in a hdf5 file uses the following structure:

@@ -29,8 +29,6 @@ setuptools.setup(
         "py",
         "Pillow",
         "ipywidgets",
-        "pytest",
-        "pytest-xvfb",
         "moderngl<6",
         "opencv-python"
     ],

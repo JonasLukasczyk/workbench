@@ -31,7 +31,7 @@ setuptools.setup(
         "ipywidgets",
         "pytest",
         "pytest-xvfb",
-        "moderngl",
+        "moderngl<6",
         "opencv-python"
     ],
     classifiers=[
